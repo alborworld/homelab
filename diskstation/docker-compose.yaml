@@ -2,8 +2,7 @@
 
 name: diskstation
 
-services:
-
+include:
   - portainer-agent-ds/docker-compose.yaml
   - traefik-kop-ds/docker-compose.yaml
   - watchtower/docker-compose.yaml
