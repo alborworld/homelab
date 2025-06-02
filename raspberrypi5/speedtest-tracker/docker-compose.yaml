@@ -1,0 +1,23 @@
+services:
+  speedtest-tracker:
+    container_name: SpeedTestTracker
+    image: lscr.io/linuxserver/speedtest-tracker:latest
+    ports:
+      - 8084:80
+      - 8444:443
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - APP_NAME="Speedtest Tracker"
+      - APP_KEY=${SPEED_TEST_TRACKER_APP_KEY}
+      - FORCE_HTTPS=false
+      - DB_CONNECTION=sqlite
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${VOLUMEDIR}/speedtest-tracker:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.speedtest.rule=Host(`speedtest.home.local`)"
+      - "traefik.http.routers.speedtest.entrypoints=web,websecure" 
+      - "traefik.http.services.speedtest.loadbalancer.server.port=80"
+    restart: unless-stopped

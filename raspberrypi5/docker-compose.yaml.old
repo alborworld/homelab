@@ -1,0 +1,275 @@
+services:
+
+  portainer:
+    container_name: Portainer
+    image: portainer/portainer-ce
+    ports:
+      - 8000:8000/tcp
+      - 9000:9000/tcp
+    volumes:
+      - ${CONFIGDIR}/portainer:/data:rw
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.home.local`)"
+      - "traefik.http.routers.portainer.entrypoints=web,websecure"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+    restart: always
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: WatchTower
+    network_mode: bridge
+    environment:
+      # Cron expressions like defined here: https://pkg.go.dev/github.com/robfig/cron#hdr-CRON_Expression_Format
+      - WATCHTOWER_SCHEDULE=0 0 6 * * *
+      - TZ=Europe/Amsterdam
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_DEBUG=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+#  homarr:
+#    container_name: Homarr
+#    image: ghcr.io/ajnart/homarr:latest
+#    ports:
+#      - 7575:7575
+#    volumes:
+#      - ${CONFIGDIR}/homarr:/app/data/configs
+#      - ${CONFIGDIR}/homarr/data:/data
+#      - ${CONFIGDIR}/homarr/icons:/app/public/icons
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.homarr.rule=Host(`homarr.home.local`)"
+#      - "traefik.http.routers.homarr.entrypoints=web,websecure"
+#    restart: unless-stopped
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: Homepage
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: homepage.home.local,10.0.4.94
+      PUID: ${UID}
+      PGID: ${GID} 
+      HOMEPAGE_VAR_QBITTORRENT_USERNAME: ${QBITTORRENT_USERNAME}
+      HOMEPAGE_VAR_QBITTORRENT_PASSWORD: ${QBITTORRENT_PASSWORD}
+      HOMEPAGE_VAR_PLEX_TOKEN: ${PLEX_TOKEN}
+      HOMEPAGE_VAR_TAUTULLI_API_KEY: ${TAUTULLI_API_KEY}
+      HOMEPAGE_VAR_PROWLARR_API_KEY: ${PROWLARR_API_KEY}
+      HOMEPAGE_VAR_RADARR_API_KEY: ${RADARR_API_KEY}
+      HOMEPAGE_VAR_SONARR_API_KEY: ${SONARR_API_KEY}
+      HOMEPAGE_VAR_READARR_API_KEY: ${READARR_API_KEY}
+      HOMEPAGE_VAR_OVERSEERR_API_KEY: ${OVERSEERR_API_KEY}
+      HOMEPAGE_VAR_ADGUARD_HOME_USERNAME: ${ADGUARD_HOME_USERNAME}
+      HOMEPAGE_VAR_ADGUARD_HOME_PASSWORD: ${ADGUARD_HOME_PASSWORD}
+    volumes:
+      - ${CONFIGDIR}/homepage:/app/config # Make sure your local config directory exists
+#      - /var/run/docker.sock:/var/run/docker.sock:ro # optional, for docker integrations
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homepage.rule=Host(`homepage.home.local`)"
+      - "traefik.http.routers.homepage.entrypoints=web,websecure"
+    restart: unless-stopped
+
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: AdGuardHome
+#    depends_on:
+#      - unbound
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"        # For DHCP if needed
+#      - "80:80/tcp"
+#      - "443:443/tcp"
+#      - "3000:3000/tcp"    # AdGuard Home's admin interface
+      - "8080:80/tcp"      # HTTP web,websecure interface
+      - "8443:443/tcp"     # HTTPS web,websecure interface
+#    networks:
+#      dns-net:
+#        ipv4_address: 172.20.0.2
+    volumes:
+      - ${CONFIGDIR}/adguardhome/work:/opt/adguardhome/work
+      - ${CONFIGDIR}/adguardhome/conf:/opt/adguardhome/conf
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adguardhome.rule=Host(`adguard.home.local`)"
+      - "traefik.http.routers.adguardhome.entrypoints=web,websecure"
+      - "traefik.http.services.adguardhome.loadbalancer.server.port=80" 
+    cap_add:
+      - NET_ADMIN
+    restart: always
+
+#  unbound:
+#    container_name: Unbound
+#    image: mvance/unbound-rpi:latest
+#    networks:
+#      dns-net:
+#        ipv4_address: 172.20.0.3
+#    volumes:
+#      - ${CONFIGDIR}/unbound:/opt/unbound/etc/unbound
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 128M
+#    healthcheck:
+#      disable: true
+#    labels:
+#      - diun.enable=true
+#    restart: always
+
+  speedtest-tracker:
+    container_name: SpeedTestTracker
+    image: lscr.io/linuxserver/speedtest-tracker:latest
+    ports:
+      - 8084:80
+      - 8444:443
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+       APP_NAME="Speedtest Tracker"
+      - APP_KEY=${SPEED_TEST_TRACKER_APP_KEY}
+      - FORCE_HTTPS=false
+      - DB_CONNECTION=sqlite
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${CONFIGDIR}/speedtest-tracker:/config
+      - ${CONFIGDIR}/speedtest-tracker/web,websecure:/etc/ssl/web,websecure
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.speedtest.rule=Host(`speedtest.home.local`)"
+      - "traefik.http.routers.speedtest.entrypoints=web,websecure" 
+      - "traefik.http.services.speedtest.loadbalancer.server.port=80"
+    restart: unless-stopped
+
+  homeassistant:
+    container_name: HomeAssistant
+    image: ghcr.io/home-assistant/home-assistant
+    network_mode: host
+    environment:
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${CONFIGDIR}/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    privileged: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homeassistant.rule=Host(`homeassistant.home.local`)"
+      - "traefik.http.routers.homeassistant.entrypoints=web,websecure"
+#      - "traefik.http.services.homeassistant.loadbalancer.server.url=http://host.docker.internal:8123"
+      - "traefik.http.services.homeassistant.loadbalancer.server.url=http://172.17.0.1:8123"
+    restart: unless-stopped
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: UptimeKuma
+    volumes:
+      - ${CONFIGDIR}/uptime-kuma:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.home.local`)"
+      - "traefik.http.routers.uptimekuma.entrypoints=web,websecure"
+    restart: always
+
+  upsnap:
+    container_name: UpSnap
+    image: ghcr.io/seriousm4x/upsnap:5 # images are also available on docker hub: seriousm4x/upsnap:5
+    network_mode: host
+    environment:
+      - TZ=Europe/Amsterdam
+      - UPSNAP_INTERVAL=*/10 * * * * * # Sets the interval in which the devices are pinged
+    volumes:
+      - ${CONFIGDIR}/upsnap/data:/app/pb_data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.upsnap.rule=Host(`upsnap.home.local`)"
+      - "traefik.http.routers.upsnap.entrypoints=web,websecure"
+      - "traefik.http.services.upsnap.loadbalancer.server.url=http://host.docker.internal:8090"
+    restart: unless-stopped
+
+  traefik:
+    image: traefik:v3.4
+    container_name: Traefik
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9090:8080"
+    volumes:
+      - ${CONFIGDIR}/traefik:/etc/traefik:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.home.local`)"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=web,websecure"
+#    networks:
+#      default:
+#      dns-net:
+#        ipv4_address: 172.20.0.4
+    restart: unless-stopped
+
+  redis:
+    image: redis:latest
+    container_name: Redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${CONFIGDIR}/redis:/data
+    restart: always
+
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: Beszel
+    volumes:
+      - ${CONFIGDIR}/beszel/data:/beszel_data
+      - ${CONFIGDIR}/beszel/socket:/beszel_socket
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.beszel.rule=Host(`beszel.home.local`)"
+      - "traefik.http.routers.beszel.entrypoints=web,websecure"
+    restart: unless-stopped
+
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: BeszelAgent
+    network_mode: host
+    volumes:
+      - ${CONFIGDIR}/beszel/socket:/beszel_socket
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      LISTEN: /beszel_socket/beszel.sock
+      KEY: ${BESZEL_AGENT_RASPBERRYPI5_PUBLIC_KEY}
+    restart: unless-stopped
+
+#  semaphore:
+##    ports:
+##      - 3000:3000
+#    image: semaphoreui/semaphore:latest
+#    container_name: Semaphore
+#    environment:
+#      SEMAPHORE_DB_DIALECT: bolt
+#      SEMAPHORE_ADMIN: admin
+#      SEMAPHORE_ADMIN_PASSWORD: ${SEMAPHORE_ADMIN_PASSWORD}
+#      SEMAPHORE_ADMIN_NAME: ${SEMAPHORE_ADMIN_NAME}
+#      SEMAPHORE_ADMIN_EMAIL: ${SEMAPHORE_ADMIN_EMAIL}
+#    volumes:
+#      - ./semaphore/data:/var/lib/semaphore
+#      - ./semaphore/config:/etc/semaphore
+#      - ./semaphore/tmp:/tmp/semaphore
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.semaphore.rule=Host(`semaphore.home.local`)"
+#      - "traefik.http.routers.semaphore.entrypoints=web,websecure"
+#    restart: unless-stopped
+
+#networks:
+#  dns-net:
+#    name: dns-net
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 172.20.0.0/16
