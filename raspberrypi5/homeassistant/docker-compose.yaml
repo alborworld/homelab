@@ -1,0 +1,17 @@
+services:
+  homeassistant:
+    container_name: HomeAssistant
+    image: ghcr.io/home-assistant/home-assistant
+    network_mode: host
+    environment:
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${VOLUMEDIR}/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    privileged: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homeassistant.rule=Host(`homeassistant.home.local`)"
+      - "traefik.http.routers.homeassistant.entrypoints=web,websecure"
+      - "traefik.http.services.homeassistant.loadbalancer.server.url=http://172.17.0.1:8123"
+    restart: unless-stopped

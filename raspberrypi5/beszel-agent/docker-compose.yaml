@@ -1,0 +1,12 @@
+services:
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: BeszelAgent
+    network_mode: host
+    volumes:
+      - ${VOLUMEDIR}/beszel/socket:/beszel_socket
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      LISTEN: /beszel_socket/beszel.sock
+      KEY: ${BESZEL_AGENT_RASPBERRYPI5_PUBLIC_KEY}
+    restart: unless-stopped

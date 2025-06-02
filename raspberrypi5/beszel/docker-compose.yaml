@@ -1,0 +1,12 @@
+services:
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: Beszel
+    volumes:
+      - ${VOLUMEDIR}/beszel/data:/beszel_data
+      - ${VOLUMEDIR}/beszel/socket:/beszel_socket
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.beszel.rule=Host(`beszel.home.local`)"
+      - "traefik.http.routers.beszel.entrypoints=web,websecure"
+    restart: unless-stopped

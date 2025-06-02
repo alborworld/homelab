@@ -1,0 +1,16 @@
+services:
+  portainer:
+    container_name: Portainer
+    image: portainer/portainer-ce
+    ports:
+      - 8000:8000/tcp
+      - 9000:9000/tcp
+    volumes:
+      - ${VOLUMEDIR}/portainer:/data:rw
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.home.local`)"
+      - "traefik.http.routers.portainer.entrypoints=web,websecure"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+    restart: always

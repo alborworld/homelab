@@ -1,0 +1,26 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: Homepage
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: homepage.home.local,10.0.4.94
+      PUID: ${UID}
+      PGID: ${GID} 
+      HOMEPAGE_VAR_QBITTORRENT_USERNAME: ${HOMEPAGE_VAR_QBITTORRENT_USERNAME}
+      HOMEPAGE_VAR_QBITTORRENT_PASSWORD: ${HOMEPAGE_VAR_QBITTORRENT_PASSWORD}
+      HOMEPAGE_VAR_PLEX_TOKEN: ${HOMEPAGE_VAR_PLEX_TOKEN}
+      HOMEPAGE_VAR_TAUTULLI_API_KEY: ${HOMEPAGE_VAR_TAUTULLI_API_KEY}
+      HOMEPAGE_VAR_PROWLARR_API_KEY: ${HOMEPAGE_VAR_PROWLARR_API_KEY}
+      HOMEPAGE_VAR_RADARR_API_KEY: ${HOMEPAGE_VAR_RADARR_API_KEY}
+      HOMEPAGE_VAR_SONARR_API_KEY: ${HOMEPAGE_VAR_SONARR_API_KEY}
+      HOMEPAGE_VAR_READARR_API_KEY: ${HOMEPAGE_VAR_READARR_API_KEY}
+      HOMEPAGE_VAR_OVERSEERR_API_KEY: ${HOMEPAGE_VAR_OVERSEERR_API_KEY}
+      HOMEPAGE_VAR_ADGUARD_HOME_USERNAME: ${HOMEPAGE_VAR_ADGUARD_HOME_USERNAME}
+      HOMEPAGE_VAR_ADGUARD_HOME_PASSWORD: ${HOMEPAGE_VAR_ADGUARD_HOME_PASSWORD}
+    volumes:
+      - ${VOLUMEDIR}/homepage:/app/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homepage.rule=Host(`homepage.home.local`)"
+      - "traefik.http.routers.homepage.entrypoints=web,websecure"
+    restart: unless-stopped
