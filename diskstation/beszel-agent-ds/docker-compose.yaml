@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  beszel-agent-ds:
+    image: "henrygd/beszel-agent"
+    container_name: BeszelAgent-DS
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      LISTEN: 45876
+      KEY: ${BESZEL_AGENT_DISKSTATION_PUBLIC_KEY}
+    restart: unless-stopped

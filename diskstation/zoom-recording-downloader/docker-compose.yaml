@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  zoom-recording-downloader:
+    container_name: ZoomRecordingDownloader
+    image: alborworld/zoom-recording-downloader
+    environment:
+      - TZ=Europe/Amsterdam
+      - CRON_SETTINGS=0 7 * * *
+      - DOWNLOAD_DIRECTORY=/downloads
+      - ZOOM_CLIENT_ID=${ZOOM_CLIENT_ID}
+      - ZOOM_CLIENT_SECRET=${ZOOM_CLIENT_SECRET}
+      - ZOOM_ACCOUNT_ID=${ZOOM_ACCOUNT_ID}
+    volumes:
+      - /volume1/homes/Alessandro/Shamanism/Recordings/Zoom:/downloads:rw
+    restart: unless-stopped
