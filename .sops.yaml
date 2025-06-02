@@ -1,4 +1,5 @@
 creation_rules:
   - path_regex: .*\.env$
-    encrypted_regex: '^(?!#).*'
-    age: [age1vamq6l5n5zk7dywt4xgksxundrla9n8nr9fjydducd7zzrywj97snscv0w]
+    input_type: dotenv
+    encrypted_regex: '^[^#\s].*'
+    age: age1vamq6l5n5zk7dywt4xgksxundrla9n8nr9fjydducd7zzrywj97snscv0w
