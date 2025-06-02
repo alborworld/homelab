@@ -1,0 +1,13 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: WatchTower
+    network_mode: bridge
+    environment:
+      - WATCHTOWER_SCHEDULE=0 30 6 * * *
+      - TZ=Europe/Amsterdam
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_DEBUG=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always

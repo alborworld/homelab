@@ -1,0 +1,10 @@
+services:
+  portainer-agent-dh:
+    ports:
+      - 9001:9001/tcp
+    container_name: PortainerAgent-DH
+    image: portainer/agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/snap/docker/common/var-lib-docker/volumes:/var/lib/docker/volumes
+    restart: always

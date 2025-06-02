@@ -1,0 +1,27 @@
+services:
+  nextcloud-app:
+    image: linuxserver/nextcloud:latest
+    container_name: NextCloud
+    ports:
+      - 8081:80
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - 44
+      - 104
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    links:
+      - nextcloud-db
+    volumes:
+      - ${VOLUMEDIR}/nextcloud/config:/config
+      - ${VOLUMEDIR}/nextcloud/data:/data
+      - /mnt/Alessandro:/mnt/Alessandro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.node=dockerhost"
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.home.local`)"
+      - "traefik.http.routers.nextcloud.entrypoints=web,websecure"
+    restart: always

@@ -1,0 +1,26 @@
+services:
+  readarr:
+    image: lscr.io/linuxserver/readarr:nightly
+    container_name: Readarr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${VOLUMEDIR}/readarr:/config
+      - ${MEDIADIR}/books:/books
+      - ${MEDIADIR}/downloads:/app/qBittorrent/downloads
+      - ${MEDIADIR}/downloads/complete/Books:/downloads/complete/Books
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_started
+      qbittorrent:
+        condition: service_started
+    labels:
+      - "traefik.enable=true"
+      - "traefik.node=dockerhost"
+      - "traefik.http.routers.readarr.rule=Host(`readarr.home.local`)"
+      - "traefik.http.routers.readarr.entrypoints=web,websecure"
+      - "traefik.http.services.readarr.loadbalancer.server.port=8787"
+    restart: always

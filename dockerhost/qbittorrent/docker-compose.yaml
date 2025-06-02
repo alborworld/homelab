@@ -1,0 +1,21 @@
+services:
+  qbittorrent:
+    image: ghcr.io/hotio/qbittorrent:release-4.6.0
+    container_name: qBittorrent
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${VOLUMEDIR}/qbittorrent:/config
+      - ${MEDIADIR}/downloads:/app/qBittorrent/downloads
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_started
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.home.local`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=web,websecure"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=7091"
+    restart: always

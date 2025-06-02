@@ -1,0 +1,11 @@
+services:
+  beszel-agent-dh:
+    image: "henrygd/beszel-agent"
+    container_name: BeszelAgent-DH
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      LISTEN: 45876
+      KEY: ${BESZEL_AGENT_DOCKERHOST_PUBLIC_KEY}
+    restart: always
