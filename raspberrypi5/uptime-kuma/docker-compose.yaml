@@ -1,0 +1,11 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: UptimeKuma
+    volumes:
+      - ${VOLUMEDIR}/uptime-kuma:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.home.local`)"
+      - "traefik.http.routers.uptimekuma.entrypoints=web,websecure"
+    restart: always

@@ -1,0 +1,16 @@
+services:
+  upsnap:
+    container_name: UpSnap
+    image: ghcr.io/seriousm4x/upsnap:5
+    network_mode: host
+    environment:
+      - TZ=Europe/Amsterdam
+      - UPSNAP_INTERVAL=*/10 * * * * * 
+    volumes:
+      - ${VOLUMEDIR}/upsnap/data:/app/pb_data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.upsnap.rule=Host(`upsnap.home.local`)"
+      - "traefik.http.routers.upsnap.entrypoints=web,websecure"
+      - "traefik.http.services.upsnap.loadbalancer.server.url=http://host.docker.internal:8090"
+    restart: unless-stopped
