@@ -1,5 +1,7 @@
 # Main docker-compose file for the Raspberrypi5 setup
 
+name: raspberrypi5
+
 include:
   - portainer/docker-compose.yaml
   - watchtower/docker-compose.yaml
