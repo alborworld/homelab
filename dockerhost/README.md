@@ -23,10 +23,16 @@ The services are defined by the `docker-compose.yaml` file in each relative subf
 ## 🔐 Secrets
 
 - Secrets are stored in `.env.sops.enc` and decrypted locally using [Mozilla SOPS](https://github.com/mozilla/sops).
+- To encrypt an existing `.env` file:
+  ```bash
+  sops --encrypt .env > .env.sops.enc
+  ```
 - After cloning, decrypt with:
   ```bash
-  sops -d .env.sops.enc > .env
+  sops --input-type dotenv --output-type dotenv --decrypt .env.sops.enc > .env
   ```
+
+NOTE: When decrypting with SOPS, specifying `--input-type dotenv --output-type dotenv` ensures that the file is correctly interpreted and formatted as a dotenv file, preserving its structure and avoiding misinterpretation or formatting issues.
 
 ---
 
@@ -44,7 +50,7 @@ ln -s ~/homelab/dockerhost ~/docker/compose
 
 ```bash
 cd ~/docker/compose
-sops -d .env.sops.enc > .env
+sops --input-type dotenv --output-type dotenv --decrypt .env.sops.enc > .env
 docker compose up -d
 ```
 
