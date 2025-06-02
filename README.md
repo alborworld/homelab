@@ -1,6 +1,6 @@
 # AlborWorld's Homelab
 
-A modular, GitOps-driven homelab infrastructure spanning multiple devices, designed for automation and maintainability.
+A modular, GitOps-driven homelab infrastructure designed to provide security, privacy, and data ownership while automating and maintaining services across multiple devices.
 
 > ⚠️ **Work in Progress**: This repository is under active development. Expect changes and improvements over time.
 
