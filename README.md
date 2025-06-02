@@ -43,6 +43,39 @@ This repository contains the configuration and orchestration files for a persona
 - **Power Management**: Automated shutdown schedule (midnight to 6 AM) for diskstation and dockerhost
 - **Security**: Secrets management using SOPS encryption
 
+## 🛠️ Technology Stack
+
+### Core Technologies
+- **Containerization**: Docker & Docker Compose v2.21.0+
+- **Secrets Management**: Mozilla SOPS for encrypted .env files
+- **Reverse Proxy**: Traefik v3.4 with automatic SSL
+- **DNS**: AdGuard Home with high-availability setup
+- **VPN**: WireGuard via Gluetun container
+- **Monitoring**: 
+  - Uptime Kuma for service monitoring
+  - Speedtest Tracker for network performance
+  - UpSnap for device power management
+
+### Media Stack
+- **Media Management**: 
+  - Plex for media streaming
+  - Sonarr, Radarr, Readarr for media automation
+  - Prowlarr for indexer management
+  - NZBGet & qBittorrent for downloads
+  - Tautulli for Plex analytics
+  - Tdarr for media transcoding
+
+### Productivity
+- **File Sharing**: Nextcloud with OnlyOffice integration
+- **Document Management**: OnlyOffice Document Server
+- **Version Control**: GitLab Runner for CI/CD
+
+### Infrastructure
+- **Container Management**: Portainer Agent
+- **Service Discovery**: Traefik Kop for multi-host setup
+- **Automation**: Watchtower for container updates
+- **Monitoring**: Beszel Agent for disk monitoring
+
 ## 📁 Repository Structure
 
 ```
