@@ -58,7 +58,7 @@ docker compose up -d
 
 ## 📋 Notes
 
-- This stack is designed to be lightweight and always-on (24/7).
+- This stack is designed to be down between midnight and 6am.
 - `~/docker/compose` is a symlink to `~/homelab/dockerhost`.
 - `~/docker/volumes` is preserved and excluded from Git.
 - Each service may have its own subfolder with `docker-compose.yaml`.
