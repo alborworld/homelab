@@ -1,0 +1,24 @@
+services:
+  vault:
+    image: vault:latest
+    container_name: Vault
+    ports:
+      - "8200:8200"
+    volumes:
+      - ${VOLUMEDIR}/vault/file:/vault/file:rw
+      - ${VOLUMEDIR}/vault/config:/vault/config:rw
+      - ${VOLUMEDIR}/vault/policies:/vault/policies:rw
+      - ${VOLUMEDIR}/vault/data:/vault/data:rw
+    environment:
+      - VAULT_ADDR=http://0.0.0.0:8200
+      - VAULT_API_ADDR=http://0.0.0.0:8200
+      - VAULT_ADDRESS=http://0.0.0.0:8200
+    cap_add:
+      - IPC_LOCK
+    entrypoint: vault server -config=/vault/config/vault.json
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vault.rule=Host(`vault.home.local`)"
+      - "traefik.http.routers.vault.entrypoints=web,websecure"
+      - "traefik.http.services.vault.loadbalancer.server.port=8200"
+    restart: unless-stopped

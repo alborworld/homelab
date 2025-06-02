@@ -1,0 +1,21 @@
+services:
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: Tautulli
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    ports:
+      - "8181:8181"
+    depends_on:
+      plex:
+        condition: service_started
+    volumes:
+      - ${VOLUMEDIR}/tautulli:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tautulli.rule=Host(`tautulli.home.local`)"
+      - "traefik.http.routers.tautulli.entrypoints=web,websecure"
+      - "traefik.http.services.tautulli.loadbalancer.server.port=8181"
+    restart: always

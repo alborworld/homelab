@@ -1,0 +1,9 @@
+services:
+  prometheus:
+    image: bitnami/prometheus:latest
+    ports:
+      - 9001:9090
+    volumes:
+      - ${VOLUMEDIR}/prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml

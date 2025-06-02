@@ -1,0 +1,18 @@
+services:
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: Overseerr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    ports:
+      - "5055:5055"
+    volumes:
+      - ${VOLUMEDIR}/overseerr:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.overseerr.rule=Host(`overseerr.home.local`)"
+      - "traefik.http.routers.overseerr.entrypoints=web,websecure"
+      - "traefik.http.services.overseerr.loadbalancer.server.port=5055"
+    restart: always

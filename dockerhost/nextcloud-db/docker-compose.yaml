@@ -1,0 +1,15 @@
+services:
+  nextcloud-db:
+    image: mariadb:10.5
+    container_name: NextCloudDB
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - ${VOLUMEDIR}/nextcloud/database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${NEXTCLOUD_MYSQL_PASSWORD}
+      - MYSQL_PASSWORD=${NEXTCLOUD_MYSQL_PASSWORD}
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - PUID=${UID}
+      - PGID=${GID}
+    restart: always

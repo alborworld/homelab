@@ -1,0 +1,26 @@
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: Sonarr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${VOLUMEDIR}/sonarr:/config
+      - ${MEDIADIR}/series:/tv
+      - ${MEDIADIR}/downloads:/app/qBittorrent/downloads
+      - ${MEDIADIR}/downloads/complete/Series:/downloads/complete/Series
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_started
+      qbittorrent:
+        condition: service_started
+    labels:
+      - "traefik.enable=true"
+      - "traefik.node=dockerhost"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.home.local`)"
+      - "traefik.http.routers.sonarr.entrypoints=web,websecure"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+    restart: always
