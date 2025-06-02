@@ -1,7 +1,8 @@
 # Ignore sensitive environment variables
 .env
-# ignores e.g., .env.backup or .env.local, but not .env.sops.enc (which you should commit)
-.env.*
+.env.*$
+!.env.sops.enc$ # Explicitly include this file
+!.env.template$ # Explicitly include this file
 
 # Ignore runtime data and volume mounts
 volumes/
