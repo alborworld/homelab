@@ -1,0 +1,15 @@
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: Grafana
+    volumes:
+      - ${VOLUMEDIR}/grafana:/var/lib/grafana
+    ports:
+      - 3001:3000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.node=dockerhost"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.home.local`)"
+      - "traefik.http.routers.grafana.entrypoints=web,websecure"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3001"
+    restart: unless-stopped

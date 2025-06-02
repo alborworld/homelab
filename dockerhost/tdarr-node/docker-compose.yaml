@@ -1,0 +1,18 @@
+services:
+  tdarr-node:
+    image: ghcr.io/haveagitgat/tdarr_node:latest
+    container_name: TdarrNode-DH
+    environment:
+      - TZ=Europe/Amsterdam
+      - PUID=${UID}
+      - PGID=${GID}
+      - nodeName=DockerHostNode
+      - serverIP=tdarr
+      - serverPort=8266
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - ${VOLUMEDIR}/tdarr/configs:/app/configs
+      - ${VOLUMEDIR}/tdarr/logs:/app/logs
+      - ${MEDIADIR}:/media
+    restart: unless-stopped

@@ -1,0 +1,20 @@
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: Prowlarr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${VOLUMEDIR}/prowlarr:/config
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_started
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.home.local`)"
+      - "traefik.http.routers.prowlarr.entrypoints=web,websecure"
+      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
+    restart: always
