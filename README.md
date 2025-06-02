@@ -12,6 +12,12 @@ This repository contains the configuration and orchestration files for a persona
 - GitOps-driven for automated deployments
 - Energy-efficient with scheduled power management
 
+## 📊 Dashboard
+
+![Homelab Dashboard](docs/images/dashboard.png)
+
+*Overview of running services and applications across the homelab infrastructure*
+
 ## 🖥️ Hardware Infrastructure
 
 ### Core Components
