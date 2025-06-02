@@ -49,25 +49,69 @@ This repository contains the configuration and orchestration files for a persona
 homelab/
 ├── diskstation/          # Synology NAS configurations
 │   ├── docker-compose.yaml
-│   └── .env.sops.yaml    # Encrypted environment variables
+│   └── .env.sops.enc     # Encrypted environment variables
 ├── dockerhost/          # Proxmox VM configurations
 │   ├── docker-compose.yaml
-│   └── .env.sops.yaml
+│   └── .env.sops.enc
 └── raspberrypi5/        # Raspberry Pi configurations
     ├── docker-compose.yaml
-    └── .env.sops.yaml
+    └── .env.sops.enc
 ```
 
 Each host directory contains:
 - `docker-compose.yaml`: Service definitions
-- `.env.sops.yaml`: Encrypted environment variables
+- `.env.sops.enc`: Encrypted environment variables
 - `volumes/`: Persistent data (git-ignored)
 
 ## 🔐 Security
 
 - Environment variables and secrets are encrypted using [SOPS](https://github.com/mozilla/sops)
-- Encrypted `.env.sops.yaml` files are version controlled
+- Encrypted `.env.sops.enc` files are version controlled
 - Plaintext secrets are never committed to the repository
+
+### SOPS Usage
+
+#### Encryption
+To encrypt an existing `.env` file:
+```bash
+sops --encrypt .env > .env.sops.enc
+```
+
+#### Decryption
+After cloning, decrypt with:
+```bash
+sops --input-type dotenv --output-type dotenv --decrypt .env.sops.enc > .env
+```
+
+> **Note**: When decrypting with SOPS, specifying `--input-type dotenv --output-type dotenv` ensures that the file is correctly interpreted and formatted as a dotenv file, preserving its structure and avoiding misinterpretation or formatting issues.
+
+## 🚀 Common Usage
+
+### Clone and Setup
+1. Clone the repository:
+   ```bash
+   git clone git@github.com:alborworld/homelab.git ~/homelab
+   ```
+
+2. For each host, create a symlink to the appropriate directory:
+   ```bash
+   # For Raspberry Pi
+   ln -s ~/homelab/raspberrypi5 ~/docker/compose
+   
+   # For Dockerhost
+   ln -s ~/homelab/dockerhost ~/docker/compose
+   
+   # For Diskstation
+   ln -s ~/homelab/diskstation /volume1/docker/compose
+   ```
+
+### Deployment
+For each host, deploy using:
+```bash
+cd ~/docker/compose  # or /volume1/docker/compose for Diskstation
+sops --input-type dotenv --output-type dotenv --decrypt .env.sops.enc > .env
+docker compose up -d
+```
 
 ## 🚧 Roadmap
 
