@@ -1,0 +1,30 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: Gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 7091:8080     # qBittorrent Web UI
+      - 6789:6789     # NZBget Web UI
+      - 9696:9696     # Prowlarr
+      - 7878:7878     # Radarr
+      - 8989:8989     # Sonarr
+      - 8787:8787     # Readarr
+    environment:
+      - VPN_SERVICE_PROVIDER=nordvpn
+      - VPN_TYPE=wireguard
+      - DNS_ADDRESS=1.1.1.1
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - SERVER_COUNTRIES=Netherlands
+      - SERVER_CITIES=Amsterdam
+      - FIREWALL_OUTBOUND_SUBNETS=10.0.4.0/24
+      - VPN_INTERFACE=tun0
+      - TZ=Europe/Amsterdam
+      - HEALTH_ADDRESS_TO_PING=1.1.1.1
+    volumes:
+      - ${VOLUMEDIR}/gluetun:/gluetun
+      - /etc/localtime:/etc/localtime:ro
+    restart: always

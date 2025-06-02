@@ -1,0 +1,23 @@
+services:
+  nzbget:
+    image: lscr.io/linuxserver/nzbget:latest
+    container_name: NZBget
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+      - NZBGET_USER=${NZBGET_USER}
+      - NZBGET_PASS=${NZBGET_PASS}
+    volumes:
+      - ${VOLUMEDIR}/nzbget:/config
+      - ${MEDIADIR}/downloads:/downloads
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_started
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nzbget.rule=Host(`nzbget.home.local`)"
+      - "traefik.http.routers.nzbget.entrypoints=web,websecure"
+      - "traefik.http.services.nzbget.loadbalancer.server.port=6789"
+    restart: always

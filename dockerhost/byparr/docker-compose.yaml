@@ -1,0 +1,14 @@
+services:
+  byparr:
+    image: ghcr.io/thephaseless/byparr:latest
+    container_name: Byparr
+    shm_size: 2gb
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_started
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      - ${VOLUMEDIR}/byparr/screenshots:/app/screenshots
+    restart: always

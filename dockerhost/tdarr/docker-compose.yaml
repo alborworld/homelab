@@ -1,0 +1,22 @@
+services:
+  tdarr:
+    image: ghcr.io/haveagitgat/tdarr:latest
+    container_name: Tdarr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    ports:
+      - "8265:8265" # Web UI
+      - "8266:8266" # Server port (for nodes to connect)
+    volumes:
+      - ${VOLUMEDIR}/tdarr/configs:/app/configs
+      - ${VOLUMEDIR}/tdarr/logs:/app/logs
+      - ${VOLUMEDIR}/tdarr/transcode:/transcode
+      - ${MEDIADIR}:/media # shared with Plex
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tdarr.rule=Host(`tdarr.home.local`)"
+      - "traefik.http.routers.tdarr.entrypoints=web,websecure"
+      - "traefik.http.services.tdarr.loadbalancer.server.port=8265"
+    restart: unless-stopped
