@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  traefik-kop-ds:
+    image: "ghcr.io/jittering/traefik-kop:latest"
+    container_name: TreaefikKop-DS
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - REDIS_ADDR="10.0.4.94:6379"
+      - BIND_IP="10.0.4.111"
+      - KOP_HOSTNAME=diskstation

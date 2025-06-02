@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  portainer-agent-ds:
+    ports:
+      - 9001:9001/tcp
+    container_name: PortainerAgent-DS
+    image: portainer/agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /volume1/@docker/volumes:/var/lib/docker/volumes
+    restart: always

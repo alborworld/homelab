@@ -1,0 +1,14 @@
+# Main docker-compose file for the Diskstation setup
+
+name: diskstation
+
+include:
+  - portainer-agent-ds/docker-compose.yaml
+  - traefik-kop-ds/docker-compose.yaml
+  - watchtower/docker-compose.yaml
+  - zoom-recording-downloader/docker-compose.yaml
+  - syncthing/docker-compose.yaml
+  - beszel-agent-ds/docker-compose.yaml
+  - adguardhome-ds/docker-compose.yaml
+  - adguardhome-sync/docker-compose.yaml
+  
