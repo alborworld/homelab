@@ -55,9 +55,3 @@ docker compose up -d
 - `~/docker/compose` is a symlink to `~/homelab/raspberrypi5`.
 - `~/docker/volumes` is preserved and excluded from Git.
 - Each service may have its own subfolder with `docker-compose.yaml`.
-
----
-
-## 👤 Maintainer
-
-Alessandro Bortolussi — [github.com/alborworld](https://github.com/alborworld)
