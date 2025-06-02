@@ -1,0 +1,33 @@
+# Ignore sensitive environment variables
+.env
+# ignores e.g., .env.backup or .env.local, but not .env.sops.enc (which you should commit)
+.env.*
+
+# Ignore runtime data and volume mounts
+volumes/
+**/volumes/
+**/data/
+**/logs/
+**/cache/
+**/storage/
+**/__pycache__/
+
+# Ignore common local files
+*.db
+*.db-shm
+*.db-wal
+*.log
+*.sock
+*.pid
+*.pem
+*.key
+*.crt
+*.sqlite
+*.bak
+
+# Ignore editor and OS-specific files
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
