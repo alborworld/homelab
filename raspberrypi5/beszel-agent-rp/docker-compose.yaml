@@ -1,7 +1,7 @@
 services:
-  beszel-agent:
+  beszel-agent-rp:
     image: henrygd/beszel-agent:latest
-    container_name: BeszelAgent
+    container_name: BeszelAgent-RP
     network_mode: host
     volumes:
       - ${VOLUMEDIR}/beszel/socket:/beszel_socket

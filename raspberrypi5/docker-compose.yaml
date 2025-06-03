@@ -17,4 +17,4 @@ include:
   - traefik/docker-compose.yaml
   - redis/docker-compose.yaml
   - beszel/docker-compose.yaml
-  - beszel-agent/docker-compose.yaml
+  - beszel-agent-rp/docker-compose.yaml
