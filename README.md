@@ -148,13 +148,18 @@ docker compose up -d
 
 ## 🚧 Roadmap
 
+- [ ] Set up private HTTPS Access (with Traefik, CloudFlare)
 - [ ] Implement Ansible playbooks for automated provisioning
 - [ ] Deploy Prometheus and Grafana for infrastructure monitoring
 - [ ] Set up CI/CD pipelines for automated deployments
 - [ ] Set up K3s cluster on Proxmox
 - [ ] Set up GitOps with ArgoCD
+- [ ] Set up Authorization with Authentik
+- [ ] Set up Unbound for recursive DNS
 - [ ] Document comprehensive backup and recovery procedures
 - [ ] Implement automated testing for infrastructure changes
+
+... and much more.
 
 ## 📄 License
 
