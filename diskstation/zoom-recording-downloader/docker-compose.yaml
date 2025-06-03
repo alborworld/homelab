@@ -10,7 +10,6 @@ services:
       - ZOOM_CLIENT_ID=${ZOOM_CLIENT_ID}
       - ZOOM_CLIENT_SECRET=${ZOOM_CLIENT_SECRET}
       - ZOOM_ACCOUNT_ID=${ZOOM_ACCOUNT_ID}
-      - LOG_RETENTION_MONTHS=3
     volumes:
       - ${VOLUMEDIR}/zoom-recording-downloader/logs:/logs:rw
       - ${ZOOM_DOWNLOAD_DIR}:/downloads:rw
