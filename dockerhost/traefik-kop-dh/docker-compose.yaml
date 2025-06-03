@@ -1,11 +1,12 @@
 services:
+  # https://www.reddit.com/r/Traefik/comments/w8v52z/running_traefik_with_multiple_docker_hosts/
   traefik-kop-dh:
     image: "ghcr.io/jittering/traefik-kop:latest"
     container_name: TreaefikKop-DH
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - REDIS_ADDR="10.0.4.94:6379"
-      - BIND_IP="10.0.4.53"
+      - REDIS_ADDR=10.0.4.94:6379
+      - BIND_IP=10.0.4.53
       - KOP_HOSTNAME=dockerhost
     restart: always
