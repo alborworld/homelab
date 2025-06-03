@@ -12,11 +12,6 @@ services:
       - ${MEDIADIR}/downloads:/app/qBittorrent/downloads
       - ${MEDIADIR}/downloads/complete/Movies:/downloads/complete/Movies
     network_mode: "service:gluetun"
-    depends_on:
-      gluetun:
-        condition: service_started
-      qbittorrent:
-        condition: service_started
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.radarr.rule=Host(`radarr.home.local`)"
