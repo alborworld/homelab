@@ -13,5 +13,5 @@ services:
       - LOG_RETENTION_MONTHS=3
     volumes:
       - ${VOLUMEDIR}/zoom-recording-downloader/logs:/logs:rw
-      - /volume1/homes/Alessandro/Shamanism/Recordings/Zoom:/downloads:rw
+      - ${ZOOM_DOWNLOAD_DIR}:/downloads:rw
     restart: unless-stopped
