@@ -7,10 +7,11 @@ services:
     environment:
       - TZ=Europe/Amsterdam
       - CRON_SETTINGS=0 7 * * *
-      - DOWNLOAD_DIRECTORY=/downloads
       - ZOOM_CLIENT_ID=${ZOOM_CLIENT_ID}
       - ZOOM_CLIENT_SECRET=${ZOOM_CLIENT_SECRET}
       - ZOOM_ACCOUNT_ID=${ZOOM_ACCOUNT_ID}
+      - LOG_RETENTION_MONTHS=3
     volumes:
+      - ${VOLUMEDIR}/zoom-recording-downloader/logs:/logs:rw
       - /volume1/homes/Alessandro/Shamanism/Recordings/Zoom:/downloads:rw
     restart: unless-stopped
