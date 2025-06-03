@@ -9,9 +9,6 @@ services:
     volumes:
       - ${VOLUMEDIR}/prowlarr:/config
     network_mode: "service:gluetun"
-    depends_on:
-      gluetun:
-        condition: service_started
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.home.local`)"

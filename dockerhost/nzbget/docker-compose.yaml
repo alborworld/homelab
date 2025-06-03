@@ -12,9 +12,6 @@ services:
       - ${VOLUMEDIR}/nzbget:/config
       - ${MEDIADIR}/downloads:/downloads
     network_mode: "service:gluetun"
-    depends_on:
-      gluetun:
-        condition: service_started
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nzbget.rule=Host(`nzbget.home.local`)"

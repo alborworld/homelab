@@ -12,11 +12,6 @@ services:
       - ${MEDIADIR}/downloads:/app/qBittorrent/downloads
       - ${MEDIADIR}/downloads/complete/Series:/downloads/complete/Series
     network_mode: "service:gluetun"
-    depends_on:
-      gluetun:
-        condition: service_started
-      qbittorrent:
-        condition: service_started
     labels:
       - "traefik.enable=true"
       - "traefik.node=dockerhost"

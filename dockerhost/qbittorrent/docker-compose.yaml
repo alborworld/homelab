@@ -10,9 +10,6 @@ services:
       - ${VOLUMEDIR}/qbittorrent:/config
       - ${MEDIADIR}/downloads:/app/qBittorrent/downloads
     network_mode: "service:gluetun"
-    depends_on:
-      gluetun:
-        condition: service_started
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.home.local`)"
