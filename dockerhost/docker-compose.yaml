@@ -3,7 +3,7 @@
 name: dockerhost
 
 include:
-  - dockerproxy/docker-compose.yaml
+  - dockerproxy-dh/docker-compose.yaml
   - beszel-agent-dh/docker-compose.yaml
   - byparr/docker-compose.yaml
   - gitlab-runner/docker-compose.yaml
