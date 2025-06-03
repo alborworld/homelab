@@ -1,7 +1,7 @@
 services:
-  dockerproxy:
+  dockerproxy-rp:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
-    container_name: DockerProxy
+    container_name: DockerProxy-RP
     environment:
       - CONTAINERS=1 # Allow access to viewing containers
       - SERVICES=1 # Allow access to viewing services (necessary when using Docker Swarm)
