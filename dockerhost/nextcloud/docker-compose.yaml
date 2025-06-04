@@ -42,6 +42,14 @@ services:
     networks:
       - nextcloud_network
 
+  redis:
+    image: redis:alpine
+    command: redis-server --protected-mode no
+    container_name: NextCloudRedis
+    restart: unless-stopped
+    networks:
+      - nextcloud_network
+
   onlyoffice:
     image: onlyoffice/documentserver
     container_name: OnlyOffice
