@@ -12,7 +12,6 @@ include:
   - nextcloud-app/docker-compose.yaml
   - nextcloud-db/docker-compose.yaml
   - nzbget/docker-compose.yaml
-  - onlyoffice-document-server/docker-compose.yaml
   - overseerr/docker-compose.yaml
   - plex/docker-compose.yaml
   - portainer-agent-dh/docker-compose.yaml
