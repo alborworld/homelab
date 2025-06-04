@@ -16,6 +16,7 @@ services:
       - ${VOLUMEDIR}/nextcloud/config:/config
       - ${VOLUMEDIR}/nextcloud/data:/data
       - /mnt/Alessandro:/mnt/Alessandro
+      - /mnt/CorsiOnline:/mnt/CorsiOnline
     devices:
       - /dev/dri:/dev/dri
     labels:
