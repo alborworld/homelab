@@ -9,8 +9,7 @@ include:
   - gitlab-runner/docker-compose.yaml
   - gluetun/docker-compose.yaml
   - grafana/docker-compose.yaml
-  - nextcloud-app/docker-compose.yaml
-  - nextcloud-db/docker-compose.yaml
+  - nextcloud/docker-compose.yaml
   - nzbget/docker-compose.yaml
   - overseerr/docker-compose.yaml
   - plex/docker-compose.yaml

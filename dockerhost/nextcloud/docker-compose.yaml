@@ -1,0 +1,67 @@
+services:
+  nextcloud:
+    image: nextcloud:latest
+    container_name: NextCloud
+    restart: unless-stopped
+    ports:
+      - 8081:80
+    environment:
+      - MYSQL_USER=${NEXTCLOUD_MYSQL_USER}
+      - MYSQL_PASSWORD=${NEXTCLOUD_MYSQL_PASSWORD}
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_HOST=nextcloud-db
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${VOLUMEDIR}/nextcloud/html:/var/www/html
+      - ${VOLUMEDIR}/nextcloud/config:/config
+      - ${VOLUMEDIR}/nextcloud/data:/data
+      - ${VOLUMEDIR}/nextcloud/logs/nextcloud:/var/log/nextcloud
+      - /mnt/Alessandro:/mnt/Alessandro
+    devices:
+      - /dev/dri:/dev/dri
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.home.local`)"
+      - "traefik.http.routers.nextcloud.entrypoints=web,websecure"
+    depends_on:
+      - nextcloud-db
+    networks:
+      - nextcloud_network
+
+  nextcloud-db:
+    image: mariadb:10.5
+    container_name: NextCloudDb
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${NEXTCLOUD_MYSQL_PASSWORD}
+      - MYSQL_USER=${NEXTCLOUD_MYSQL_USER}
+      - MYSQL_PASSWORD=${NEXTCLOUD_MYSQL_PASSWORD}
+      - MYSQL_DATABASE=nextcloud
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${VOLUMEDIR}/nextcloud/database:/var/lib/mysql
+      - ${VOLUMEDIR}/nextcloud/logs/database:/var/log/mysql
+    networks:
+      - nextcloud_network
+
+  onlyoffice:
+    image: onlyoffice/documentserver
+    container_name: OnlyOffice
+    restart: unless-stopped
+    environment:
+      - JWT_ENABLED=true
+      - JWT_SECRET=${ONLY_OFFICE_JWT_SECRET}
+    ports:
+      - 9980:80
+    volumes:
+      - ${VOLUMEDIR}/nextcloud/logs/onlyoffice:/var/log/onlyoffice
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.onlyoffice.rule=Host(`onlyoffice.home.local`)"
+      - "traefik.http.routers.onlyoffice.entrypoints=web,websecure"
+    networks:
+      - nextcloud_network
+
+networks:
+  nextcloud_network:
+    driver: bridge
