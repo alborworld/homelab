@@ -23,6 +23,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.home.local`)"
       - "traefik.http.routers.nextcloud.entrypoints=web,websecure"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=8081"
     depends_on:
       - nextcloud-db
     networks:
