@@ -15,7 +15,6 @@ services:
       - ${VOLUMEDIR}/nextcloud/html:/var/www/html
       - ${VOLUMEDIR}/nextcloud/config:/config
       - ${VOLUMEDIR}/nextcloud/data:/data
-      - ${VOLUMEDIR}/nextcloud/logs/nextcloud:/var/log/nextcloud
       - /mnt/Alessandro:/mnt/Alessandro
     devices:
       - /dev/dri:/dev/dri
@@ -41,7 +40,6 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - ${VOLUMEDIR}/nextcloud/database:/var/lib/mysql
-      - ${VOLUMEDIR}/nextcloud/logs/database:/var/log/mysql
     networks:
       - nextcloud_network
 
