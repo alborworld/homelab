@@ -11,6 +11,6 @@ services:
       - ZOOM_CLIENT_SECRET=${ZOOM_CLIENT_SECRET}
       - ZOOM_ACCOUNT_ID=${ZOOM_ACCOUNT_ID}
     volumes:
-      - ${VOLUMEDIR}/zoom-recording-downloader/logs:/logs:rw
+      - ${VOLUMEDIR}/zoom-recording-downloader/logs:/var/log/zoom-recording-downloader:rw
       - ${ZOOM_DOWNLOAD_DIR}:/downloads:rw
     restart: unless-stopped
