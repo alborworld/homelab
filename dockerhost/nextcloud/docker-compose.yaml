@@ -11,6 +11,7 @@ services:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_HOST=nextcloud-db
       - TZ=Europe/Amsterdam
+      - NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.home.local,nextcloud.shamanism-nature.com
     volumes:
       - ${VOLUMEDIR}/nextcloud/html:/var/www/html
       - /mnt/Alessandro:/mnt/Alessandro
@@ -19,9 +20,9 @@ services:
       - /dev/dri:/dev/dri
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.home.local`, `nextcloud.shamanism-nature.com`)"
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.home.local`) || Host(`nextcloud.shamanism-nature.com`)"
       - "traefik.http.routers.nextcloud.entrypoints=web,websecure"
-      - "traefik.http.routers.nextcloud.tls=true"
+      - "traefik.http.routers.nextcloud.tls.certresolver=myresolver"
       - "traefik.http.services.nextcloud.loadbalancer.server.port=8081"
     depends_on:
       - nextcloud-db
