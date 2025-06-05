@@ -2,7 +2,7 @@ services:
   cloudflared-shamanism:
     image: cloudflare/cloudflared:latest
     container_name: CloudFlareDShamanism
-    command: tunnel run
+    command: tunnel run shamanism-tunnel
     depends_on:
       - traefik
     volumes:
