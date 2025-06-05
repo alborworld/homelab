@@ -22,7 +22,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.home.local`) || Host(`nextcloud.shamanism-nature.com`)"
       - "traefik.http.routers.nextcloud.entrypoints=web,websecure"
-      - "traefik.http.routers.nextcloud.tls.certresolver=myresolver"
       - "traefik.http.services.nextcloud.loadbalancer.server.port=8081"
     depends_on:
       - nextcloud-db
