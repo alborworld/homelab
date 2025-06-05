@@ -2,9 +2,9 @@ services:
   cloudflared-shamanism:
     image: cloudflare/cloudflared:latest
     container_name: CloudFlareDShamanism
-    command: tunnel --no-autoupdate run --config /etc/cloudflared/config.yaml
-    restart: unless-stopped
+    command: tunnel run
     depends_on:
       - traefik
     volumes:
       - ${VOLUMEDIR}/cloudflared-shamanism:/etc/cloudflared
+    restart: unless-stopped
