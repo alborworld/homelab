@@ -3,6 +3,7 @@
 name: raspberrypi5
 
 include:
+  - cloudflared/docker-compose.yaml
   - dockerproxy-rp/docker-compose.yaml
   - portainer/docker-compose.yaml
   - watchtower/docker-compose.yaml
