@@ -2,21 +2,36 @@ services:
   traefik:
     image: traefik:v3.4
     container_name: Traefik
+    user: "${UID}:${GID}"
+    group_add:
+      - ${DGID}
     ports:
       - "80:80"
       - "443:443"
       - "9090:8080"
     environment:
       - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
-      - ACME_EMAIL=${ACME_EMAIL}
+      - TRAEFIK_CERTIFICATESRESOLVERS_cloudflare_ACME_EMAIL=${ACME_EMAIL}
     volumes:
-      - ${VOLUMEDIR}/traefik:/etc/traefik:ro
+      - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./dynamic:/etc/traefik/dynamic:ro
+      - ${VOLUMEDIR}/traefik/certs/:/var/traefik/certs/:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.home.local`)"
-      - "traefik.http.routers.traefik-dashboard.service=api@internal"
-      - "traefik.http.routers.traefik-dashboard.entrypoints=web,websecure"
+      # Old Traefik dashboard router (insecure)
+      - "traefik.http.routers.traefik-insecure.rule=Host(`traefik.home.local`)"
+      - "traefik.http.routers.traefik-insecure.entrypoints=web"
+      - "traefik.http.routers.traefik-insecure.service=api@internal"
+      # Traefik dashboard router (secure)
+      - "traefik.http.routers.traefik.rule=Host(`traefik.home.alborworld.com`)"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
+      # Add basic auth middleware for the admin dashboard
+      # - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_AUTH_USERS}"
+      # - "traefik.http.routers.traefik.middlewares=traefik-auth"
     restart: unless-stopped
