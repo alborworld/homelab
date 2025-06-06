@@ -13,9 +13,17 @@ services:
       - ${VOLUMEDIR}/adguardhome/conf:/opt/adguardhome/conf
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.adguardhome.rule=Host(`adguard.home.local`)"
-      - "traefik.http.routers.adguardhome.entrypoints=web,websecure"
-      - "traefik.http.services.adguardhome.loadbalancer.server.port=80" 
+      - "traefik.http.services.adguardhome.loadbalancer.server.port=80"
+      # Old ADguardHome router (insecure)
+      - "traefik.http.routers.adguardhome-insecure.rule=Host(`adguard.home.local`)"
+      - "traefik.http.routers.adguardhome-insecure.entrypoints=web"
+      - "traefik.http.routers.adguardhome-insecure.service=adguardhome"
+      # ADguardHome router (secure)
+      - "traefik.http.routers.adguardhome.rule=Host(`adguard.home.alborworld.com`)"
+      - "traefik.http.routers.adguardhome.entrypoints=websecure"
+      - "traefik.http.routers.adguardhome.service=adguardhome"
+      - "traefik.http.routers.adguardhome.tls=true"
+      - "traefik.http.routers.adguardhome.tls.certresolver=cloudflare"
     cap_add:
       - NET_ADMIN
     restart: always
