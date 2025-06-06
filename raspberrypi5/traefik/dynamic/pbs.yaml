@@ -1,0 +1,30 @@
+---
+http:
+  routers:
+    pbs:
+      rule: "Host(`pbs.home.local`)"
+      service: pbs
+      entryPoints:
+        - web
+        - websecure
+      middlewares:
+        - pbs-headers
+
+  middlewares:
+    pbs-headers:
+      headers:
+        customRequestHeaders:
+          Authorization: ""
+          Cookie: ""
+
+  services:
+    pbs:
+      loadBalancer:
+        servers:
+          - url: "https://pbs.home:8007"
+        passHostHeader: true
+        serversTransport: insecureTransport
+
+  serversTransports:
+    insecureTransport:
+      insecureSkipVerify: true
