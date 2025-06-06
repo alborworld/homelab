@@ -7,6 +7,12 @@ services:
       - ${VOLUMEDIR}/beszel/socket:/beszel_socket
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.beszel.rule=Host(`beszel.home.local`)"
-      - "traefik.http.routers.beszel.entrypoints=web,websecure"
+      # Old Beszel router (insecure)
+      - "traefik.http.routers.beszel-insecure.rule=Host(`beszel.home.local`)"
+      - "traefik.http.routers.beszel-insecure.entrypoints=web"
+      # Beszel router (secure)
+      - "traefik.http.routers.beszel.rule=Host(`beszel.home.alborworld.com`)"
+      - "traefik.http.routers.beszel.entrypoints=websecure"
+      - "traefik.http.routers.beszel.tls=true"
+      - "traefik.http.routers.beszel.tls.certresolver=cloudflare"
     restart: unless-stopped
