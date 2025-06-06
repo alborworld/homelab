@@ -1,7 +1,7 @@
 services:
   speedtest-tracker:
-    container_name: SpeedTestTracker
     image: lscr.io/linuxserver/speedtest-tracker:latest
+    container_name: SpeedTestTracker
     ports:
       - 8084:80
       - 8444:443
@@ -17,7 +17,15 @@ services:
       - ${VOLUMEDIR}/speedtest-tracker:/config
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.speedtest.rule=Host(`speedtest.home.local`)"
-      - "traefik.http.routers.speedtest.entrypoints=web,websecure" 
       - "traefik.http.services.speedtest.loadbalancer.server.port=80"
+      # Old SpeetTestTracker router (insecure)
+      - "traefik.http.routers.speedtest-insecure.rule=Host(`speedtest.home.local`)"
+      - "traefik.http.routers.speedtest-insecure.entrypoints=web" 
+      - "traefik.http.routers.speedtest-insecure.service=speedtest"
+      # SpeetTestTracker router (secure)
+      - "traefik.http.routers.speedtest.rule=Host(`speedtest.home.alborworld.com`)"
+      - "traefik.http.routers.speedtest.entrypoints=websecure"
+      - "traefik.http.routers.speedtest.service=speedtest"
+      - "traefik.http.routers.speedtest.tls=true"
+      - "traefik.http.routers.speedtest.tls.certresolver=cloudflare"
     restart: unless-stopped
