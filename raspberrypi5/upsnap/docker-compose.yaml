@@ -10,7 +10,15 @@ services:
       - ${VOLUMEDIR}/upsnap/data:/app/pb_data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.upsnap.rule=Host(`upsnap.home.local`)"
-      - "traefik.http.routers.upsnap.entrypoints=web,websecure"
       - "traefik.http.services.upsnap.loadbalancer.server.url=http://host.docker.internal:8090"
+      # Old UpSnap router (insecure)
+      - "traefik.http.routers.upsnap-insecure.rule=Host(`upsnap.home.local`)"
+      - "traefik.http.routers.upsnap-insecure.entrypoints=web"
+      - "traefik.http.routers.upsnap-insecure.service=upsnap"
+      # UpSnap router (secure)
+      - "traefik.http.routers.upsnap.rule=Host(`upsnap.home.alborworld.com`)"
+      - "traefik.http.routers.upsnap.entrypoints=websecure"
+      - "traefik.http.routers.upsnap.service=upsnap"
+      - "traefik.http.routers.upsnap.tls=true"
+      - "traefik.http.routers.upsnap.tls.certresolver=cloudflare"
     restart: unless-stopped
