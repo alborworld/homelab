@@ -1,0 +1,30 @@
+---
+http:
+  routers:
+    diskstation:
+      rule: "Host(`diskstation.home.local`)"
+      service: diskstation
+      entryPoints:
+        - web
+        - websecure
+      middlewares:
+        - diskstation-headers
+
+  middlewares:
+    diskstation-headers:
+      headers:
+        customRequestHeaders:
+          Authorization: ""
+          Cookie: ""
+
+  services:
+    diskstation:
+      loadBalancer:
+        servers:
+          - url: "http://diskstation.home:5000"
+        passHostHeader: true
+        serversTransport: insecureTransport
+
+  serversTransports:
+    insecureTransport:
+      insecureSkipVerify: true
