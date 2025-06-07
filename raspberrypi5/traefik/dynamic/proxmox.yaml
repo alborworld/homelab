@@ -2,13 +2,14 @@
 http:
   routers:
     proxmox:
-      rule: "Host(`proxmox.home.local`)"
+      rule: "Host(`proxmox.home.alborworld.com`)"
       service: proxmox
       entryPoints:
-        - web
         - websecure
       middlewares:
         - proxmox-headers
+      tls:
+        certResolver: cloudflare
 
   middlewares:
     proxmox-headers:
