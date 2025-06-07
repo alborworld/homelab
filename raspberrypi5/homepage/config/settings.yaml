@@ -1,0 +1,20 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/settings/
+
+title: AlborWorld HomeLab
+startUrl: http://homepage.home.local
+
+background: 
+  image: https://www.pixelstalk.net/wp-content/uploads/images1/Desktop-Jungle-Images.jpg
+  blur: xs # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+  saturate: 75 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+  brightness: 50 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+  opacity: 100 # 0-100
+
+theme: dark # or light
+color: slate
+
+providers:
+  openweathermap: openweathermapapikey
+  weatherapi: weatherapiapikey
