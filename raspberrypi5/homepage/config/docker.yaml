@@ -1,0 +1,15 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/docker/
+
+my-docker:
+  host: dockerproxy-rp
+  port: 2375
+
+dockerhost:
+  host: 10.0.4.53
+  port: 2375
+
+diskstation:
+  host: 10.0.4.111
+  port: 2375

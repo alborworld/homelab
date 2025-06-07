@@ -18,7 +18,8 @@ services:
       HOMEPAGE_VAR_ADGUARD_HOME_USERNAME: ${HOMEPAGE_VAR_ADGUARD_HOME_USERNAME}
       HOMEPAGE_VAR_ADGUARD_HOME_PASSWORD: ${HOMEPAGE_VAR_ADGUARD_HOME_PASSWORD}
     volumes:
-      - ${VOLUMEDIR}/homepage:/app/config
+      - ./config:/app/config
+      - ${VOLUMEDIR}/homepage/logs:/app/config/logs:rw
     labels:
       - "traefik.enable=true"
       # Old Homepage router (insecure)

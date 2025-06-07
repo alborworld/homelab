@@ -1,0 +1,236 @@
+---
+# For configuration options and examples, please see:
+# https://ge.home.localpage.dev/configs/services/
+
+- Infrastructure:
+    - Portainer:
+        icon: portainer.png
+        href: http://portainer.home.local
+        description: Container Management
+        siteMonitor: http://portainer.home.local
+    - Proxmox:
+        icon: proxmox.png
+        href: https://nuc.home:8006
+        description: NUC – VM & Container Management
+        siteMonitor: https://nuc.home:8006
+    - Proxmox Backup Server:
+        icon: proxmox.png
+        href: http://pbs.home:8007
+        description: Backup Server for VMs & Containers
+        siteMonitor: https://pbs.home:8007
+    - Traefik:
+        icon: traefik.png
+        href: http://traefik.home.local
+        description: Reverse Proxy
+        siteMonitor: http://traefik.home.local
+        widget:
+          type: traefik
+          url: http://traefik.home.local
+    - Vault:
+        icon: vault.png
+        href: http://vault.home.local
+        description: Secrets Management
+        siteMonitor: http://vault.home.local/v1/sys/health
+
+- Networking:
+    - AdGuard Home:
+        icon: adguard-home.png
+        href: http://adguard.home.local
+        description: Ad blocker and DNS filtering
+        siteMonitor: http://adguard.home.local
+        widget:
+          type: adguard
+          url: http://adguard.home.local
+          username: {{HOMEPAGE_VAR_ADGUARD_HOME_USERNAME}}
+          password: {{HOMEPAGE_VAR_ADGUARD_HOME_PASSWORD}}
+    - UpSnap:
+        icon: upsnap.png
+        href: http://upsnap.home.local
+        description: Wake on lan web app
+        siteMonitor: http://upsnap.home.local
+
+- Network Devices:
+    - Synology DiskStation:
+        icon: synology.png
+#        href: https://alborworld-diskstation.synology.me
+#        href: http://diskstation.home.local
+        href: http://diskstation.home:5000
+        description: Synology DS218+ NAS
+#        siteMonitor: https://alborworld-diskstation.synology.me
+#        siteMonitor: http://diskstation.home.local
+        siteMonitor: http://diskstation.home:5000
+    - Synology DiskStation Backup:
+        icon: synology.png
+#        href: https://alborworld-diskstation.synology.me
+#        href: http://10.0.4.34:5000/
+#        href: http://diskstation-backup.home.local
+        href: http://diskstation-backup.home:5000
+        description: Synology DS214 NAS
+#        siteMonitor: https://alborworld-diskstation-backup.synology.me
+#        siteMonitor: http://10.0.4.34:5000/
+#        siteMonitor: http://diskstation-backup.home.local
+        siteMonitor: http:diskstation-backup.home:5000
+    - Synology Router:
+        icon: synology.png
+        href: https://alborworld-router.synology.me:8001
+        description: Synology RT2600ac Router
+        siteMonitor: https://alborworld-router.synology.me
+
+- Monitoring:
+    - Beszel:
+        icon: beszel.png
+        href: http://beszel.home.local
+        description: Server Monitoring Platform
+        siteMonitor: http://beszel.home.local
+    - Grafana:
+        icon: grafana.png
+        href: http://grafana.home.local
+        description: Metrics Dashboards
+        siteMonitor: http://grafana.home.local
+    - Prometheus:
+        icon: prometheus.png
+        href: http://prometheus.home.local
+        description: Time-Series Metrics Collector
+        siteMonitor: http://prometheus.home.local/metrics
+    - Speedtest Tracker:
+        icon: speedtest-tracker.png
+        href: http://speedtest.home.local
+        description: Internet Speed History
+        siteMonitor: http://speedtest.home.local
+        widget:
+          type: speedtest
+          url: http://speedtest.home.local
+          version: 1 # optional, default is 1
+#          key: speedtestapikey # required for version 2
+          bitratePrecision: 3 # optional, default is 
+    - Uptime Kuma:
+        icon: uptime-kuma.png
+        href: http://uptimekuma.home.local
+        description: Service Uptime Monitor
+        siteMonitor: http://uptimekuma.home.local
+        widget:
+          type: uptimekuma
+          url: http://uptimekuma.home.local
+          slug: shamanism
+
+- Download Clients:
+    - NZBGet:
+        icon: nzbget.png
+        href: http://nzbget.home.local
+        description: Usenet Downloader
+        siteMonitor: http://nzbget.home.local
+    - qBittorrent:
+        icon: qbittorrent.png
+        href: http://qbittorrent.home.local
+        description: Torrent Downloader
+        siteMonitor: http://qbittorrent.home.local
+        widget:
+          type: qbittorrent
+          url: http://qbittorrent.home.local
+          username: {{HOMEPAGE_VAR_QBITTORRENT_USERNAME}}
+          password: {{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}
+          enableLeechProgress: true # optional, defaults to false
+
+- Plex:
+    - Plex:
+        icon: plex.png
+        href: http://plex.home.local
+        description: Plex Media Server
+        siteMonitor: http://plex.home.local
+        widget:
+          type: plex
+          url: http://plex.home.local
+          key: {{HOMEPAGE_VAR_PLEX_TOKEN}}
+    - Tautulli:
+        icon: tautulli.png
+        href: http://tautulli.home.local
+        description: Plex Monitoring
+        siteMonitor: http://tautulli.home.local
+        widget:
+          type: tautulli
+          url: http://tautulli.home.local
+          key: {{HOMEPAGE_VAR_TAUTULLI_API_KEY}}
+          enableUser: true # optional, defaults to false
+          showEpisodeNumber: true # optional, defaults to false
+          expandOneStreamToTwoRows: false # optional, defaults to true
+    - Overseerr:
+        icon: overseerr.png
+        href: http://overseerr.home.local
+        description: Request Movies and TV Shows
+        siteMonitor: http://overseerr.home.local
+        widget:
+          type: overseerr
+          url: http://overseerr.home.local
+          key: {{HOMEPAGE_VAR_OVERSEERR_API_KEY}}
+
+- Media:
+    - Prowlarr:
+        icon: prowlarr.png
+        href: http://prowlarr.home.local
+        description: Indexer Manager
+        siteMonitor: http://prowlarr.home.local
+        widget:
+          type: prowlarr
+          url: http://prowlarr.home.local
+          key: {{HOMEPAGE_VAR_PROWLARR_API_KEY}}
+    - Radarr:
+        icon: radarr.png
+        href: http://radarr.home.local
+        description: Movies Automation
+        siteMonitor: http://radarr.home.local
+        widget:
+          type: radarr
+          url: http://radarr.home.local
+#          url: http://10.0.4.111:7878
+          key: {{HOMEPAGE_VAR_RADARR_API_KEY}}
+    - Readarr:
+        icon: readarr.png
+        href: http://readarr.home.local
+        description: Books Automation
+        siteMonitor: http://readarr.home.local
+        widget:
+          type: readarr
+          url: http://readarr.home.local
+          key: {{HOMEPAGE_VAR_READARR_API_KEY}}
+    - Sonarr:
+        icon: sonarr.png
+        href: http://sonarr.home.local
+        description: TV Shows Automation
+        siteMonitor: http://sonarr.home.local
+        widget:
+          type: sonarr
+          url: http://sonarr.home.local
+#          url: http://10.0.4.111:8989 
+          key: {{HOMEPAGE_VAR_SONARR_API_KEY}}
+    - Tdarr:
+        icon: tdarr.png
+        href: http://tdarr.home.local
+        description: Media Transcoding
+        siteMonitor: http://tdarr.home.local
+        widget:
+          type: tdarr
+          url: http://tdarr.home.local
+
+- Utilities:
+    - Home Assistant:
+        icon: home-assistant.png
+        href: http://homeassistant.home.local
+        description: Home Automation
+        siteMonitor: http://homeassistant.home.local
+    - NextCloud:
+        icon: nextcloud.png
+#        href: http://nextcloud.home.local
+        href: https://nextcloud.shamanism-nature.com
+        description: Personal Cloud Storage
+#        siteMonitor: http://nextcloud.home.local
+        siteMonitor: https://nextcloud.shamanism-nature.com
+    - Syncthing:
+        icon: syncthing.png
+        href: http://syncthing.home.local
+        description: File Synchronization
+        siteMonitor: http://syncthing.home.local
+    - Synology Photos:
+        icon: synology-photos.png
+        href: https://alborworld-diskstation.synology.me/?launchApp=SYNO.Foto.AppInstance
+        description: Media Gallery
+
