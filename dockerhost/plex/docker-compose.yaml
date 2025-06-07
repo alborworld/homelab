@@ -24,7 +24,15 @@ services:
       - /dev/dri:/dev/dri
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.plex.rule=Host(`plex.home.local`)"
-      - "traefik.http.routers.plex.entrypoints=web,websecure"
       - "traefik.http.services.plex.loadbalancer.server.port=32400"
+      # Old Plex router (insecure)
+      - "traefik.http.routers.plex-insecure.rule=Host(`plex.home.local`)"
+      - "traefik.http.routers.plex-insecure.entrypoints=web"
+      - "traefik.http.routers.plex-insecure.service=plex"
+      # Plex router (secure)
+      - "traefik.http.routers.plex.rule=Host(`plex.home.alborworld.com`)"
+      - "traefik.http.routers.plex.entrypoints=websecure"
+      - "traefik.http.routers.plex.service=plex"
+      - "traefik.http.routers.plex.tls=true"
+      - "traefik.http.routers.plex.tls.certresolver=cloudflare"
     restart: always
