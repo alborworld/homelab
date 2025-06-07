@@ -12,7 +12,15 @@ services:
       - ${VOLUMEDIR}/overseerr:/config
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.overseerr.rule=Host(`overseerr.home.local`)"
-      - "traefik.http.routers.overseerr.entrypoints=web,websecure"
       - "traefik.http.services.overseerr.loadbalancer.server.port=5055"
+      # Old Overseerr router (insecure)
+      - "traefik.http.routers.overseerr-insecure.rule=Host(`overseerr.home.local`)"
+      - "traefik.http.routers.overseerr-insecure.entrypoints=web"
+      - "traefik.http.routers.overseerr-insecure.service=overseerr"
+      # Overseerr router (secure)
+      - "traefik.http.routers.overseerr.rule=Host(`overseerr.home.alborworld.com`)"
+      - "traefik.http.routers.overseerr.entrypoints=websecure"
+      - "traefik.http.routers.overseerr.service=overseerr"
+      - "traefik.http.routers.overseerr.tls=true"
+      - "traefik.http.routers.overseerr.tls.certresolver=cloudflare"
     restart: always
