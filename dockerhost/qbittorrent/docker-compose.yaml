@@ -12,7 +12,15 @@ services:
     network_mode: "service:gluetun"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.home.local`)"
-      - "traefik.http.routers.qbittorrent.entrypoints=web,websecure"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=7091"
+      # Old qBittorrent router (insecure)
+      - "traefik.http.routers.qbittorrent-insecure.rule=Host(`qbittorrent.home.local`)"
+      - "traefik.http.routers.qbittorrent-insecure.entrypoints=web"
+      - "traefik.http.routers.qbittorrent-insecure.service=qbittorrent"
+      # qBittorrent router (secure)
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.home.alborworld.com`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
+      - "traefik.http.routers.qbittorrent.service=qbittorrent"
+      - "traefik.http.routers.qbittorrent.tls=true"
+      - "traefik.http.routers.qbittorrent.tls.certresolver=cloudflare"
     restart: always
