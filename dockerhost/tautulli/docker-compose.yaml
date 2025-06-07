@@ -15,7 +15,15 @@ services:
       - ${VOLUMEDIR}/tautulli:/config
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.tautulli.rule=Host(`tautulli.home.local`)"
-      - "traefik.http.routers.tautulli.entrypoints=web,websecure"
       - "traefik.http.services.tautulli.loadbalancer.server.port=8181"
+      # Old Tautulli router (insecure)
+      - "traefik.http.routers.tautulli-insecure.rule=Host(`tautulli.home.local`)"
+      - "traefik.http.routers.tautulli-insecure.entrypoints=web"
+      - "traefik.http.routers.tautulli-insecure.service=tautulli"
+      # Tautulli router (secure)
+      - "traefik.http.routers.tautulli.rule=Host(`tautulli.home.alborworld.com`)"
+      - "traefik.http.routers.tautulli.entrypoints=websecure"
+      - "traefik.http.routers.tautulli.service=tautulli"
+      - "traefik.http.routers.tautulli.tls=true"
+      - "traefik.http.routers.tautulli.tls.certresolver=cloudflare"
     restart: always
