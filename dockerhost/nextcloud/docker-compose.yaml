@@ -34,7 +34,7 @@ services:
       - nextcloud_network
 
   nextcloud-db:
-    image: mariadb:10.5
+    image: mariadb:11.4
     container_name: NextCloudDb
     restart: unless-stopped
     environment:
