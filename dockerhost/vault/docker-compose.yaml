@@ -18,7 +18,15 @@ services:
     entrypoint: vault server -config=/vault/config/vault.json
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.vault.rule=Host(`vault.home.local`)"
-      - "traefik.http.routers.vault.entrypoints=web,websecure"
       - "traefik.http.services.vault.loadbalancer.server.port=8200"
+      # Old Vault router (insecure)
+      - "traefik.http.routers.vault-insecure.rule=Host(`vault.home.local`)"
+      - "traefik.http.routers.vault-insecure.entrypoints=web"
+      - "traefik.http.routers.vault-insecure.service=vault"
+      # Vault router (secure)
+      - "traefik.http.routers.vault.rule=Host(`vault.home.alborworld.com`)"
+      - "traefik.http.routers.vault.entrypoints=websecure"
+      - "traefik.http.routers.vault.service=vault"
+      - "traefik.http.routers.vault.tls=true"
+      - "traefik.http.routers.vault.tls.certresolver=cloudflare"
     restart: unless-stopped
