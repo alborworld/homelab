@@ -14,8 +14,15 @@ services:
     network_mode: "service:gluetun"
     labels:
       - "traefik.enable=true"
-      - "traefik.node=dockerhost"
-      - "traefik.http.routers.sonarr.rule=Host(`sonarr.home.local`)"
-      - "traefik.http.routers.sonarr.entrypoints=web,websecure"
       - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+      # Old Sonarr router (insecure)
+      - "traefik.http.routers.sonarr-insecure.rule=Host(`sonarr.home.local`)"
+      - "traefik.http.routers.sonarr-insecure.entrypoints=web"
+      - "traefik.http.routers.sonarr-insecure.service=sonarr"
+      # Sonarr router (secure)
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.home.alborworld.com`)"
+      - "traefik.http.routers.sonarr.entrypoints=websecure"
+      - "traefik.http.routers.sonarr.service=sonarr"
+      - "traefik.http.routers.sonarr.tls=true"
+      - "traefik.http.routers.sonarr.tls.certresolver=cloudflare"
     restart: always
