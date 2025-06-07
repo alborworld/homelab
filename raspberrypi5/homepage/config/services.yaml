@@ -185,8 +185,9 @@
 #        href: http://tautulli.home.local
         href: https://tautulli.home.alborworld.com
         description: Plex Monitoring
-#        siteMonitor: http://tautulli.home.local
-        siteMonitor: https://tautulli.home.alborworld.com
+#       For some reason the siteMonitor for Tautulli wants http and not https
+#        siteMonitor: https://tautulli.home.alborworld.com
+        siteMonitor: http://tautulli.home.local
         widget:
           type: tautulli
 #          url: http://tautulli.home.local
