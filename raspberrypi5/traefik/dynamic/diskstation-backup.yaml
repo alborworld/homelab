@@ -2,13 +2,14 @@
 http:
   routers:
     diskstation-backup:
-      rule: "Host(`diskstation-backup.home.local`)"
+      rule: "Host(`diskstation-backup.home.alborworld.com`)"
       service: diskstation-backup
       entryPoints:
-        - web
         - websecure
       middlewares:
         - diskstation-backup-headers
+      tls:
+        certResolver: cloudflare
 
   middlewares:
     diskstation-backup-headers:
