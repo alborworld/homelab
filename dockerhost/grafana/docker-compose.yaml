@@ -9,7 +9,15 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.node=dockerhost"
-      - "traefik.http.routers.grafana.rule=Host(`grafana.home.local`)"
-      - "traefik.http.routers.grafana.entrypoints=web,websecure"
       - "traefik.http.services.grafana.loadbalancer.server.port=3001"
+      # Old Grafana router (insecure)
+      - "traefik.http.routers.grafana-insecure.rule=Host(`grafana.home.local`)"
+      - "traefik.http.routers.grafana-insecure.entrypoints=web"
+      - "traefik.http.routers.grafana-insecure.service=grafana"
+      # Grafana router (secure)
+      - "traefik.http.routers.grafana.rule=Host(`grafana.home.alborworld.com`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.service=grafana"
+      - "traefik.http.routers.grafana.tls=true"
+      - "traefik.http.routers.grafana.tls.certresolver=cloudflare"
     restart: unless-stopped
