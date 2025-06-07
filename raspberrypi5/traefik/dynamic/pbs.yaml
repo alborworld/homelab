@@ -2,13 +2,14 @@
 http:
   routers:
     pbs:
-      rule: "Host(`pbs.home.local`)"
+      rule: "Host(`pbs.home.alborworld.com`)"
       service: pbs
       entryPoints:
-        - web
         - websecure
       middlewares:
         - pbs-headers
+      tls:
+        certResolver: cloudflare
 
   middlewares:
     pbs-headers:
