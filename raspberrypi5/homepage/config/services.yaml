@@ -12,13 +12,17 @@
         siteMonitor: https://portainer.home.alborworld.com
     - Proxmox:
         icon: proxmox.png
+#        href: https://proxmox.home.alborworld.com
         href: https://nuc.home:8006
         description: NUC – VM & Container Management
+#        siteMonitor: https://proxmox.home.alborworld.com
         siteMonitor: https://nuc.home:8006
     - Proxmox Backup Server:
         icon: proxmox.png
-        href: http://pbs.home:8007
+#        href: https://pbs.home.alborworld.com
+        href: https://pbs.home:8007
         description: Backup Server for VMs & Containers
+#        siteMonitor: https://pbs.home.alborworld.com
         siteMonitor: https://pbs.home:8007
     - Traefik:
         icon: traefik.png
@@ -66,21 +70,25 @@
         icon: synology.png
 #        href: https://alborworld-diskstation.synology.me
 #        href: http://diskstation.home.local
+#        href: https://diskstation.home.alborworld.com
         href: http://diskstation.home:5000
         description: Synology DS218+ NAS
 #        siteMonitor: https://alborworld-diskstation.synology.me
 #        siteMonitor: http://diskstation.home.local
+#        siteMonitor: https://diskstation.home.alborworld.com
         siteMonitor: http://diskstation.home:5000
     - Synology DiskStation Backup:
         icon: synology.png
 #        href: https://alborworld-diskstation.synology.me
 #        href: http://10.0.4.34:5000/
 #        href: http://diskstation-backup.home.local
+#        href: https://diskstation-backup.home.alborworld.com
         href: http://diskstation-backup.home:5000
         description: Synology DS214 NAS
 #        siteMonitor: https://alborworld-diskstation-backup.synology.me
 #        siteMonitor: http://10.0.4.34:5000/
 #        siteMonitor: http://diskstation-backup.home.local
+#        siteMonitor: https://diskstation-backup.home.alborworld.com
         siteMonitor: http:diskstation-backup.home:5000
     - Synology Router:
         icon: synology.png
