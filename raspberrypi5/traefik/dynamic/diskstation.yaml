@@ -2,13 +2,15 @@
 http:
   routers:
     diskstation:
-      rule: "Host(`diskstation.home.local`)"
+      rule: "Host(`diskstation.home.alborworld.com`)"
       service: diskstation
       entryPoints:
-        - web
+#        - web
         - websecure
       middlewares:
         - diskstation-headers
+      tls:
+        certResolver: cloudflare
 
   middlewares:
     diskstation-headers:
