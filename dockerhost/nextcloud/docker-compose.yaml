@@ -19,9 +19,15 @@ services:
       - /dev/dri:/dev/dri
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.home.local`) || Host(`nextcloud.shamanism-nature.com`)"
-      - "traefik.http.routers.nextcloud.entrypoints=web,websecure"
       - "traefik.http.services.nextcloud.loadbalancer.server.port=8081"
+      # Old Nextcloud router (insecure)
+      - "traefik.http.routers.nextcloud-insecure.rule=Host(`nextcloud.home.local`)"
+      - "traefik.http.routers.nextcloud-insecure.entrypoints=web"
+      - "traefik.http.routers.nextcloud-insecure.service=nextcloud"
+      # Nextcloud router for shamanism-nature.com (no TLS, handled by Cloudflare Tunnel)
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.shamanism-nature.com`)"
+      - "traefik.http.routers.nextcloud.entrypoints=web"
+      - "traefik.http.routers.nextcloud.service=nextcloud"
     depends_on:
       - nextcloud-db
     networks:
@@ -63,8 +69,11 @@ services:
       - ${VOLUMEDIR}/nextcloud/logs/onlyoffice:/var/log/onlyoffice
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.onlyoffice.rule=Host(`onlyoffice.home.local`)"
-      - "traefik.http.routers.onlyoffice.entrypoints=web,websecure"
+      - "traefik.http.services.onlyoffice.loadbalancer.server.port=9980"
+      # OnlyOffice router for shamanism-nature.com (no TLS, handled by Cloudflare Tunnel)
+      - "traefik.http.routers.onlyoffice.rule=Host(`onlyoffice.shamanism-nature.com`)"
+      - "traefik.http.routers.onlyoffice.entrypoints=web"
+      - "traefik.http.routers.onlyoffice.service=onlyoffice"
     networks:
       - nextcloud_network
 
