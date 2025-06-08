@@ -11,6 +11,7 @@ services:
     volumes:
       - ${VOLUMEDIR}/overseerr:/config
     labels:
+      # TRAEFIK
       - "traefik.enable=true"
       - "traefik.http.services.overseerr.loadbalancer.server.port=5055"
       # Old Overseerr router (insecure)
@@ -23,4 +24,14 @@ services:
       - "traefik.http.routers.overseerr.service=overseerr"
       - "traefik.http.routers.overseerr.tls=true"
       - "traefik.http.routers.overseerr.tls.certresolver=cloudflare"
+      # HOMEPAGE
+      - homepage.group=Plex
+      - homepage.name=Overseerr
+      - homepage.icon=overseerr.png
+      - homepage.href=https://overseerr.home.alborworld.com
+      - homepage.description=Request Movies and TV Shows
+      - homepage.siteMonitor=https://overseerr.home.alborworld.com
+      - homepage.widget.type=overseerr
+      - homepage.widget.url=https://overseerr.home.alborworld.com
+      - homepage.widget.key=${OVERSEERR_API_KEY}
     restart: always

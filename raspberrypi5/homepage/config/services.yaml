@@ -196,18 +196,6 @@
           enableUser: true
           showEpisodeNumber: true
           expandOneStreamToTwoRows: false
-    - Overseerr:
-        icon: overseerr.png
-#        href: http://overseerr.home.local
-        href: https://overseerr.home.alborworld.com
-        description: Request Movies and TV Shows
-#        siteMonitor: http://overseerr.home.local
-        siteMonitor: https://overseerr.home.alborworld.com
-        widget:
-          type: overseerr
-#          url: http://overseerr.home.local
-          url: https://overseerr.home.alborworld.com
-          key: {{HOMEPAGE_VAR_OVERSEERR_API_KEY}}
 
 - Media:
     - Prowlarr:
