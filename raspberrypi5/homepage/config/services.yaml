@@ -269,10 +269,10 @@
     - NextCloud:
         icon: nextcloud.png
 #        href: http://nextcloud.home.local
-        href: https://nextcloud.shamanism-nature.com
+        href: https://nextcloud.imiarma.com
         description: Personal Cloud Storage
 #        siteMonitor: http://nextcloud.home.local
-        siteMonitor: https://nextcloud.shamanism-nature.com
+        siteMonitor: https://nextcloud.imiarma.com
     - Syncthing:
         icon: syncthing.png
 #        href: http://syncthing.home.local

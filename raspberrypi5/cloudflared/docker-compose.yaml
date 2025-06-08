@@ -1,10 +1,10 @@
 services:
   cloudflared-shamanism:
     image: cloudflare/cloudflared:latest
-    container_name: CloudFlareDShamanism
-    command: tunnel run shamanism-tunnel
+    container_name: CloudFlareDImiarma
+    command: tunnel run imiarma-tunnel
     depends_on:
       - traefik
     volumes:
-      - ${VOLUMEDIR}/cloudflared-shamanism:/etc/cloudflared
+      - ${VOLUMEDIR}/cloudflared-imiarma:/etc/cloudflared
     restart: unless-stopped
