@@ -54,4 +54,5 @@
         icon: synology-photos.png
         href: https://alborworld-diskstation.synology.me/?launchApp=SYNO.Foto.AppInstance
         description: Media Gallery
+        siteMonitor: http://alborworld-diskstation.synology.me
 
