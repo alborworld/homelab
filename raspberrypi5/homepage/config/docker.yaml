@@ -9,7 +9,13 @@ my-docker:
 dockerhost:
   host: 10.0.4.53
   port: 2375
+#  host: https://dockerproxy.dockerhost.home.alborworld.com
+#  port: 443
+#  protocol: https
 
 diskstation:
   host: 10.0.4.111
   port: 2375
+#  host: https://dockerproxy.diskstation.home.alborworld.com
+#  port: 443
+#  protocol: https
