@@ -24,7 +24,7 @@ services:
       - traefik.http.routers.speedtest-insecure.entrypoints=web
       - traefik.http.routers.speedtest-insecure.service=speedtest
       # Speedtest router (secure)
-      - traefik.http.routers.speedtest.rule=Host(`speedtest.home.alborworld.com`)
+      - traefik.http.routers.speedtest.rule=Host(`speedtest.${LOCAL_DOMAIN}`)
       - traefik.http.routers.speedtest.entrypoints=websecure
       - traefik.http.routers.speedtest.service=speedtest
       - traefik.http.routers.speedtest.tls=true
@@ -33,11 +33,11 @@ services:
       - homepage.group=Monitoring
       - homepage.name=SpeedTest Tracker
       - homepage.icon=speedtest-tracker.png
-      - homepage.href=https://speedtest.home.alborworld.com
-      - homepage.description=Internet Speed History
-      - homepage.siteMonitor=https://speedtest.home.alborworld.com
+      - homepage.href=https://speedtest.${LOCAL_DOMAIN}
+      - homepage.description=Internet Speed Monitoring
+      - homepage.siteMonitor=https://speedtest.${LOCAL_DOMAIN}
       - homepage.widget.type=speedtest
-      - homepage.widget.url=https://speedtest.home.alborworld.com
+      - homepage.widget.url=https://speedtest.${LOCAL_DOMAIN}
       - homepage.widget.version=1
       - homepage.widget.bitratePrecision=3
     restart: unless-stopped

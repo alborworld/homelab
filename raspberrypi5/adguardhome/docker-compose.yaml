@@ -20,7 +20,7 @@ services:
       - traefik.http.routers.adguardhome-insecure.entrypoints=web
       - traefik.http.routers.adguardhome-insecure.service=adguardhome
       # AdGuardHome router (secure)
-      - traefik.http.routers.adguardhome.rule=Host(`adguard.home.alborworld.com`)
+      - traefik.http.routers.adguardhome.rule=Host(`adguard.${LOCAL_DOMAIN}`)
       - traefik.http.routers.adguardhome.entrypoints=websecure
       - traefik.http.routers.adguardhome.service=adguardhome
       - traefik.http.routers.adguardhome.tls=true
@@ -29,11 +29,11 @@ services:
       - homepage.group=Networking
       - homepage.name=Adguard Home
       - homepage.icon=adguard-home.png
-      - homepage.href=https://adguard.home.alborworld.com
-      - homepage.siteMonitor=https://adguard.home.alborworld.com
-      - homepage.description=Ad blocker and DNS filtering
+      - homepage.href=https://adguard.${LOCAL_DOMAIN}
+      - homepage.siteMonitor=https://adguard.${LOCAL_DOMAIN}
+      - homepage.description=DNS Ad-blocker
       - homepage.widget.type=adguard
-      - homepage.widget.url=https://adguard.home.alborworld.com
+      - homepage.widget.url=https://adguard.${LOCAL_DOMAIN}
       - homepage.widget.username=${ADGUARD_HOME_USERNAME}
       - homepage.widget.password=${ADGUARD_HOME_PASSWORD}
     cap_add:

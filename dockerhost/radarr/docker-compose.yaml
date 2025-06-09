@@ -21,7 +21,7 @@ services:
       - traefik.http.routers.radarr-insecure.entrypoints=web
       - traefik.http.routers.radarr-insecure.service=radarr
       # Radarr router (secure)
-      - traefik.http.routers.radarr.rule=Host(`radarr.home.alborworld.com`)
+      - traefik.http.routers.radarr.rule=Host(`radarr.${LOCAL_DOMAIN}`)
       - traefik.http.routers.radarr.entrypoints=websecure
       - traefik.http.routers.radarr.service=radarr
       - traefik.http.routers.radarr.tls=true
@@ -30,10 +30,10 @@ services:
       - homepage.group=Media
       - homepage.name=Radarr
       - homepage.icon=radarr.png
-      - homepage.href=https://radarr.home.alborworld.com
+      - homepage.href=https://radarr.${LOCAL_DOMAIN}
       - homepage.description=Movies Automation
-      - homepage.siteMonitor=https://radarr.home.alborworld.com
+      - homepage.siteMonitor=https://radarr.${LOCAL_DOMAIN}
       - homepage.widget.type=radarr
-      - homepage.widget.url=https://radarr.home.alborworld.com
+      - homepage.widget.url=https://radarr.${LOCAL_DOMAIN}
       - homepage.widget.key=${RADARR_API_KEY}
     restart: always

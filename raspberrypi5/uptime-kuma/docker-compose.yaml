@@ -11,7 +11,7 @@ services:
       - traefik.http.routers.uptimekuma-insecure.rule=Host(`uptimekuma.home.local`)
       - traefik.http.routers.uptimekuma-insecure.entrypoints=web
       # UptimeKuma router (secure)
-      - traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.home.alborworld.com`)
+      - traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.${LOCAL_DOMAIN}`)
       - traefik.http.routers.uptimekuma.entrypoints=websecure
       - traefik.http.routers.uptimekuma.tls=true
       - traefik.http.routers.uptimekuma.tls.certresolver=cloudflare
@@ -19,10 +19,10 @@ services:
       - homepage.group=Monitoring
       - homepage.name=Uptime Kuma
       - homepage.icon=uptime-kuma.png
-      - homepage.href=https://uptimekuma.home.alborworld.com
-      - homepage.description=Service Uptime Monitor
-      - homepage.siteMonitor=https://uptimekuma.home.alborworld.com
+      - homepage.href=https://uptimekuma.${LOCAL_DOMAIN}
+      - homepage.description=Uptime Monitoring
+      - homepage.siteMonitor=https://uptimekuma.${LOCAL_DOMAIN}
       - homepage.widget.type=uptimekuma
-      - homepage.widget.url=https://uptimekuma.home.alborworld.com
+      - homepage.widget.url=https://uptimekuma.${LOCAL_DOMAIN}
       - homepage.widget.slug=shamanism
     restart: always

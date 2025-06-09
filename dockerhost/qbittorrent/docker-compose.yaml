@@ -19,7 +19,7 @@ services:
       - traefik.http.routers.qbittorrent-insecure.entrypoints=web
       - traefik.http.routers.qbittorrent-insecure.service=qbittorrent
       # qBittorrent router (secure)
-      - traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.home.alborworld.com`)
+      - traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.${LOCAL_DOMAIN}`)
       - traefik.http.routers.qbittorrent.entrypoints=websecure
       - traefik.http.routers.qbittorrent.service=qbittorrent
       - traefik.http.routers.qbittorrent.tls=true
@@ -28,11 +28,11 @@ services:
       - homepage.group=Download Clients
       - homepage.name=qBittorrent
       - homepage.icon=qbittorrent.png
-      - homepage.href=https://qbittorrent.home.alborworld.com
+      - homepage.href=https://qbittorrent.${LOCAL_DOMAIN}
       - homepage.description=Torrent Downloader
-      - homepage.siteMonitor=https://qbittorrent.home.alborworld.com
+      - homepage.siteMonitor=https://qbittorrent.${LOCAL_DOMAIN}
       - homepage.widget.type=qbittorrent
-      - homepage.widget.url=https://qbittorrent.home.alborworld.com
+      - homepage.widget.url=https://qbittorrent.${LOCAL_DOMAIN}
       - homepage.widget.username=${QBITTORRENT_USERNAME}
       - homepage.widget.password=${QBITTORRENT_PASSWORD}
       - homepage.widget.enableLeechProgress=true

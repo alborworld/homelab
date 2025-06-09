@@ -23,7 +23,7 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.node=dockerhost
-      - traefik.http.routers.readarr.rule=Host(`readarr.home.alborworld.com`)
+      - traefik.http.routers.readarr.rule=Host(`readarr.${LOCAL_DOMAIN}`)
       - traefik.http.routers.readarr.entrypoints=websecure
       - traefik.http.routers.readarr.service=readarr
       - traefik.http.routers.readarr.tls=true
@@ -37,10 +37,10 @@ services:
       - homepage.group=Media
       - homepage.name=Readarr
       - homepage.icon=readarr.png
-      - homepage.href=https://readarr.home.alborworld.com
+      - homepage.href=https://readarr.${LOCAL_DOMAIN}
       - homepage.description=Books Automation
-      - homepage.siteMonitor=https://readarr.home.alborworld.com
+      - homepage.siteMonitor=https://readarr.${LOCAL_DOMAIN}
       - homepage.widget.type=readarr
-      - homepage.widget.url=https://readarr.home.alborworld.com
+      - homepage.widget.url=https://readarr.${LOCAL_DOMAIN}
       - homepage.widget.key=${READARR_API_KEY}
     restart: always

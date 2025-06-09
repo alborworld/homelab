@@ -17,7 +17,7 @@ services:
       - traefik.http.routers.portainer-insecure.entrypoints=web
       - traefik.http.routers.portainer-insecure.service=portainer
       # Portainer router (secure)
-      - traefik.http.routers.portainer.rule=Host(`portainer.home.alborworld.com`)
+      - traefik.http.routers.portainer.rule=Host(`portainer.${LOCAL_DOMAIN}`)
       - traefik.http.routers.portainer.entrypoints=websecure
       - traefik.http.routers.portainer.service=portainer
       - traefik.http.routers.portainer.tls=true
@@ -26,7 +26,7 @@ services:
       - homepage.group=Infrastructure
       - homepage.name=Portainer
       - homepage.icon=portainer.png
-      - homepage.href=https://portainer.home.alborworld.com
-      - homepage.siteMonitor=https://portainer.home.alborworld.com
+      - homepage.href=https://portainer.${LOCAL_DOMAIN}
+      - homepage.siteMonitor=https://portainer.${LOCAL_DOMAIN}
       - homepage.description=Container Management
     restart: always

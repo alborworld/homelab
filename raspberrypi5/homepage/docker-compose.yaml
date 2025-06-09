@@ -3,9 +3,10 @@ services:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: Homepage
     environment:
-      HOMEPAGE_ALLOWED_HOSTS: homepage.home.local,homepage.home.alborworld.com,10.0.4.94
+      HOMEPAGE_ALLOWED_HOSTS: homepage.home.local,homepage.${LOCAL_DOMAIN},${RASPBERRYPI_IP}
       PUID: ${UID}
       PGID: ${GID}
+      HOMEPAGE_VAR_LOCAL_DOMAIN: ${LOCAL_DOMAIN}
     volumes:
       - ./config:/app/config
       - ${VOLUMEDIR}/homepage/logs:/app/config/logs:rw
@@ -16,7 +17,7 @@ services:
       - traefik.http.routers.homepage-insecure.rule=Host(`homepage.home.local`)
       - traefik.http.routers.homepage-insecure.entrypoints=web
       # Homepage router (secure)
-      - traefik.http.routers.homepage.rule=Host(`homepage.home.alborworld.com`)
+      - traefik.http.routers.homepage.rule=Host(`homepage.${LOCAL_DOMAIN}`)
       - traefik.http.routers.homepage.entrypoints=websecure
       - traefik.http.routers.homepage.tls=true
       - traefik.http.routers.homepage.tls.certresolver=cloudflare

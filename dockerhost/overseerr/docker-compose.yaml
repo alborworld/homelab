@@ -19,7 +19,7 @@ services:
       - traefik.http.routers.overseerr-insecure.entrypoints=web
       - traefik.http.routers.overseerr-insecure.service=overseerr
       # Overseerr router (secure)
-      - traefik.http.routers.overseerr.rule=Host(`overseerr.home.alborworld.com`)
+      - traefik.http.routers.overseerr.rule=Host(`overseerr.${LOCAL_DOMAIN}`)
       - traefik.http.routers.overseerr.entrypoints=websecure
       - traefik.http.routers.overseerr.service=overseerr
       - traefik.http.routers.overseerr.tls=true
@@ -28,10 +28,10 @@ services:
       - homepage.group=Plex
       - homepage.name=Overseerr
       - homepage.icon=overseerr.png
-      - homepage.href=https://overseerr.home.alborworld.com
-      - homepage.description=Request Movies and TV Shows
-      - homepage.siteMonitor=https://overseerr.home.alborworld.com
+      - homepage.href=https://overseerr.${LOCAL_DOMAIN}
+      - homepage.description=Media Request Management
+      - homepage.siteMonitor=https://overseerr.${LOCAL_DOMAIN}
       - homepage.widget.type=overseerr
-      - homepage.widget.url=https://overseerr.home.alborworld.com
+      - homepage.widget.url=https://overseerr.${LOCAL_DOMAIN}
       - homepage.widget.key=${OVERSEERR_API_KEY}
     restart: always

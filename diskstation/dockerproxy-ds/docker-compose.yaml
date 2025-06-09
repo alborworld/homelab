@@ -15,7 +15,7 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.dockerproxy-diskstation.loadbalancer.server.port=2375
-      - traefik.http.routers.dockerproxy-diskstation.rule=Host(`dockerproxy.diskstation.home.alborworld.com`)
+      - traefik.http.routers.dockerproxy-diskstation.rule=Host(`dockerproxy.diskstation.${LOCAL_DOMAIN}`)
       - traefik.http.routers.dockerproxy-diskstation.entrypoints=websecure
       - traefik.http.routers.dockerproxy-diskstation.service=dockerproxy-diskstation
       - traefik.http.routers.dockerproxy-diskstation.tls=true

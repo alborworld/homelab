@@ -25,7 +25,7 @@ services:
       - traefik.http.routers.vault-insecure.entrypoints=web
       - traefik.http.routers.vault-insecure.service=vault
       # Vault router (secure)
-      - traefik.http.routers.vault.rule=Host(`vault.home.alborworld.com`)
+      - traefik.http.routers.vault.rule=Host(`vault.${INTERNAL_DOMAIN}`)
       - traefik.http.routers.vault.entrypoints=websecure
       - traefik.http.routers.vault.service=vault
       - traefik.http.routers.vault.tls=true
@@ -34,7 +34,7 @@ services:
       - homepage.group=Infrastructure
       - homepage.name=Vault
       - homepage.icon=vault.png
-      - homepage.href=https://vault.home.alborworld.com
+      - homepage.href=https://vault.${INTERNAL_DOMAIN}
       - homepage.description=Secrets Management
-      - homepage.siteMonitor=https://vault.home.alborworld.com/v1/sys/health
+      - homepage.siteMonitor=https://vault.${INTERNAL_DOMAIN}/v1/sys/health
     restart: unless-stopped

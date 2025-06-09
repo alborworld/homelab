@@ -17,7 +17,7 @@ services:
       - traefik.http.routers.upsnap-insecure.entrypoints=web
       - traefik.http.routers.upsnap-insecure.service=upsnap
       # Upsnap router (secure)
-      - traefik.http.routers.upsnap.rule=Host(`upsnap.home.alborworld.com`)
+      - traefik.http.routers.upsnap.rule=Host(`upsnap.${LOCAL_DOMAIN}`)
       - traefik.http.routers.upsnap.entrypoints=websecure
       - traefik.http.routers.upsnap.service=upsnap
       - traefik.http.routers.upsnap.tls=true
@@ -26,7 +26,7 @@ services:
       - homepage.group=Networking
       - homepage.name=Upsnap
       - homepage.icon=upsnap.png
-      - homepage.href=https://upsnap.home.alborworld.com
-      - homepage.description=Wake on lan web app
-      - homepage.siteMonitor=https://upsnap.home.alborworld.com
+      - homepage.href=https://upsnap.${LOCAL_DOMAIN}
+      - homepage.description=Uptime Monitoring
+      - homepage.siteMonitor=https://upsnap.${LOCAL_DOMAIN}
     restart: unless-stopped
