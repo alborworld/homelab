@@ -18,7 +18,7 @@ services:
       - traefik.http.routers.prowlarr-insecure.entrypoints=web
       - traefik.http.routers.prowlarr-insecure.service=prowlarr
       # Prowlarr router (secure)
-      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.home.alborworld.com`)
+      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.${LOCAL_DOMAIN}`)
       - traefik.http.routers.prowlarr.entrypoints=websecure
       - traefik.http.routers.prowlarr.service=prowlarr
       - traefik.http.routers.prowlarr.tls=true
@@ -27,10 +27,10 @@ services:
       - homepage.group=Media
       - homepage.name=Prowlarr
       - homepage.icon=prowlarr.png
-      - homepage.href=https://prowlarr.home.alborworld.com
+      - homepage.href=https://prowlarr.${LOCAL_DOMAIN}
       - homepage.description=Indexer Manager
-      - homepage.siteMonitor=https://prowlarr.home.alborworld.com
+      - homepage.siteMonitor=https://prowlarr.${LOCAL_DOMAIN}
       - homepage.widget.type=prowlarr
-      - homepage.widget.url=https://prowlarr.home.alborworld.com
+      - homepage.widget.url=https://prowlarr.${LOCAL_DOMAIN}
       - homepage.widget.key=${PROWLARR_API_KEY}
     restart: always

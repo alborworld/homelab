@@ -23,7 +23,7 @@ services:
       - traefik.http.routers.adguardhome2-insecure.entrypoints=web
       - traefik.http.routers.adguardhome2-insecure.service=adguardhome2
       # ADguardHome router (secure)
-      - traefik.http.routers.adguardhome2.rule=Host(`adguard2.home.alborworld.com`)
+      - traefik.http.routers.adguardhome2.rule=Host(`adguard2.${LOCAL_DOMAIN}`)
       - traefik.http.routers.adguardhome2.entrypoints=websecure
       - traefik.http.routers.adguardhome2.service=adguardhome2
       - traefik.http.routers.adguardhome2.tls=true

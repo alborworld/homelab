@@ -16,7 +16,7 @@ services:
       - traefik.http.routers.grafana-insecure.entrypoints=web
       - traefik.http.routers.grafana-insecure.service=grafana
       # Grafana router (secure)
-      - traefik.http.routers.grafana.rule=Host(`grafana.home.alborworld.com`)
+      - traefik.http.routers.grafana.rule=Host(`grafana.${LOCAL_DOMAIN}`)
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.routers.grafana.service=grafana
       - traefik.http.routers.grafana.tls=true
@@ -25,7 +25,7 @@ services:
       - homepage.group=Monitoring
       - homepage.name=Grafana
       - homepage.icon=grafana.png
-      - homepage.href=https://grafana.home.alborworld.com
+      - homepage.href=https://grafana.${LOCAL_DOMAIN}
       - homepage.description=Metrics Dashboards
-      - homepage.siteMonitor=https://grafana.home.alborworld.com
+      - homepage.siteMonitor=https://grafana.${LOCAL_DOMAIN}
     restart: unless-stopped

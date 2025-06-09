@@ -26,7 +26,7 @@ services:
       - traefik.http.routers.traefik-insecure.entrypoints=web
       - traefik.http.routers.traefik-insecure.service=api@internal
       # Traefik router (secure)
-      - traefik.http.routers.traefik.rule=Host(`traefik.home.alborworld.com`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.${LOCAL_DOMAIN}`)
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.tls=true
@@ -38,9 +38,9 @@ services:
       - homepage.group=Infrastructure
       - homepage.name=Traefik
       - homepage.icon=traefik.png
-      - homepage.href=https://traefik.home.alborworld.com
+      - homepage.href=https://traefik.${LOCAL_DOMAIN}
       - homepage.description=Reverse Proxy
-      - homepage.siteMonitor=https://traefik.home.alborworld.com
+      - homepage.siteMonitor=https://traefik.${LOCAL_DOMAIN}
       - homepage.widget.type=traefik
-      - homepage.widget.url=https://traefik.home.alborworld.com
+      - homepage.widget.url=https://traefik.${LOCAL_DOMAIN}
     restart: unless-stopped

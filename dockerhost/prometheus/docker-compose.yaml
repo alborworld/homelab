@@ -16,7 +16,7 @@ services:
       - traefik.http.routers.prometheus-insecure.entrypoints=web
       - traefik.http.routers.prometheus-insecure.service=speedtest
       # Speedtest router (secure)
-      - traefik.http.routers.prometheus.rule=Host(`speedtest.home.alborworld.com`)
+      - traefik.http.routers.prometheus.rule=Host(`speedtest.${LOCAL_DOMAIN}`)
       - traefik.http.routers.prometheus.entrypoints=websecure
       - traefik.http.routers.prometheus.service=prometheus
       - traefik.http.routers.prometheus.tls=true
@@ -25,6 +25,6 @@ services:
       - homepage.group=Monitoring
       - homepage.name=Prometheus
       - homepage.icon=prometheus.png
-      - homepage.href=https://prometheus.home.alborworld.com
-      - homepage.description=Time-Series Metrics Collector
-      - homepage.siteMonitor=https://prometheus.home.alborworld.com
+      - homepage.href=https://prometheus.${LOCAL_DOMAIN}
+      - homepage.description=Metrics Collection
+      - homepage.siteMonitor=https://prometheus.${LOCAL_DOMAIN}

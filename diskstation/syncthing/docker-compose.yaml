@@ -25,7 +25,7 @@ services:
       - traefik.http.routers.syncthing-insecure.entrypoints=web
       - traefik.http.routers.syncthing-insecure.service=syncthing
       # Syncthing router (secure)
-      - traefik.http.routers.syncthing.rule=Host(`syncthing.home.alborworld.com`)
+      - traefik.http.routers.syncthing.rule=Host(`syncthing.${LOCAL_DOMAIN}`)
       - traefik.http.routers.syncthing.entrypoints=websecure
       - traefik.http.routers.syncthing.service=syncthing
       - traefik.http.routers.syncthing.tls=true
@@ -34,7 +34,7 @@ services:
       - homepage.group=Utilities
       - homepage.name=Syncthing
       - homepage.icon=syncthing.png
-      - homepage.href=https://syncthing.home.alborworld.com
+      - homepage.href=https://syncthing.${LOCAL_DOMAIN}
       - homepage.description=File Synchronization
-      - homepage.siteMonitor=https://syncthing.home.alborworld.com
+      - homepage.siteMonitor=https://syncthing.${LOCAL_DOMAIN}
     restart: unless-stopped

@@ -20,7 +20,7 @@ services:
       - traefik.http.routers.nzbget-insecure.entrypoints=web
       - traefik.http.routers.nzbget-insecure.service=nzbget
       # NZBGet router (secure)
-      - traefik.http.routers.nzbget.rule=Host(`nzbget.home.alborworld.com`)
+      - traefik.http.routers.nzbget.rule=Host(`nzbget.${LOCAL_DOMAIN}`)
       - traefik.http.routers.nzbget.entrypoints=websecure
       - traefik.http.routers.nzbget.service=nzbget
       - traefik.http.routers.nzbget.tls=true
@@ -29,7 +29,7 @@ services:
       - homepage.group=Download Clients
       - homepage.name=NZBGet
       - homepage.icon=nzbget.png
-      - homepage.href=https://nzbget.home.alborworld.com
+      - homepage.href=https://nzbget.${LOCAL_DOMAIN}
       - homepage.description=Usenet Downloader
-      - homepage.siteMonitor=https://nzbget.home.alborworld.com
+      - homepage.siteMonitor=https://nzbget.${LOCAL_DOMAIN}
     restart: always

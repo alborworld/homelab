@@ -23,7 +23,7 @@ services:
       - traefik.http.routers.tdarr-insecure.entrypoints=web
       - traefik.http.routers.tdarr-insecure.service=tdarr
       # Tdarr router (secure)
-      - traefik.http.routers.tdarr.rule=Host(`tdarr.home.alborworld.com`)
+      - traefik.http.routers.tdarr.rule=Host(`tdarr.${LOCAL_DOMAIN}`)
       - traefik.http.routers.tdarr.entrypoints=websecure
       - traefik.http.routers.tdarr.service=tdarr
       - traefik.http.routers.tdarr.tls=true
@@ -32,9 +32,9 @@ services:
       - homepage.group=Media
       - homepage.name=Tdarr
       - homepage.icon=tdarr.png
-      - homepage.href=https://tdarr.home.alborworld.com
+      - homepage.href=https://tdarr.${LOCAL_DOMAIN}
       - homepage.description=Media Transcoding
-      - homepage.siteMonitor=https://tdarr.home.alborworld.com
+      - homepage.siteMonitor=https://tdarr.${LOCAL_DOMAIN}
       - homepage.widget.type=tdarr
-      - homepage.widget.url=https://tdarr.home.alborworld.com
+      - homepage.widget.url=https://tdarr.${LOCAL_DOMAIN}
     restart: unless-stopped

@@ -31,7 +31,7 @@ services:
       - traefik.http.routers.adguardhome-sync-insecure.entrypoints=web
       - traefik.http.routers.adguardhome-sync-insecure.service=adguardhome-sync
       # AdGuardHome Sync router (secure)
-      - traefik.http.routers.adguardhome-sync.rule=Host(`adguardhome-sync.home.alborworld.com`)
+      - traefik.http.routers.adguardhome-sync.rule=Host(`adguardhome-sync.${LOCAL_DOMAIN}`)
       - traefik.http.routers.adguardhome-sync.entrypoints=websecure
       - traefik.http.routers.adguardhome-sync.service=adguardhome-sync
       - traefik.http.routers.adguardhome-sync.tls=true

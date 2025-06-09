@@ -12,7 +12,7 @@ services:
       - traefik.http.routers.beszel-insecure.rule=Host(`beszel.home.local`)
       - traefik.http.routers.beszel-insecure.entrypoints=web
       # Beszel router (secure)
-      - traefik.http.routers.beszel.rule=Host(`beszel.home.alborworld.com`)
+      - traefik.http.routers.beszel.rule=Host(`beszel.${LOCAL_DOMAIN}`)
       - traefik.http.routers.beszel.entrypoints=websecure
       - traefik.http.routers.beszel.tls=true
       - traefik.http.routers.beszel.tls.certresolver=cloudflare
@@ -20,7 +20,7 @@ services:
       - homepage.group=Monitoring
       - homepage.name=Beszel
       - homepage.icon=beszel.png
-      - homepage.href=https://beszel.home.alborworld.com
-      - homepage.siteMonitor=https://beszel.home.alborworld.com
+      - homepage.href=https://beszel.${LOCAL_DOMAIN}
+      - homepage.siteMonitor=https://beszel.${LOCAL_DOMAIN}
       - homepage.description=Server Monitoring Platform
     restart: unless-stopped
