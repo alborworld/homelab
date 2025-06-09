@@ -16,6 +16,7 @@ services:
     volumes:
       - ${VOLUMEDIR}/speedtest-tracker:/config
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.speedtest.loadbalancer.server.port=80
       # Old Speedtest router (insecure)
@@ -28,4 +29,15 @@ services:
       - traefik.http.routers.speedtest.service=speedtest
       - traefik.http.routers.speedtest.tls=true
       - traefik.http.routers.speedtest.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Monitoring
+      - homepage.name=SpeedTest Tracker
+      - homepage.icon=speedtest-tracker.png
+      - homepage.href=https://speedtest.home.alborworld.com
+      - homepage.description=Internet Speed History
+      - homepage.siteMonitor=https://speedtest.home.alborworld.com
+      - homepage.widget.type=speedtest
+      - homepage.widget.url=https://speedtest.home.alborworld.com
+      - homepage.widget.version=1
+      - homepage.widget.bitratePrecision=3
     restart: unless-stopped

@@ -11,6 +11,7 @@ services:
       - ${MEDIADIR}/downloads:/app/qBittorrent/downloads
     network_mode: "service:gluetun"
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.qbittorrent.loadbalancer.server.port=7091
       # Old qBittorrent router (insecure)
@@ -23,4 +24,16 @@ services:
       - traefik.http.routers.qbittorrent.service=qbittorrent
       - traefik.http.routers.qbittorrent.tls=true
       - traefik.http.routers.qbittorrent.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Download Clients
+      - homepage.name=qBittorrent
+      - homepage.icon=qbittorrent.png
+      - homepage.href=https://qbittorrent.home.alborworld.com
+      - homepage.description=Torrent Downloader
+      - homepage.siteMonitor=https://qbittorrent.home.alborworld.com
+      - homepage.widget.type=qbittorrent
+      - homepage.widget.url=https://qbittorrent.home.alborworld.com
+      - homepage.widget.username=${QBITTORRENT_USERNAME}
+      - homepage.widget.password=${QBITTORRENT_PASSWORD}
+      - homepage.widget.enableLeechProgress=true
     restart: always

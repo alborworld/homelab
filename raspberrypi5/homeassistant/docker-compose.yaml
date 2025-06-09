@@ -10,6 +10,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     privileged: true
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.homeassistant.loadbalancer.server.url=http://172.17.0.1:8123
       # Old HomeAssistant router (insecure)
@@ -22,4 +23,11 @@ services:
       - traefik.http.routers.homeassistant.service=homeassistant
       - traefik.http.routers.homeassistant.tls=true
       - traefik.http.routers.homeassistant.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Utilities
+      - homepage.name=Home Assistant
+      - homepage.icon=home-assistant.png
+      - homepage.href=https://homeassistant.home.alborworld.com
+      - homepage.siteMonitor=https://homeassistant.home.alborworld.com
+      - homepage.description=Home Automation
     restart: unless-stopped

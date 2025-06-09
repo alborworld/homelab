@@ -10,6 +10,7 @@ services:
       - ${VOLUMEDIR}/prowlarr:/config
     network_mode: "service:gluetun"
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
       # Old Prowlarr router (insecure)
@@ -22,4 +23,14 @@ services:
       - traefik.http.routers.prowlarr.service=prowlarr
       - traefik.http.routers.prowlarr.tls=true
       - traefik.http.routers.prowlarr.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Media
+      - homepage.name=Prowlarr
+      - homepage.icon=prowlarr.png
+      - homepage.href=https://prowlarr.home.alborworld.com
+      - homepage.description=Indexer Manager
+      - homepage.siteMonitor=https://prowlarr.home.alborworld.com
+      - homepage.widget.type=prowlarr
+      - homepage.widget.url=https://prowlarr.home.alborworld.com
+      - homepage.widget.key=${PROWLARR_API_KEY}
     restart: always

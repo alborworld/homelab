@@ -23,6 +23,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.plex.loadbalancer.server.port=32400
       # Old Plex router (insecure)
@@ -35,4 +36,14 @@ services:
       - traefik.http.routers.plex.service=plex
       - traefik.http.routers.plex.tls=true
       - traefik.http.routers.plex.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Plex
+      - homepage.name=Plex
+      - homepage.icon=plex.png
+      - homepage.href=https://plex.home.alborworld.com
+      - homepage.description=Plex Media Server
+      - homepage.siteMonitor=https://plex.home.alborworld.com
+      - homepage.widget.type=plex
+      - homepage.widget.url=https://plex.home.alborworld.com
+      - homepage.widget.key=${PLEX_TOKEN}
     restart: always

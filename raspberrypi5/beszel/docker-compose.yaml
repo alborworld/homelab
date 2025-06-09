@@ -6,6 +6,7 @@ services:
       - ${VOLUMEDIR}/beszel/data:/beszel_data
       - ${VOLUMEDIR}/beszel/socket:/beszel_socket
     labels:
+      # TRAEFIK
       - traefik.enable=true
       # Old Beszel router (insecure)
       - traefik.http.routers.beszel-insecure.rule=Host(`beszel.home.local`)
@@ -15,4 +16,11 @@ services:
       - traefik.http.routers.beszel.entrypoints=websecure
       - traefik.http.routers.beszel.tls=true
       - traefik.http.routers.beszel.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Monitoring
+      - homepage.name=Beszel
+      - homepage.icon=beszel.png
+      - homepage.href=https://beszel.home.alborworld.com
+      - homepage.siteMonitor=https://beszel.home.alborworld.com
+      - homepage.description=Server Monitoring Platform
     restart: unless-stopped

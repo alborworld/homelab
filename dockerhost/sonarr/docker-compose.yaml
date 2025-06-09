@@ -13,6 +13,7 @@ services:
       - ${MEDIADIR}/downloads/complete/Series:/downloads/complete/Series
     network_mode: "service:gluetun"
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
       # Old Sonarr router (insecure)
@@ -25,4 +26,14 @@ services:
       - traefik.http.routers.sonarr.service=sonarr
       - traefik.http.routers.sonarr.tls=true
       - traefik.http.routers.sonarr.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Media
+      - homepage.name=Sonarr
+      - homepage.icon=sonarr.png
+      - homepage.href=https://sonarr.home.alborworld.com
+      - homepage.description=TV Shows Automation
+      - homepage.siteMonitor=https://sonarr.home.alborworld.com
+      - homepage.widget.type=sonarr
+      - homepage.widget.url=https://sonarr.home.alborworld.com
+      - homepage.widget.key=${SONARR_API_KEY}
     restart: always

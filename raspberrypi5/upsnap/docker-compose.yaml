@@ -9,6 +9,7 @@ services:
     volumes:
       - ${VOLUMEDIR}/upsnap/data:/app/pb_data
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.upsnap.loadbalancer.server.url=http://host.docker.internal:8090
       # Old Upsnap router (insecure)
@@ -21,4 +22,11 @@ services:
       - traefik.http.routers.upsnap.service=upsnap
       - traefik.http.routers.upsnap.tls=true
       - traefik.http.routers.upsnap.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Networking
+      - homepage.name=Upsnap
+      - homepage.icon=upsnap.png
+      - homepage.href=https://upsnap.home.alborworld.com
+      - homepage.description=Wake on lan web app
+      - homepage.siteMonitor=https://upsnap.home.alborworld.com
     restart: unless-stopped

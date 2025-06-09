@@ -9,6 +9,7 @@ services:
       - ${CONFIGDIR}/homarr/data:/data
       - ${CONFIGDIR}/homarr/icons:/app/public/icons
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.homarr.loadbalancer.server.port=7575
       # Old Homarr router (insecure)

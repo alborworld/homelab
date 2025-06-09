@@ -13,6 +13,7 @@ services:
       - ${MEDIADIR}/downloads/complete/Movies:/downloads/complete/Movies
     network_mode: "service:gluetun"
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.radarr.loadbalancer.server.port=7878
       # Old Radarr router (insecure)
@@ -25,4 +26,14 @@ services:
       - traefik.http.routers.radarr.service=radarr
       - traefik.http.routers.radarr.tls=true
       - traefik.http.routers.radarr.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Media
+      - homepage.name=Radarr
+      - homepage.icon=radarr.png
+      - homepage.href=https://radarr.home.alborworld.com
+      - homepage.description=Movies Automation
+      - homepage.siteMonitor=https://radarr.home.alborworld.com
+      - homepage.widget.type=radarr
+      - homepage.widget.url=https://radarr.home.alborworld.com
+      - homepage.widget.key=${RADARR_API_KEY}
     restart: always

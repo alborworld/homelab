@@ -5,21 +5,12 @@ services:
     environment:
       HOMEPAGE_ALLOWED_HOSTS: homepage.home.local,homepage.home.alborworld.com,10.0.4.94
       PUID: ${UID}
-      PGID: ${GID} 
-      HOMEPAGE_VAR_QBITTORRENT_USERNAME: ${HOMEPAGE_VAR_QBITTORRENT_USERNAME}
-      HOMEPAGE_VAR_QBITTORRENT_PASSWORD: ${HOMEPAGE_VAR_QBITTORRENT_PASSWORD}
-      HOMEPAGE_VAR_PLEX_TOKEN: ${HOMEPAGE_VAR_PLEX_TOKEN}
-      HOMEPAGE_VAR_TAUTULLI_API_KEY: ${HOMEPAGE_VAR_TAUTULLI_API_KEY}
-      HOMEPAGE_VAR_PROWLARR_API_KEY: ${HOMEPAGE_VAR_PROWLARR_API_KEY}
-      HOMEPAGE_VAR_RADARR_API_KEY: ${HOMEPAGE_VAR_RADARR_API_KEY}
-      HOMEPAGE_VAR_SONARR_API_KEY: ${HOMEPAGE_VAR_SONARR_API_KEY}
-      HOMEPAGE_VAR_READARR_API_KEY: ${HOMEPAGE_VAR_READARR_API_KEY}
-      HOMEPAGE_VAR_ADGUARD_HOME_USERNAME: ${HOMEPAGE_VAR_ADGUARD_HOME_USERNAME}
-      HOMEPAGE_VAR_ADGUARD_HOME_PASSWORD: ${HOMEPAGE_VAR_ADGUARD_HOME_PASSWORD}
+      PGID: ${GID}
     volumes:
       - ./config:/app/config
       - ${VOLUMEDIR}/homepage/logs:/app/config/logs:rw
     labels:
+      # TRAEFIK
       - traefik.enable=true
       # Old Homepage router (insecure)
       - traefik.http.routers.homepage-insecure.rule=Host(`homepage.home.local`)
