@@ -11,4 +11,13 @@ services:
       - 2375:2375
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro # Mounted as read-only
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.dockerproxy-dockerhost.loadbalancer.server.port=2375
+      - traefik.http.routers.dockerproxy-dockerhost.rule=Host(`dockerproxy.dockerhost.home.alborworld.com`)
+      - traefik.http.routers.dockerproxy-dockerhost.entrypoints=websecure
+      - traefik.http.routers.dockerproxy-dockerhost.service=dockerproxy-dockerhost
+      - traefik.http.routers.dockerproxy-dockerhost.tls=true
+      - traefik.http.routers.dockerproxy-dockerhost.tls.certresolver=cloudflare
     restart: unless-stopped
