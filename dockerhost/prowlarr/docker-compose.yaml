@@ -10,16 +10,16 @@ services:
       - ${VOLUMEDIR}/prowlarr:/config
     network_mode: "service:gluetun"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
+      - traefik.enable=true
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
       # Old Prowlarr router (insecure)
-      - "traefik.http.routers.prowlarr-insecure.rule=Host(`prowlarr.home.local`)"
-      - "traefik.http.routers.prowlarr-insecure.entrypoints=web"
-      - "traefik.http.routers.prowlarr-insecure.service=prowlarr"
+      - traefik.http.routers.prowlarr-insecure.rule=Host(`prowlarr.home.local`)
+      - traefik.http.routers.prowlarr-insecure.entrypoints=web
+      - traefik.http.routers.prowlarr-insecure.service=prowlarr
       # Prowlarr router (secure)
-      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.home.alborworld.com`)"
-      - "traefik.http.routers.prowlarr.entrypoints=websecure"
-      - "traefik.http.routers.prowlarr.service=prowlarr"
-      - "traefik.http.routers.prowlarr.tls=true"
-      - "traefik.http.routers.prowlarr.tls.certresolver=cloudflare"
+      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.home.alborworld.com`)
+      - traefik.http.routers.prowlarr.entrypoints=websecure
+      - traefik.http.routers.prowlarr.service=prowlarr
+      - traefik.http.routers.prowlarr.tls=true
+      - traefik.http.routers.prowlarr.tls.certresolver=cloudflare
     restart: always

@@ -18,16 +18,16 @@ services:
     devices:
       - /dev/dri:/dev/dri
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.nextcloud.loadbalancer.server.port=8081"
+      - traefik.enable=true
+      - traefik.http.services.nextcloud.loadbalancer.server.port=8081
       # Old Nextcloud router (insecure)
-      - "traefik.http.routers.nextcloud-insecure.rule=Host(`nextcloud.home.local`)"
-      - "traefik.http.routers.nextcloud-insecure.entrypoints=web"
-      - "traefik.http.routers.nextcloud-insecure.service=nextcloud"
+      - traefik.http.routers.nextcloud-insecure.rule=Host(`nextcloud.home.local`)
+      - traefik.http.routers.nextcloud-insecure.entrypoints=web
+      - traefik.http.routers.nextcloud-insecure.service=nextcloud
       # Nextcloud router for shamanism-nature.com (no TLS, handled by Cloudflare Tunnel)
-      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.${NEXTCLOUD_DOMAIN}`)"
-      - "traefik.http.routers.nextcloud.entrypoints=web"
-      - "traefik.http.routers.nextcloud.service=nextcloud"
+      - traefik.http.routers.nextcloud.rule=Host(`nextcloud.${NEXTCLOUD_DOMAIN}`)
+      - traefik.http.routers.nextcloud.entrypoints=web
+      - traefik.http.routers.nextcloud.service=nextcloud
     depends_on:
       - nextcloud-db
     networks:
@@ -68,12 +68,12 @@ services:
     volumes:
       - ${VOLUMEDIR}/nextcloud/logs/onlyoffice:/var/log/onlyoffice
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.onlyoffice.loadbalancer.server.port=9980"
+      - traefik.enable=true
+      - traefik.http.services.onlyoffice.loadbalancer.server.port=9980
       # OnlyOffice router for shamanism-nature.com (no TLS, handled by Cloudflare Tunnel)
-      - "traefik.http.routers.onlyoffice.rule=Host(`onlyoffice.${NEXTCLOUD_DOMAIN}`)"
-      - "traefik.http.routers.onlyoffice.entrypoints=web"
-      - "traefik.http.routers.onlyoffice.service=onlyoffice"
+      - traefik.http.routers.onlyoffice.rule=Host(`onlyoffice.${NEXTCLOUD_DOMAIN}`)
+      - traefik.http.routers.onlyoffice.entrypoints=web
+      - traefik.http.routers.onlyoffice.service=onlyoffice
     networks:
       - nextcloud_network
 

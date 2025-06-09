@@ -20,13 +20,13 @@ services:
       - ./config:/app/config
       - ${VOLUMEDIR}/homepage/logs:/app/config/logs:rw
     labels:
-      - "traefik.enable=true"
+      - traefik.enable=true
       # Old Homepage router (insecure)
-      - "traefik.http.routers.homepage-insecure.rule=Host(`homepage.home.local`)"
-      - "traefik.http.routers.homepage-insecure.entrypoints=web"
+      - traefik.http.routers.homepage-insecure.rule=Host(`homepage.home.local`)
+      - traefik.http.routers.homepage-insecure.entrypoints=web
       # Homepage router (secure)
-      - "traefik.http.routers.homepage.rule=Host(`homepage.home.alborworld.com`)"
-      - "traefik.http.routers.homepage.entrypoints=websecure"
-      - "traefik.http.routers.homepage.tls=true"
-      - "traefik.http.routers.homepage.tls.certresolver=cloudflare"
+      - traefik.http.routers.homepage.rule=Host(`homepage.home.alborworld.com`)
+      - traefik.http.routers.homepage.entrypoints=websecure
+      - traefik.http.routers.homepage.tls=true
+      - traefik.http.routers.homepage.tls.certresolver=cloudflare
     restart: unless-stopped

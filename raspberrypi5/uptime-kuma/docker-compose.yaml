@@ -5,13 +5,13 @@ services:
     volumes:
       - ${VOLUMEDIR}/uptime-kuma:/app/data
     labels:
-      - "traefik.enable=true"
+      - traefik.enable=true
       # Old UptimeKuma router (insecure)
-      - "traefik.http.routers.uptimekuma-insecure.rule=Host(`uptimekuma.home.local`)"
-      - "traefik.http.routers.uptimekuma-insecure.entrypoints=web"
-      # UpSnap router (secure)
-      - "traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.home.alborworld.com`)"
-      - "traefik.http.routers.uptimekuma.entrypoints=websecure"
-      - "traefik.http.routers.uptimekuma.tls=true"
-      - "traefik.http.routers.uptimekuma.tls.certresolver=cloudflare"
+      - traefik.http.routers.uptimekuma-insecure.rule=Host(`uptimekuma.home.local`)
+      - traefik.http.routers.uptimekuma-insecure.entrypoints=web
+      # UptimeKuma router (secure)
+      - traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.home.alborworld.com`)
+      - traefik.http.routers.uptimekuma.entrypoints=websecure
+      - traefik.http.routers.uptimekuma.tls=true
+      - traefik.http.routers.uptimekuma.tls.certresolver=cloudflare
     restart: always
