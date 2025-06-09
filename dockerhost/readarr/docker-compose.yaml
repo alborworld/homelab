@@ -20,16 +20,16 @@ services:
       nzbget:
         condition: service_started
     labels:
-      - "traefik.enable=true"
-      - "traefik.node=dockerhost"
-      - "traefik.http.routers.readarr.rule=Host(`readarr.home.alborworld.com`)"
-      - "traefik.http.routers.readarr.entrypoints=websecure"
-      - "traefik.http.routers.readarr.service=readarr"
-      - "traefik.http.routers.readarr.tls=true"
-      - "traefik.http.routers.readarr.tls.certresolver=cloudflare"
-      - "traefik.http.services.readarr.loadbalancer.server.port=8787"
+      - traefik.enable=true
+      - traefik.node=dockerhost
+      - traefik.http.routers.readarr.rule=Host(`readarr.home.alborworld.com`)
+      - traefik.http.routers.readarr.entrypoints=websecure
+      - traefik.http.routers.readarr.service=readarr
+      - traefik.http.routers.readarr.tls=true
+      - traefik.http.routers.readarr.tls.certresolver=cloudflare
+      - traefik.http.services.readarr.loadbalancer.server.port=8787
       # Old Readarr router (insecure)
-      - "traefik.http.routers.readarr-insecure.rule=Host(`readarr.home.local`)"
-      - "traefik.http.routers.readarr-insecure.entrypoints=web"
-      - "traefik.http.routers.readarr-insecure.service=readarr"
+      - traefik.http.routers.readarr-insecure.rule=Host(`readarr.home.local`)
+      - traefik.http.routers.readarr-insecure.entrypoints=web
+      - traefik.http.routers.readarr-insecure.service=readarr
     restart: always

@@ -17,16 +17,16 @@ services:
       - 22000:22000/udp
       - 21027:21027/udp
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.syncthing.loadbalancer.server.port=8384"
+      - traefik.enable=true
+      - traefik.http.services.syncthing.loadbalancer.server.port=8384
       # Old Syncthing router (insecure)
-      - "traefik.http.routers.syncthing-insecure.rule=Host(`syncthing.home.local`)"
-      - "traefik.http.routers.syncthing-insecure.entrypoints=web"
-      - "traefik.http.routers.syncthing-insecure.service=syncthing"
+      - traefik.http.routers.syncthing-insecure.rule=Host(`syncthing.home.local`)
+      - traefik.http.routers.syncthing-insecure.entrypoints=web
+      - traefik.http.routers.syncthing-insecure.service=syncthing
       # Syncthing router (secure)
-      - "traefik.http.routers.syncthing.rule=Host(`syncthing.home.alborworld.com`)"
-      - "traefik.http.routers.syncthing.entrypoints=websecure"
-      - "traefik.http.routers.syncthing.service=syncthing"
-      - "traefik.http.routers.syncthing.tls=true"
-      - "traefik.http.routers.syncthing.tls.certresolver=cloudflare"
+      - traefik.http.routers.syncthing.rule=Host(`syncthing.home.alborworld.com`)
+      - traefik.http.routers.syncthing.entrypoints=websecure
+      - traefik.http.routers.syncthing.service=syncthing
+      - traefik.http.routers.syncthing.tls=true
+      - traefik.http.routers.syncthing.tls.certresolver=cloudflare
     restart: unless-stopped

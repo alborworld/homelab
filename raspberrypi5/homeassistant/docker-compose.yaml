@@ -10,16 +10,16 @@ services:
       - /etc/localtime:/etc/localtime:ro
     privileged: true
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.homeassistant.loadbalancer.server.url=http://172.17.0.1:8123"
+      - traefik.enable=true
+      - traefik.http.services.homeassistant.loadbalancer.server.url=http://172.17.0.1:8123
       # Old HomeAssistant router (insecure)
-      - "traefik.http.routers.homeassistant-insecure.rule=Host(`homeassistant.home.local`)"
-      - "traefik.http.routers.homeassistant-insecure.entrypoints=web"
-      - "traefik.http.routers.homeassistant-insecure.service=homeassistant"
+      - traefik.http.routers.homeassistant-insecure.rule=Host(`homeassistant.home.local`)
+      - traefik.http.routers.homeassistant-insecure.entrypoints=web
+      - traefik.http.routers.homeassistant-insecure.service=homeassistant
       # HomeAssistant router (secure)
-      - "traefik.http.routers.homeassistant.rule=Host(`homeassistant.home.alborworld.com`)"
-      - "traefik.http.routers.homeassistant.entrypoints=websecure"
-      - "traefik.http.routers.homeassistant.service=homeassistant"
-      - "traefik.http.routers.homeassistant.tls=true"
-      - "traefik.http.routers.homeassistant.tls.certresolver=cloudflare"
+      - traefik.http.routers.homeassistant.rule=Host(`homeassistant.home.alborworld.com`)
+      - traefik.http.routers.homeassistant.entrypoints=websecure
+      - traefik.http.routers.homeassistant.service=homeassistant
+      - traefik.http.routers.homeassistant.tls=true
+      - traefik.http.routers.homeassistant.tls.certresolver=cloudflare
     restart: unless-stopped

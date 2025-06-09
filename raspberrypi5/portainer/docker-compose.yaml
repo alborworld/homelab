@@ -9,16 +9,16 @@ services:
       - ${VOLUMEDIR}/portainer:/data:rw
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - traefik.enable=true
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
       # Old Portainer router (insecure)
-      - "traefik.http.routers.portainer-insecure.rule=Host(`portainer.home.local`)"
-      - "traefik.http.routers.portainer-insecure.entrypoints=web"
-      - "traefik.http.routers.portainer-insecure.service=portainer"
+      - traefik.http.routers.portainer-insecure.rule=Host(`portainer.home.local`)
+      - traefik.http.routers.portainer-insecure.entrypoints=web
+      - traefik.http.routers.portainer-insecure.service=portainer
       # Portainer router (secure)
-      - "traefik.http.routers.portainer.rule=Host(`portainer.home.alborworld.com`)"
-      - "traefik.http.routers.portainer.entrypoints=websecure"
-      - "traefik.http.routers.portainer.service=portainer"
-      - "traefik.http.routers.portainer.tls=true"
-      - "traefik.http.routers.portainer.tls.certresolver=cloudflare"
+      - traefik.http.routers.portainer.rule=Host(`portainer.home.alborworld.com`)
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.service=portainer
+      - traefik.http.routers.portainer.tls=true
+      - traefik.http.routers.portainer.tls.certresolver=cloudflare
     restart: always

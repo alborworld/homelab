@@ -19,17 +19,17 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     labels:
-      - "traefik.enable=true"
-      # Old Traefik dashboard router (insecure)
-      - "traefik.http.routers.traefik-insecure.rule=Host(`traefik.home.local`)"
-      - "traefik.http.routers.traefik-insecure.entrypoints=web"
-      - "traefik.http.routers.traefik-insecure.service=api@internal"
-      # Traefik dashboard router (secure)
-      - "traefik.http.routers.traefik.rule=Host(`traefik.home.alborworld.com`)"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.tls=true"
-      - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
+      - traefik.enable=true
+      # Old Traefik router (insecure)
+      - traefik.http.routers.traefik-insecure.rule=Host(`traefik.home.local`)
+      - traefik.http.routers.traefik-insecure.entrypoints=web
+      - traefik.http.routers.traefik-insecure.service=api@internal
+      # Traefik router (secure)
+      - traefik.http.routers.traefik.rule=Host(`traefik.home.alborworld.com`)
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.traefik.tls.certresolver=cloudflare
       # Add basic auth middleware for the admin dashboard
       # - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_AUTH_USERS}"
       # - "traefik.http.routers.traefik.middlewares=traefik-auth"
