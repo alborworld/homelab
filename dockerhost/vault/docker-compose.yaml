@@ -17,6 +17,7 @@ services:
       - IPC_LOCK
     entrypoint: vault server -config=/vault/config/vault.json
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.vault.loadbalancer.server.port=8200
       # Old Vault router (insecure)
@@ -29,4 +30,11 @@ services:
       - traefik.http.routers.vault.service=vault
       - traefik.http.routers.vault.tls=true
       - traefik.http.routers.vault.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Infrastructure
+      - homepage.name=Vault
+      - homepage.icon=vault.png
+      - homepage.href=https://vault.home.alborworld.com
+      - homepage.description=Secrets Management
+      - homepage.siteMonitor=https://vault.home.alborworld.com/v1/sys/health
     restart: unless-stopped

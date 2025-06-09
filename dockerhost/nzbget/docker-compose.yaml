@@ -25,4 +25,11 @@ services:
       - traefik.http.routers.nzbget.service=nzbget
       - traefik.http.routers.nzbget.tls=true
       - traefik.http.routers.nzbget.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Download Clients
+      - homepage.name=NZBGet
+      - homepage.icon=nzbget.png
+      - homepage.href=https://nzbget.home.alborworld.com
+      - homepage.description=Usenet Downloader
+      - homepage.siteMonitor=https://nzbget.home.alborworld.com
     restart: always

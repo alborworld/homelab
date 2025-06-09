@@ -7,3 +7,24 @@ services:
       - ${VOLUMEDIR}/prometheus:/etc/prometheus
       - prometheus-data:/prometheus
     command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.prometheus.loadbalancer.server.port=9001
+      # Old Speedtest router (insecure)
+      - traefik.http.routers.prometheus-insecure.rule=Host(`speedtest.home.local`)
+      - traefik.http.routers.prometheus-insecure.entrypoints=web
+      - traefik.http.routers.prometheus-insecure.service=speedtest
+      # Speedtest router (secure)
+      - traefik.http.routers.prometheus.rule=Host(`speedtest.home.alborworld.com`)
+      - traefik.http.routers.prometheus.entrypoints=websecure
+      - traefik.http.routers.prometheus.service=prometheus
+      - traefik.http.routers.prometheus.tls=true
+      - traefik.http.routers.prometheus.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Monitoring
+      - homepage.name=Prometheus
+      - homepage.icon=prometheus.png
+      - homepage.href=https://prometheus.home.alborworld.com
+      - homepage.description=Time-Series Metrics Collector
+      - homepage.siteMonitor=https://prometheus.home.alborworld.com

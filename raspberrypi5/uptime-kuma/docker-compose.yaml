@@ -5,6 +5,7 @@ services:
     volumes:
       - ${VOLUMEDIR}/uptime-kuma:/app/data
     labels:
+      # TRAEFIK
       - traefik.enable=true
       # Old UptimeKuma router (insecure)
       - traefik.http.routers.uptimekuma-insecure.rule=Host(`uptimekuma.home.local`)
@@ -14,4 +15,14 @@ services:
       - traefik.http.routers.uptimekuma.entrypoints=websecure
       - traefik.http.routers.uptimekuma.tls=true
       - traefik.http.routers.uptimekuma.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Monitoring
+      - homepage.name=Uptime Kuma
+      - homepage.icon=uptime-kuma.png
+      - homepage.href=https://uptimekuma.home.alborworld.com
+      - homepage.description=Service Uptime Monitor
+      - homepage.siteMonitor=https://uptimekuma.home.alborworld.com
+      - homepage.widget.type=uptimekuma
+      - homepage.widget.url=https://uptimekuma.home.alborworld.com
+      - homepage.widget.slug=shamanism
     restart: always

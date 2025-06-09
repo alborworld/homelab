@@ -19,6 +19,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     labels:
+      # TRAEFIK
       - traefik.enable=true
       # Old Traefik router (insecure)
       - traefik.http.routers.traefik-insecure.rule=Host(`traefik.home.local`)
@@ -33,4 +34,13 @@ services:
       # Add basic auth middleware for the admin dashboard
       # - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_AUTH_USERS}"
       # - "traefik.http.routers.traefik.middlewares=traefik-auth"
+      # HOMEPAGE
+      - homepage.group=Infrastructure
+      - homepage.name=Traefik
+      - homepage.icon=traefik.png
+      - homepage.href=https://traefik.home.alborworld.com
+      - homepage.description=Reverse Proxy
+      - homepage.siteMonitor=https://traefik.home.alborworld.com
+      - homepage.widget.type=traefik
+      - homepage.widget.url=https://traefik.home.alborworld.com
     restart: unless-stopped

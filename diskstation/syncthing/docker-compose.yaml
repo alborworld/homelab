@@ -17,6 +17,7 @@ services:
       - 22000:22000/udp
       - 21027:21027/udp
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.syncthing.loadbalancer.server.port=8384
       # Old Syncthing router (insecure)
@@ -29,4 +30,11 @@ services:
       - traefik.http.routers.syncthing.service=syncthing
       - traefik.http.routers.syncthing.tls=true
       - traefik.http.routers.syncthing.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Utilities
+      - homepage.name=Syncthing
+      - homepage.icon=syncthing.png
+      - homepage.href=https://syncthing.home.alborworld.com
+      - homepage.description=File Synchronization
+      - homepage.siteMonitor=https://syncthing.home.alborworld.com
     restart: unless-stopped

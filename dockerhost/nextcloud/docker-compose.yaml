@@ -18,6 +18,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.nextcloud.loadbalancer.server.port=8081
       # Old Nextcloud router (insecure)
@@ -28,6 +29,13 @@ services:
       - traefik.http.routers.nextcloud.rule=Host(`nextcloud.${NEXTCLOUD_DOMAIN}`)
       - traefik.http.routers.nextcloud.entrypoints=web
       - traefik.http.routers.nextcloud.service=nextcloud
+      # HOMEPAGE
+      - homepage.group=Utilities
+      - homepage.name=NextCloud
+      - homepage.icon=nextcloud.png
+      - homepage.href=https://nextcloud.imiarma.com
+      - homepage.description=Personal Cloud Storage
+      - homepage.siteMonitor=https://nextcloud.imiarma.com
     depends_on:
       - nextcloud-db
     networks:

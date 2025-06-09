@@ -20,6 +20,7 @@ services:
       nzbget:
         condition: service_started
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.node=dockerhost
       - traefik.http.routers.readarr.rule=Host(`readarr.home.alborworld.com`)
@@ -32,4 +33,14 @@ services:
       - traefik.http.routers.readarr-insecure.rule=Host(`readarr.home.local`)
       - traefik.http.routers.readarr-insecure.entrypoints=web
       - traefik.http.routers.readarr-insecure.service=readarr
+      # HOMEPAGE
+      - homepage.group=Media
+      - homepage.name=Readarr
+      - homepage.icon=readarr.png
+      - homepage.href=https://readarr.home.alborworld.com
+      - homepage.description=Books Automation
+      - homepage.siteMonitor=https://readarr.home.alborworld.com
+      - homepage.widget.type=readarr
+      - homepage.widget.url=https://readarr.home.alborworld.com
+      - homepage.widget.key=${READARR_API_KEY}
     restart: always

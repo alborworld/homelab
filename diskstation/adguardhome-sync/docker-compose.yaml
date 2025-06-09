@@ -23,6 +23,7 @@ services:
       - FEATURE_CLIENT_SETTINGS=true
       - FEATURE_SERVICES=true
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.adguardhome-sync.loadbalancer.server.port=8082
       # Old AdGuardHome Sync router (insecure)

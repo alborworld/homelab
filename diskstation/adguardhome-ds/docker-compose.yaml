@@ -15,6 +15,7 @@ services:
       - ${VOLUMEDIR}/adguardhome/work:/opt/adguardhome/work
       - ${VOLUMEDIR}/adguardhome/conf:/opt/adguardhome/conf
     labels:
+      # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.adguardhome2.loadbalancer.server.port=8080
       # Old ADguardHome router (insecure)
