@@ -81,8 +81,10 @@ services:
       - traefik.enable=true
       - traefik.http.services.onlyoffice.loadbalancer.server.port=9980
       - traefik.http.routers.onlyoffice.rule=Host(`onlyoffice.${LOCAL_DOMAIN}`)
-      - traefik.http.routers.onlyoffice.entrypoints=web
+      - traefik.http.routers.onlyoffice.entrypoints=websecure
       - traefik.http.routers.onlyoffice.service=onlyoffice
+      - traefik.http.routers.onlyoffice.tls=true
+      - traefik.http.routers.onlyoffice.tls.certresolver=cloudflare
     networks:
       - nextcloud_network
 
