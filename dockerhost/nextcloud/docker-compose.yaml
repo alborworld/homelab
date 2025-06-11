@@ -25,17 +25,19 @@ services:
       - traefik.http.routers.nextcloud-insecure.rule=Host(`nextcloud.home.local`)
       - traefik.http.routers.nextcloud-insecure.entrypoints=web
       - traefik.http.routers.nextcloud-insecure.service=nextcloud
-      # Nextcloud router for shamanism-nature.com (no TLS, handled by Cloudflare Tunnel)
-      - traefik.http.routers.nextcloud.rule=Host(`nextcloud.${NEXTCLOUD_DOMAIN}`)
-      - traefik.http.routers.nextcloud.entrypoints=web
+      # Nextcloud router (secure)
+      - traefik.http.routers.nextcloud.rule=Host(`nextcloud.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.nextcloud.entrypoints=websecure
       - traefik.http.routers.nextcloud.service=nextcloud
+      - traefik.http.routers.nextcloud.tls=true
+      - traefik.http.routers.nextcloud.tls.certresolver=cloudflare
       # HOMEPAGE
       - homepage.group=Utilities
       - homepage.name=NextCloud
       - homepage.icon=nextcloud.png
-      - homepage.href=https://nextcloud.imiarma.com
+      - homepage.href=https://nextcloud.${LOCAL_DOMAIN}
       - homepage.description=Personal Cloud Storage
-      - homepage.siteMonitor=https://nextcloud.imiarma.com
+      - homepage.siteMonitor=https://nextcloud.${LOCAL_DOMAIN}
     depends_on:
       - nextcloud-db
     networks:
@@ -78,8 +80,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.onlyoffice.loadbalancer.server.port=9980
-      # OnlyOffice router for shamanism-nature.com (no TLS, handled by Cloudflare Tunnel)
-      - traefik.http.routers.onlyoffice.rule=Host(`onlyoffice.${NEXTCLOUD_DOMAIN}`)
+      - traefik.http.routers.onlyoffice.rule=Host(`onlyoffice.${LOCAL_DOMAIN}`)
       - traefik.http.routers.onlyoffice.entrypoints=web
       - traefik.http.routers.onlyoffice.service=onlyoffice
     networks:
