@@ -7,10 +7,6 @@ services:
     labels:
       # TRAEFIK
       - traefik.enable=true
-      # Old UptimeKuma router (insecure)
-      - traefik.http.routers.uptimekuma-insecure.rule=Host(`uptimekuma.home.local`)
-      - traefik.http.routers.uptimekuma-insecure.entrypoints=web
-      # UptimeKuma router (secure)
       - traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.${LOCAL_DOMAIN}`)
       - traefik.http.routers.uptimekuma.entrypoints=websecure
       - traefik.http.routers.uptimekuma.tls=true

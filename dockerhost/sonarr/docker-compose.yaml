@@ -16,11 +16,6 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
-      # Old Sonarr router (insecure)
-      - traefik.http.routers.sonarr-insecure.rule=Host(`sonarr.home.local`)
-      - traefik.http.routers.sonarr-insecure.entrypoints=web
-      - traefik.http.routers.sonarr-insecure.service=sonarr
-      # Sonarr router (secure)
       - traefik.http.routers.sonarr.rule=Host(`sonarr.${LOCAL_DOMAIN}`)
       - traefik.http.routers.sonarr.entrypoints=websecure
       - traefik.http.routers.sonarr.service=sonarr

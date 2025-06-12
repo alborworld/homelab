@@ -21,11 +21,6 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.nextcloud.loadbalancer.server.port=8081
-      # Old Nextcloud router (insecure)
-      - traefik.http.routers.nextcloud-insecure.rule=Host(`nextcloud.home.local`)
-      - traefik.http.routers.nextcloud-insecure.entrypoints=web
-      - traefik.http.routers.nextcloud-insecure.service=nextcloud
-      # Nextcloud router (secure)
       - traefik.http.routers.nextcloud.rule=Host(`nextcloud.${LOCAL_DOMAIN}`)
       - traefik.http.routers.nextcloud.entrypoints=websecure
       - traefik.http.routers.nextcloud.service=nextcloud

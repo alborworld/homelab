@@ -17,11 +17,6 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.tautulli.loadbalancer.server.port=8181
-      # Old Tautulli router (insecure)
-      - traefik.http.routers.tautulli-insecure.rule=Host(`tautulli.home.local`)
-      - traefik.http.routers.tautulli-insecure.entrypoints=web
-      - traefik.http.routers.tautulli-insecure.service=tautulli
-      # Tautulli router (secure)
       - traefik.http.routers.tautulli.rule=Host(`tautulli.${LOCAL_DOMAIN}`)
       - traefik.http.routers.tautulli.entrypoints=websecure
       - traefik.http.routers.tautulli.service=tautulli
