@@ -19,11 +19,6 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.speedtest.loadbalancer.server.port=80
-      # Old Speedtest router (insecure)
-      - traefik.http.routers.speedtest-insecure.rule=Host(`speedtest.home.local`)
-      - traefik.http.routers.speedtest-insecure.entrypoints=web
-      - traefik.http.routers.speedtest-insecure.service=speedtest
-      # Speedtest router (secure)
       - traefik.http.routers.speedtest.rule=Host(`speedtest.${LOCAL_DOMAIN}`)
       - traefik.http.routers.speedtest.entrypoints=websecure
       - traefik.http.routers.speedtest.service=speedtest

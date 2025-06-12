@@ -15,11 +15,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.nzbget.loadbalancer.server.port=6789
-      # Old NZBGet router (insecure)
-      - traefik.http.routers.nzbget-insecure.rule=Host(`nzbget.home.local`)
-      - traefik.http.routers.nzbget-insecure.entrypoints=web
-      - traefik.http.routers.nzbget-insecure.service=nzbget
-      # NZBGet router (secure)
       - traefik.http.routers.nzbget.rule=Host(`nzbget.${LOCAL_DOMAIN}`)
       - traefik.http.routers.nzbget.entrypoints=websecure
       - traefik.http.routers.nzbget.service=nzbget

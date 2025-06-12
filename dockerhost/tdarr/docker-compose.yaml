@@ -18,11 +18,6 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.tdarr.loadbalancer.server.port=8265
-      # Old Tdarr router (insecure)
-      - traefik.http.routers.tdarr-insecure.rule=Host(`tdarr.home.local`)
-      - traefik.http.routers.tdarr-insecure.entrypoints=web
-      - traefik.http.routers.tdarr-insecure.service=tdarr
-      # Tdarr router (secure)
       - traefik.http.routers.tdarr.rule=Host(`tdarr.${LOCAL_DOMAIN}`)
       - traefik.http.routers.tdarr.entrypoints=websecure
       - traefik.http.routers.tdarr.service=tdarr

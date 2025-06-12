@@ -21,11 +21,6 @@ services:
     labels:
       # TRAEFIK
       - traefik.enable=true
-      # Old Traefik router (insecure)
-      - traefik.http.routers.traefik-insecure.rule=Host(`traefik.home.local`)
-      - traefik.http.routers.traefik-insecure.entrypoints=web
-      - traefik.http.routers.traefik-insecure.service=api@internal
-      # Traefik router (secure)
       - traefik.http.routers.traefik.rule=Host(`traefik.${LOCAL_DOMAIN}`)
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.service=api@internal

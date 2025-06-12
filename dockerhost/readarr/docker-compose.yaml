@@ -29,10 +29,6 @@ services:
       - traefik.http.routers.readarr.tls=true
       - traefik.http.routers.readarr.tls.certresolver=cloudflare
       - traefik.http.services.readarr.loadbalancer.server.port=8787
-      # Old Readarr router (insecure)
-      - traefik.http.routers.readarr-insecure.rule=Host(`readarr.home.local`)
-      - traefik.http.routers.readarr-insecure.entrypoints=web
-      - traefik.http.routers.readarr-insecure.service=readarr
       # HOMEPAGE
       - homepage.group=Media
       - homepage.name=Readarr

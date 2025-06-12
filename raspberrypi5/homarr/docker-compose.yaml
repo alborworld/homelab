@@ -12,11 +12,6 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.homarr.loadbalancer.server.port=7575
-      # Old Homarr router (insecure)
-      - traefik.http.routers.homarr-insecure.rule=Host(`homarr.home.local`)
-      - traefik.http.routers.homarr-insecure.entrypoints=web
-      - traefik.http.routers.homarr-insecure.service=homarr
-      # Homarr router (secure)
       - traefik.http.routers.homarr.rule=Host(`homarr.${LOCAL_DOMAIN}`)
       - traefik.http.routers.homarr.entrypoints=websecure
       - traefik.http.routers.homarr.service=homarr
