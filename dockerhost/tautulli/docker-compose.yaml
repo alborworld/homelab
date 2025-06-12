@@ -30,7 +30,7 @@ services:
       - homepage.description=Plex Statistics
       # For some reason the siteMonitor for Tautulli wants http and not https
       #- homepage.siteMonitor=https://tautulli.${LOCAL_DOMAIN}
-      - homepage.siteMonitor=http://tautulli.home.local
+      - homepage.siteMonitor=http://dockerhost.home:8181
       - homepage.widget.type=tautulli
       - homepage.widget.url=https://tautulli.${LOCAL_DOMAIN}
       - homepage.widget.key=${TAUTULLI_API_KEY}
