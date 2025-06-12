@@ -20,11 +20,6 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.vault.loadbalancer.server.port=8200
-      # Old Vault router (insecure)
-      - traefik.http.routers.vault-insecure.rule=Host(`vault.home.local`)
-      - traefik.http.routers.vault-insecure.entrypoints=web
-      - traefik.http.routers.vault-insecure.service=vault
-      # Vault router (secure)
       - traefik.http.routers.vault.rule=Host(`vault.${INTERNAL_DOMAIN}`)
       - traefik.http.routers.vault.entrypoints=websecure
       - traefik.http.routers.vault.service=vault

@@ -12,11 +12,6 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.upsnap.loadbalancer.server.url=http://host.docker.internal:8090
-      # Old Upsnap router (insecure)
-      - traefik.http.routers.upsnap-insecure.rule=Host(`upsnap.home.local`)
-      - traefik.http.routers.upsnap-insecure.entrypoints=web
-      - traefik.http.routers.upsnap-insecure.service=upsnap
-      # Upsnap router (secure)
       - traefik.http.routers.upsnap.rule=Host(`upsnap.${LOCAL_DOMAIN}`)
       - traefik.http.routers.upsnap.entrypoints=websecure
       - traefik.http.routers.upsnap.service=upsnap

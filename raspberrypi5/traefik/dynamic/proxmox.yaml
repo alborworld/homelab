@@ -22,7 +22,7 @@ http:
     proxmox:
       loadBalancer:
         servers:
-          - url: "https://nuc.local:8006"
+          - url: "https://nuc.home:8006"
         passHostHeader: true
         serversTransport: insecureTransport
 

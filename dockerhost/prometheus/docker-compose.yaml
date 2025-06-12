@@ -11,11 +11,6 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.prometheus.loadbalancer.server.port=9001
-      # Old Speedtest router (insecure)
-      - traefik.http.routers.prometheus-insecure.rule=Host(`speedtest.home.local`)
-      - traefik.http.routers.prometheus-insecure.entrypoints=web
-      - traefik.http.routers.prometheus-insecure.service=speedtest
-      # Speedtest router (secure)
       - traefik.http.routers.prometheus.rule=Host(`speedtest.${LOCAL_DOMAIN}`)
       - traefik.http.routers.prometheus.entrypoints=websecure
       - traefik.http.routers.prometheus.service=prometheus

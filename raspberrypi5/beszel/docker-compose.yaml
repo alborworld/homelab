@@ -8,10 +8,6 @@ services:
     labels:
       # TRAEFIK
       - traefik.enable=true
-      # Old Beszel router (insecure)
-      - traefik.http.routers.beszel-insecure.rule=Host(`beszel.home.local`)
-      - traefik.http.routers.beszel-insecure.entrypoints=web
-      # Beszel router (secure)
       - traefik.http.routers.beszel.rule=Host(`beszel.${LOCAL_DOMAIN}`)
       - traefik.http.routers.beszel.entrypoints=websecure
       - traefik.http.routers.beszel.tls=true
