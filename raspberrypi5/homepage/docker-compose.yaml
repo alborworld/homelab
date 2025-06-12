@@ -3,7 +3,7 @@ services:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: Homepage
     environment:
-      HOMEPAGE_ALLOWED_HOSTS: homepage.home.local,homepage.${LOCAL_DOMAIN},${RASPBERRYPI_IP}
+      HOMEPAGE_ALLOWED_HOSTS: homepage.${LOCAL_DOMAIN},${RASPBERRYPI_IP},raspberrypi.home
       PUID: ${UID}
       PGID: ${GID}
       HOMEPAGE_VAR_LOCAL_DOMAIN: ${LOCAL_DOMAIN}
