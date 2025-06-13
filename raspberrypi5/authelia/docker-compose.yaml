@@ -26,6 +26,10 @@ services:
       - traefik.http.routers.authelia.entrypoints=websecure
       - traefik.http.routers.authelia.tls=true
       - traefik.http.routers.authelia.tls.certresolver=cloudflare
+      # ForwardAuth middleware
+      - traefik.http.middlewares.authelia.forwardAuth.address="http://authelia:9091/api/verify?rd=https://authelia.${LOCAL_DOMAIN}"
+      - traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader=true
+      - traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders=Remote-User,Remote-Groups
       # HOMEPAGE
       - homepage.group=Infrastructure
       - homepage.name=Authelia
