@@ -29,18 +29,18 @@ authentication_backend:
 access_control:
   default_policy: one_factor
   rules:
-    - domain: "*.home.alborworld.com"
+    - domain: '*.{{ mustEnv "LOCAL_DOMAIN" }}'
       policy: one_factor
 
 session:
 #  secret: ${AUTHELIA_SESSION_SECRET}
   cookies:
     - name: authelia_session
-      domain: home.alborworld.com
-      authelia_url: https://authelia.home.alborworld.com
+      domain: '{{ mustEnv "LOCAL_DOMAIN" }}'
+      authelia_url: 'https://authelia.{{ mustEnv "LOCAL_DOMAIN" }}'
       expiration: 1h
       inactivity: 5m
-      default_redirection_url: https://homepage.home.alborworld.com
+      default_redirection_url: 'https://homepage.{{ mustEnv "LOCAL_DOMAIN" }}'
 
 regulation:
   max_retries: 3
