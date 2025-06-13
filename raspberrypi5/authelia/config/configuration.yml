@@ -37,7 +37,7 @@ session:
   cookies:
     - name: authelia_session
       domain: '{{ mustEnv "LOCAL_DOMAIN" }}'
-      authelia_url: 'https://authelia.{{ mustEnv "LOCAL_DOMAIN" }}'
+      authelia_url: 'https://auth.{{ mustEnv "LOCAL_DOMAIN" }}'
       expiration: 1h
       inactivity: 5m
       default_redirection_url: 'https://homepage.{{ mustEnv "LOCAL_DOMAIN" }}'

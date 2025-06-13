@@ -22,19 +22,19 @@ services:
     labels:
       # TRAEFIK
       - traefik.enable=true
-      - traefik.http.routers.authelia.rule=Host(`authelia.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.authelia.rule=Host(`auth.${LOCAL_DOMAIN}`)
       - traefik.http.routers.authelia.entrypoints=websecure
       - traefik.http.routers.authelia.tls=true
       - traefik.http.routers.authelia.tls.certresolver=cloudflare
       # ForwardAuth middleware
-      - traefik.http.middlewares.authelia.forwardAuth.address="http://authelia:9091/api/verify?rd=https://authelia.${LOCAL_DOMAIN}"
+      - traefik.http.middlewares.authelia.forwardAuth.address="http://authelia:9091/api/verify?rd=https://auth.${LOCAL_DOMAIN}"
       - traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader=true
       - traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders=Remote-User,Remote-Groups
       # HOMEPAGE
       - homepage.group=Infrastructure
       - homepage.name=Authelia
       - homepage.icon=authelia.png
-      - homepage.href=https://authelia.${LOCAL_DOMAIN}
-      - homepage.siteMonitor=https://authelia.${LOCAL_DOMAIN}
+      - homepage.href=https://auth.${LOCAL_DOMAIN}
+      - homepage.siteMonitor=https://auth.${LOCAL_DOMAIN}
       - homepage.description=Authentication Gateway
     restart: unless-stopped
