@@ -1,0 +1,34 @@
+services:
+  pocket-id:
+    image: ghcr.io/pocket-id/pocket-id:latest
+    container_name: PocketId
+    ports:
+      - 1411:1411
+    volumes:
+      - ${VOLUMEDIR}/pocket-id:/app/data
+    environment:
+      PUID: ${UID}
+      PGID: ${GID}
+      APP_URL: https://id.${LOCAL_DOMAIN}
+      TRUST_PROXY: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1411/healthz"]
+      interval: 1m30s
+      timeout: 5s
+      retries: 2
+      start_period: 10s
+    labels:
+      # TRAEFIK
+      - "traefik.enable=true"
+      - "traefik.http.routers.pocket-id.rule=Host(`id.${LOCAL_DOMAIN}`)"
+      - "traefik.http.routers.pocket-id.entrypoints=websecure"
+      - "traefik.http.routers.pocket-id.tls=true"
+      - "traefik.http.routers.pocket-id.tls.certresolver=cloudflare"
+      # HOMEPAGE
+      - homepage.group=Infrastructure
+      - homepage.name=Pocket Id
+      - homepage.icon=pocket-id.png
+      - homepage.href=https://id.${LOCAL_DOMAIN}
+      - homepage.siteMonitor=https://id.${LOCAL_DOMAIN}
+      - homepage.description=Authentication Gateway
+    restart: unless-stopped
