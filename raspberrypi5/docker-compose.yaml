@@ -3,19 +3,19 @@
 name: raspberrypi5
 
 include:
-  - authelia/docker-compose.yaml
-  - dockerproxy-rp/docker-compose.yaml
-  - portainer/docker-compose.yaml
-  - watchtower/docker-compose.yaml
-#  - homarr/docker-compose.yaml
-  - homepage/docker-compose.yaml
   - adguardhome/docker-compose.yaml
-  - speedtest-tracker/docker-compose.yaml
-  - homeassistant/docker-compose.yaml
-#  - unbound/docker-compose.yaml
-  - uptime-kuma/docker-compose.yaml
-  - upsnap/docker-compose.yaml
-  - traefik/docker-compose.yaml
-  - redis/docker-compose.yaml
-  - beszel/docker-compose.yaml
+  - authelia/docker-compose.yaml
   - beszel-agent-rp/docker-compose.yaml
+  - beszel/docker-compose.yaml
+  - dockerproxy-rp/docker-compose.yaml
+#  - homarr/docker-compose.yaml
+  - homeassistant/docker-compose.yaml
+  - homepage/docker-compose.yaml
+  - portainer/docker-compose.yaml
+  - redis/docker-compose.yaml
+  - speedtest-tracker/docker-compose.yaml
+  - traefik/docker-compose.yaml
+#  - unbound/docker-compose.yaml
+  - upsnap/docker-compose.yaml
+  - uptime-kuma/docker-compose.yaml
+  - watchtower/docker-compose.yaml
