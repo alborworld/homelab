@@ -1,25 +1,25 @@
 ---
 http:
   routers:
-    proxmox:
-      rule: "Host(`proxmox.home.alborworld.com`)"
-      service: proxmox
+    pve:
+      rule: "Host(`pve.home.alborworld.com`)"
+      service: pve
       entryPoints:
         - websecure
       middlewares:
-        - proxmox-headers
+        - pve-headers
       tls:
         certResolver: cloudflare
 
   middlewares:
-    proxmox-headers:
+    pve-headers:
       headers:
         customRequestHeaders:
           Authorization: ""
           Cookie: ""
 
   services:
-    proxmox:
+    pve:
       loadBalancer:
         servers:
           - url: "https://nuc.home:8006"

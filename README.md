@@ -23,7 +23,7 @@ This repository contains the configuration and orchestration files for a persona
 ### Core Components
 - **Router**: Synology RT2600ac
 - **NAS**: Synology DiskStation DS218+ (10 GB RAM, 2 x 5 TB HD)
-- **Compute Node**: Intel NUC 13 (64 GB RAM, 2 TB SSD) running Proxmox
+- **Compute Node**: Intel NUC 13 (64 GB RAM, 2 TB SSD) running Proxmox VE
 - **Edge Node**: Raspberry Pi 5 (4 GB RAM, 64 GB SSD)
 
 ## 🧩 Architecture
@@ -34,7 +34,7 @@ This repository contains the configuration and orchestration files for a persona
   - High-availability DNS
 - **diskstation**: Synology Docker host
   - Managed via Synology's Docker package
-- **dockerhost**: Ubuntu VM on Proxmox
+- **dockerhost**: Ubuntu VM on Proxmox VE
   - Main container orchestration
   - Secondary DNS server
 
@@ -153,7 +153,7 @@ docker compose up -d
 - [ ] Implement Ansible playbooks for automated provisioning
 - [ ] Deploy Prometheus and Grafana for infrastructure monitoring
 - [ ] Set up CI/CD pipelines for automated deployments
-- [ ] Set up K3s cluster on Proxmox
+- [ ] Set up K3s cluster on pve
 - [ ] Set up GitOps with ArgoCD
 - [ ] Set up Unbound for recursive DNS
 - [ ] Document comprehensive backup and recovery procedures
