@@ -20,9 +20,9 @@ certificatesResolvers:
     acme:
       email: alessandro@alborworld.com
       storage: /var/traefik/certs/cloudflare-acme.json
-#      caServer: "https://acme-v02.api.letsencrypt.org/directory"
-      # Use Let's Encrypt staging endpoint for tests
-      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      caServer: "https://acme-v02.api.letsencrypt.org/directory"
+      # Let's Encrypt staging endpoint for tests
+#      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
       dnsChallenge:
         provider: cloudflare
         resolvers:
