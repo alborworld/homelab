@@ -8,7 +8,6 @@ include:
   - byparr/docker-compose.yaml
   - gluetun/docker-compose.yaml
   - grafana/docker-compose.yaml
-  - nextcloud/docker-compose.yaml
   - nzbget/docker-compose.yaml
   - overseerr/docker-compose.yaml
   - plex/docker-compose.yaml
