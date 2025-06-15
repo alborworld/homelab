@@ -6,23 +6,14 @@ http:
       service: pve
       entryPoints:
         - websecure
-      middlewares:
-        - pve-headers
       tls:
         certResolver: cloudflare
-
-  middlewares:
-    pve-headers:
-      headers:
-        customRequestHeaders:
-          Authorization: ""
-          Cookie: ""
 
   services:
     pve:
       loadBalancer:
         servers:
-          - url: "https://nuc.home:8006"
+          - url: "https://pve.home:8006"
         passHostHeader: true
         serversTransport: insecureTransport
 
