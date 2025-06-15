@@ -6,17 +6,8 @@ http:
       service: pve
       entryPoints:
         - websecure
-      middlewares:
-        - pve-headers
       tls:
         certResolver: cloudflare
-
-  middlewares:
-    pve-headers:
-      headers:
-        customRequestHeaders:
-          Authorization: ""
-          Cookie: ""
 
   services:
     pve:

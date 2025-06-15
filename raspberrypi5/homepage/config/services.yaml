@@ -5,18 +5,14 @@
 - Infrastructure:
     - Proxmox VE:
         icon: proxmox.png
-#        href: https://pve.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
-        href: https://nuc.home:8006
+        href: https://pve.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         description: NUC – VM & Container Management
-#        siteMonitor: https://pve.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
-        siteMonitor: https://nuc.home:8006
+        siteMonitor: https://pve.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
     - Proxmox Backup Server:
         icon: proxmox.png
-#        href: https://pbs.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
-        href: https://pbs.home:8007
+        href: https://pbs.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         description: Backup Server for VMs & Containers
-#        siteMonitor: https://pbs.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
-        siteMonitor: https://pbs.home:8007
+        siteMonitor: https://pbs.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
 
 - Network Devices:
     - Synology DiskStation:

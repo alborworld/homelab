@@ -6,17 +6,8 @@ http:
       service: pbs
       entryPoints:
         - websecure
-      middlewares:
-        - pbs-headers
       tls:
         certResolver: cloudflare
-
-  middlewares:
-    pbs-headers:
-      headers:
-        customRequestHeaders:
-          Authorization: ""
-          Cookie: ""
 
   services:
     pbs:
