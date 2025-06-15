@@ -3,12 +3,12 @@
 # https://ge.home.localpage.dev/configs/services/
 
 - Infrastructure:
-    - Proxmox:
+    - Proxmox VE:
         icon: proxmox.png
-#        href: https://proxmox.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
+#        href: https://pve.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         href: https://nuc.home:8006
         description: NUC – VM & Container Management
-#        siteMonitor: https://proxmox.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
+#        siteMonitor: https://pve.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         siteMonitor: https://nuc.home:8006
     - Proxmox Backup Server:
         icon: proxmox.png
