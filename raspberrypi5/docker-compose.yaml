@@ -11,6 +11,7 @@ include:
 #  - homarr/docker-compose.yaml
   - homeassistant/docker-compose.yaml
   - homepage/docker-compose.yaml
+  - pocket-id/docker-compose.yaml
   - portainer/docker-compose.yaml
   - redis/docker-compose.yaml
   - speedtest-tracker/docker-compose.yaml
