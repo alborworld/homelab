@@ -17,8 +17,6 @@ services:
       - traefik.http.routers.portainer.service=portainer
       - traefik.http.routers.portainer.tls=true
       - traefik.http.routers.portainer.tls.certresolver=cloudflare
-      # Authelia's ForwardAuth middleware
-      - traefik.http.routers.portainer.middlewares=authelia@docker
       # HOMEPAGE
       - homepage.group=Infrastructure
       - homepage.name=Portainer
