@@ -5,25 +5,15 @@ http:
       rule: "Host(`diskstation.home.alborworld.com`)"
       service: diskstation
       entryPoints:
-#        - web
         - websecure
-      middlewares:
-        - diskstation-headers
       tls:
         certResolver: cloudflare
-
-  middlewares:
-    diskstation-headers:
-      headers:
-        customRequestHeaders:
-          Authorization: ""
-          Cookie: ""
 
   services:
     diskstation:
       loadBalancer:
         servers:
-          - url: "http://diskstation.home:5000"
+          - url: "https://diskstation.home:5001"
         passHostHeader: true
         serversTransport: insecureTransport
 

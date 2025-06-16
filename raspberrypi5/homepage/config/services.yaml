@@ -17,28 +17,14 @@
 - Network Devices:
     - Synology DiskStation:
         icon: synology.png
-#        href: https://alborworld-diskstation.synology.me
-#        href: http://diskstation.home.local
-#        href: https://diskstation.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
-        href: http://diskstation.home:5000
+        href: https://diskstation.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         description: Synology DS218+ NAS
-#        siteMonitor: https://alborworld-diskstation.synology.me
-#        siteMonitor: http://diskstation.home.local
-#        siteMonitor: https://diskstation.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
-        siteMonitor: http://diskstation.home:5000
+        siteMonitor: https://diskstation.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
     - Synology DiskStation Backup:
         icon: synology.png
-#        href: https://alborworld-diskstation.synology.me
-#        href: http://10.0.4.34:5000/
-#        href: http://diskstation-backup.home.local
-#        href: https://diskstation-backup.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
-        href: http://diskstation-backup.home:5000
+        href: https://diskstation-backup.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         description: Synology DS214 NAS
-#        siteMonitor: https://alborworld-diskstation-backup.synology.me
-#        siteMonitor: http://10.0.4.34:5000/
-#        siteMonitor: http://diskstation-backup.home.local
-#        siteMonitor: https://diskstation-backup.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
-        siteMonitor: http:diskstation-backup.home:5000
+        siteMonitor: https://diskstation-backup.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
     - Synology Router:
         icon: synology.png
         href: https://alborworld-router.synology.me:8001
@@ -48,7 +34,7 @@
 - Utilities:
     - Synology Photos:
         icon: synology-photos.png
-        href: https://alborworld-diskstation.synology.me/?launchApp=SYNO.Foto.AppInstance
+        href: https://diskstation.home.alborworld.com/?launchApp=SYNO.Foto.AppInstance
         description: Media Gallery
-        siteMonitor: http://alborworld-diskstation.synology.me
+        siteMonitor: https://diskstation.home.alborworld.com
 
