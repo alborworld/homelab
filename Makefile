@@ -14,19 +14,19 @@ ENV_TARGETS := diskstation dockerhost raspberrypi5
 
 # Encrypt .env to .env.sops.enc for a given target
 encrypt-%:
-	sops --input-type dotenv --output-type dotenv --encrypt $*/.env > $*/.env.sops.enc
+	sops --input-type dotenv --output-type dotenv --encrypt $*/docker/.env > $*/docker/.env.sops.enc
 
 # Decrypt .env.sops.enc to .env for a given target
 decrypt-%:
-	sops --input-type dotenv --output-type dotenv --decrypt $*/.env.sops.enc > $*/.env
+	sops --input-type dotenv --output-type dotenv --decrypt $*/docker/.env.sops.enc > $*/docker/.env
 
 # Delete the decrypted .env file for a given target
 clean-%:
-	rm -f $*/.env
+	rm -f $*/docker/.env
 
 # Print the decrypted .env file to stdout without writing it to disk
 show-%:
-	sops --input-type dotenv --output-type dotenv --decrypt $*/.env.sops.enc
+	sops --input-type dotenv --output-type dotenv --decrypt $*/docker/.env.sops.enc
 
 # Declare targets as phony (not actual files)
 .PHONY: $(ENV_TARGETS)

@@ -32,12 +32,12 @@ The services are defined by the `docker-compose.yaml` file in each relative subf
 1. Clone and symlink:
    ```bash
    git clone git@github.com:alborworld/homelab.git ~/homelab
-   ln -s ~/homelab/diskstation /volume1/docker/compose
+   ln -s ~/homelab/diskstation/docker /volume1/docker/compose
    ```
 
 2. Deploy:
    ```bash
+   make decrypt-diskstation
    cd /volume1/docker/compose
-   sops --input-type dotenv --output-type dotenv --decrypt .env.sops.enc > .env
    docker compose up -d
    ```
