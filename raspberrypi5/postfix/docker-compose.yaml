@@ -1,0 +1,16 @@
+services:
+  postfix:
+    image: boky/postfix
+    container_name: PostfixRelay
+    ports:
+      - "25:587"
+    environment:
+      RELAYHOST: ${POSTFIX_RELAYHOST}
+      RELAYHOST_USERNAME: ${POSTFIX_RELAYHOST_USERNAME}
+      RELAYHOST_PASSWORD: ${POSTFIX_RELAYHOST_PASSWORD}
+      POSTFIX_myhostname: 'smtp-relay.${LOCAL_DOMAIN}'
+      DOMAINNAME: '${LOCAL_DOMAIN}'
+      ALLOWED_SENDER_DOMAINS: ${POSTFIX_ALLOWED_SENDER_DOMAINS}
+      POSTFIX_mynetworks: ${POSTFIX_mynetworks}
+      LOGLEVEL: 'info'
+    restart: unless-stopped
