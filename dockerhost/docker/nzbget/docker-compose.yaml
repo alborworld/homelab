@@ -18,11 +18,8 @@ services:
       - traefik.http.routers.nzbget.service=nzbget
       - traefik.http.routers.nzbget.tls=true
       - traefik.http.routers.nzbget.tls.certresolver=cloudflare
-      # Define forward-auth middleware for Authelia
-#      - traefik.http.middlewares.auth.forwardauth.address=https://auth.${LOCAL_DOMAIN}/api/verify?rd=https://nzbget.${LOCAL_DOMAIN}
-#      - traefik.http.middlewares.auth.forwardauth.trustForwardHeader=true
-#      - traefik.http.middlewares.auth.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
-#      - traefik.http.routers.nzbget.middlewares=authelia-forwardauth@file
+      # Authelia's ForwardAuth middleware
+      # - traefik.http.routers.nzbget.middlewares=authelia@docker
       # HOMEPAGE
       - homepage.group=Download Clients
       - homepage.name=NZBGet
