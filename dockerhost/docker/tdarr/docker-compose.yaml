@@ -23,6 +23,8 @@ services:
       - traefik.http.routers.tdarr.service=tdarr
       - traefik.http.routers.tdarr.tls=true
       - traefik.http.routers.tdarr.tls.certresolver=cloudflare
+      # Authelia's ForwardAuth middleware
+      # - traefik.http.routers.tdarr.middlewares=authelia@docker
       # HOMEPAGE
       - homepage.group=Media
       - homepage.name=Tdarr
