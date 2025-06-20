@@ -7,7 +7,7 @@ include:
   - beszel-agent-dh/docker-compose.yaml
   - byparr/docker-compose.yaml
   - gluetun/docker-compose.yaml
-  - grafana/docker-compose.yaml
+#  - grafana/docker-compose.yaml
   - nzbget/docker-compose.yaml
   - overseerr/docker-compose.yaml
   - plex/docker-compose.yaml
