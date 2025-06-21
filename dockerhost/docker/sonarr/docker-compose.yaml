@@ -21,8 +21,6 @@ services:
       - traefik.http.routers.sonarr.service=sonarr
       - traefik.http.routers.sonarr.tls=true
       - traefik.http.routers.sonarr.tls.certresolver=cloudflare
-      # Authelia's ForwardAuth middleware
-      # - traefik.http.routers.sonarr.middlewares=authelia@docker
       # HOMEPAGE
       - homepage.group=Media
       - homepage.name=Sonarr

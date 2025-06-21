@@ -149,7 +149,7 @@ docker compose up -d
 ## 🚧 Roadmap
 
 - [x] Set up private HTTPS Access (with Traefik, CloudFlare)
-- [ ] Set up Authorization with Authelia
+- [ ] Set up Authorization with PocketID + OAuth2-Proxy
 - [ ] Implement Ansible playbooks for automated provisioning
 - [ ] Deploy Prometheus and Grafana for infrastructure monitoring
 - [ ] Set up CI/CD pipelines for automated deployments

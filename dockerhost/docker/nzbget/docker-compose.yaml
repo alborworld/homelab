@@ -18,8 +18,6 @@ services:
       - traefik.http.routers.nzbget.service=nzbget
       - traefik.http.routers.nzbget.tls=true
       - traefik.http.routers.nzbget.tls.certresolver=cloudflare
-      # Authelia's ForwardAuth middleware
-      # - traefik.http.routers.nzbget.middlewares=authelia@docker
       # HOMEPAGE
       - homepage.group=Download Clients
       - homepage.name=NZBGet

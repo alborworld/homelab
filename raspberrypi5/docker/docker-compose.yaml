@@ -4,7 +4,6 @@ name: raspberrypi5
 
 include:
   - adguardhome/docker-compose.yaml
-  - authelia/docker-compose.yaml
   - beszel-agent-rp/docker-compose.yaml
   - beszel/docker-compose.yaml
   - dockerproxy-rp/docker-compose.yaml
