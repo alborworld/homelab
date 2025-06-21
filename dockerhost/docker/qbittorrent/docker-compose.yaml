@@ -19,8 +19,6 @@ services:
       - traefik.http.routers.qbittorrent.service=qbittorrent
       - traefik.http.routers.qbittorrent.tls=true
       - traefik.http.routers.qbittorrent.tls.certresolver=cloudflare
-      # Authelia's ForwardAuth middleware
-      # - traefik.http.routers.qbittorrent.middlewares=authelia@docker
       # HOMEPAGE
       - homepage.group=Download Clients
       - homepage.name=qBittorrent

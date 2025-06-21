@@ -18,8 +18,6 @@ services:
       - traefik.http.routers.prowlarr.service=prowlarr
       - traefik.http.routers.prowlarr.tls=true
       - traefik.http.routers.prowlarr.tls.certresolver=cloudflare
-      # Authelia's ForwardAuth middleware
-      # - traefik.http.routers.prowlarr.middlewares=authelia@docker
       # HOMEPAGE
       - homepage.group=Media
       - homepage.name=Prowlarr
