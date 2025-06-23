@@ -1,6 +1,6 @@
 # Main docker-compose file for the Dockerhost setup
 
-name: dockerhost
+name: ${HOSTNAME}
 
 include:
   - dockerproxy-dh/docker-compose.yaml

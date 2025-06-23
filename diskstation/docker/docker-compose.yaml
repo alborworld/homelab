@@ -1,6 +1,6 @@
 # Main docker-compose file for the Diskstation setup
 
-name: diskstation
+name: ${HOSTNAME}
 
 include:
   - dockerproxy-ds/docker-compose.yaml
