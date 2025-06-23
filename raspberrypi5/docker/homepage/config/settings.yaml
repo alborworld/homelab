@@ -18,3 +18,5 @@ color: slate
 providers:
   openweathermap: openweathermapapikey
   weatherapi: weatherapiapikey
+
+logpath: /app/
