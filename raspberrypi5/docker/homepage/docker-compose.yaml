@@ -9,7 +9,7 @@ services:
       HOMEPAGE_VAR_LOCAL_DOMAIN: ${LOCAL_DOMAIN}
     volumes:
       - ./config:/app/config
-      - ${VOLUMEDIR}/homepage/logs:/app/config/logs:rw
+      - ${VOLUMEDIR}/homepage/logs:/app/logs:rw
     labels:
       # TRAEFIK
       - traefik.enable=true
