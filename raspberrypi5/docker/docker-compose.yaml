@@ -1,6 +1,6 @@
 # Main docker-compose file for the Raspberrypi5 setup
 
-name: raspberrypi5
+name: ${HOSTNAME}
 
 include:
   - adguardhome/docker-compose.yaml
