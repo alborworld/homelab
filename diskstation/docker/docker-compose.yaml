@@ -6,7 +6,7 @@ include:
   - dockerproxy-ds/docker-compose.yaml
   - portainer-agent-ds/docker-compose.yaml
   - traefik-kop-ds/docker-compose.yaml
-  - watchtower/docker-compose.yaml
+  - watchtower-ds/docker-compose.yaml
   - zoom-recording-downloader/docker-compose.yaml
   - syncthing/docker-compose.yaml
   - beszel-agent-ds/docker-compose.yaml
