@@ -10,6 +10,7 @@ include:
 #  - homarr/docker-compose.yaml
   - homeassistant/docker-compose.yaml
   - homepage/docker-compose.yaml
+  - oauth2-proxy/docker-compose.yaml
   - pocket-id/docker-compose.yaml
   - portainer/docker-compose.yaml
   - postfix/docker-compose.yaml
