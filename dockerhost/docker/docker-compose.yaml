@@ -23,4 +23,4 @@ include:
   - tdarr-node/docker-compose.yaml
   - traefik-kop-dh/docker-compose.yaml
 #  - vault/docker-compose.yaml
-  - watchtower/docker-compose.yaml
+  - watchtower-dh/docker-compose.yaml

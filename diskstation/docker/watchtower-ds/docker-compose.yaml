@@ -1,15 +1,18 @@
-version: "3.9"
-
 services:
-  watchtower:
+  watchtower-ds:
     image: containrrr/watchtower
-    container_name: WatchTower
+    container_name: WatchTower-DS
     network_mode: bridge
     environment:
       - WATCHTOWER_SCHEDULE=0 15 6 * * *
       - TZ=Europe/Amsterdam
+      - WATCHTOWER_NOTIFICATIONS_HOSTNAME=diskstation
       - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      - WATCHTOWER_REVIVE_STOPPED=false
       - WATCHTOWER_DEBUG=true
+      - WATCHTOWER_NOTIFICATIONS=shoutrrr
+      - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always

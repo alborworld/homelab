@@ -19,4 +19,4 @@ include:
 #  - unbound/docker-compose.yaml
   - upsnap/docker-compose.yaml
   - uptime-kuma/docker-compose.yaml
-  - watchtower/docker-compose.yaml
+  - watchtower-rp/docker-compose.yaml
