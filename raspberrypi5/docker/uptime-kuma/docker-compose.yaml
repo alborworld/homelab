@@ -11,6 +11,8 @@ services:
       - traefik.http.routers.uptimekuma.entrypoints=websecure
       - traefik.http.routers.uptimekuma.tls=true
       - traefik.http.routers.uptimekuma.tls.certresolver=cloudflare
+      # Apply authentication
+      - traefik.http.routers.uptimekuma.middlewares=oauth2-forward@docker,oauth-errors@docker
       # HOMEPAGE
       - homepage.group=Monitoring
       - homepage.name=Uptime Kuma

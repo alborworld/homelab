@@ -22,6 +22,7 @@ services:
       #- OAUTH2_PROXY_COOKIE_CSRF_EXPIRE=5m
       #- OAUTH2_PROXY_CUSTOM_TEMPLATES_DIR="/templates"
       - OAUTH2_PROXY_REVERSE_PROXY=true
+      - OAUTH2_PROXY_UPSTREAMS=static://202
 #    volumes:
 #      - ${VOLUMEDIR}/oauth2-proxy/templates/:/templates:ro
     depends_on:
@@ -34,5 +35,20 @@ services:
       - traefik.http.routers.oauth2-proxy.entrypoints=websecure
       - traefik.http.routers.oauth2-proxy.tls=true
       - traefik.http.routers.oauth2-proxy.tls.certresolver=cloudflare
-      - "traefik.http.services.oauth2-proxy.loadbalancer.server.port=4180"
+      - traefik.http.services.oauth2-proxy.loadbalancer.server.port=4180
+      # ForwardAuth middleware
+      - traefik.http.middlewares.oauth2-forward.forwardauth.address=http://oauth2-proxy:4180/oauth2/auth
+      - traefik.http.middlewares.oauth2-forward.forwardauth.trustForwardHeader=true
+      - traefik.http.middlewares.oauth2-forward.forwardauth.authResponseHeaders=X-Auth-Request-User,X-Auth-Request-Email
+      # Error-handling middleware (to redirect on auth failure)
+      - traefik.http.middlewares.oauth-errors.errors.status=401,403
+      - traefik.http.middlewares.oauth-errors.errors.service=oauth2-proxy@docker
+      - traefik.http.middlewares.oauth-errors.errors.query=/oauth2/start?rd={scheme}://{host}{path}
+      # HOMEPAGE
+      - homepage.group=Infrastructure
+      - homepage.name=Oauth2 Proxy
+      - homepage.icon=oauth2-proxy.png
+      - homepage.href=https://oauth2.${LOCAL_DOMAIN}
+      - homepage.siteMonitor=https://oauth2.${LOCAL_DOMAIN}
+      - homepage.description=OIDC authentication proxy
     restart: unless-stopped
