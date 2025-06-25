@@ -30,7 +30,7 @@ services:
       - traefik.http.routers.readarr.tls.certresolver=cloudflare
       - traefik.http.services.readarr.loadbalancer.server.port=8787
       # HOMEPAGE
-      - homepage.group=Media
+      - homepage.group=Media Automation
       - homepage.name=Readarr
       - homepage.icon=readarr.png
       - homepage.href=https://readarr.${LOCAL_DOMAIN}

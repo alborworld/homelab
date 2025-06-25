@@ -26,7 +26,7 @@ services:
       - traefik.http.routers.syncthing.tls=true
       - traefik.http.routers.syncthing.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Utilities
+      - homepage.group=Home & Utilities
       - homepage.name=Syncthing
       - homepage.icon=syncthing.png
       - homepage.href=https://syncthing.${LOCAL_DOMAIN}

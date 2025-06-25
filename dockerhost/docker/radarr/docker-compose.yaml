@@ -22,7 +22,7 @@ services:
       - traefik.http.routers.radarr.tls=true
       - traefik.http.routers.radarr.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Media
+      - homepage.group=Media Automation
       - homepage.name=Radarr
       - homepage.icon=radarr.png
       - homepage.href=https://radarr.${LOCAL_DOMAIN}

@@ -30,7 +30,7 @@ services:
       # - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_AUTH_USERS}"
       # - "traefik.http.routers.traefik.middlewares=traefik-auth"
       # HOMEPAGE
-      - homepage.group=Infrastructure
+      - homepage.group=Core Infrastructure
       - homepage.name=Traefik
       - homepage.icon=traefik.png
       - homepage.href=https://traefik.${LOCAL_DOMAIN}

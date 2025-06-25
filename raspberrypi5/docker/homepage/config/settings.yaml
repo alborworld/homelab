@@ -3,14 +3,17 @@
 # https://gethomepage.dev/configs/settings/
 
 title: AlborWorld HomeLab
-startUrl: http://homepage.home.local
+startUrl: http://homepage.home.alborworld.com
 
 background: 
   image: https://www.pixelstalk.net/wp-content/uploads/images1/Desktop-Jungle-Images.jpg
-  blur: xs # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+  blur: lg # sm, xs, md, xl... see https://tailwindcss.com/docs/backdrop-blur
   saturate: 75 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
   brightness: 50 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
   opacity: 100 # 0-100
+
+cardBlur: md # md, sm, lg
+headerStyle: boxed # underlined, boxed, boxedWidgets, clean
 
 theme: dark # or light
 color: slate

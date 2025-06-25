@@ -1,37 +1,39 @@
 ---
 # For configuration options and examples, please see:
-# https://ge.home.localpage.dev/configs/services/
+# https://gethomepage.dev/configs/services/
 
-- Infrastructure:
+- Core Infrastructure:
     - Proxmox VE:
         icon: proxmox.png
         href: https://pve.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         description: NUC – VM & Container Management
         siteMonitor: https://pve.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
+
     - Proxmox Backup Server:
         icon: proxmox.png
         href: https://pbs.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         description: Backup Server for VMs & Containers
         siteMonitor: https://pbs.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
 
-- Network Devices:
     - Synology DiskStation:
         icon: synology.png
         href: https://diskstation.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         description: Synology DS218+ NAS
         siteMonitor: https://diskstation.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
+
     - Synology DiskStation Backup:
         icon: synology.png
         href: https://diskstation-backup.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         description: Synology DS214 NAS
         siteMonitor: https://diskstation-backup.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
+
     - Synology Router:
         icon: synology.png
         href: https://alborworld-router.synology.me:8001
         description: Synology RT2600ac Router
         siteMonitor: https://alborworld-router.synology.me
 
-- Utilities:
+- Home & Utilities:
     - Synology Photos:
         icon: synology-photos.png
         href: https://diskstation.home.alborworld.com/?launchApp=SYNO.Foto.AppInstance

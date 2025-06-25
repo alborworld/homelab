@@ -24,7 +24,7 @@ services:
       - traefik.http.routers.tdarr.tls=true
       - traefik.http.routers.tdarr.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Media
+      - homepage.group=Media Automation
       - homepage.name=Tdarr
       - homepage.icon=tdarr.png
       - homepage.href=https://tdarr.${LOCAL_DOMAIN}

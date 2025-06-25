@@ -23,7 +23,7 @@ services:
       - traefik.http.routers.tautulli.tls=true
       - traefik.http.routers.tautulli.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Plex
+      - homepage.group=Media Servers
       - homepage.name=Tautulli
       - homepage.icon=tautulli.png
       - homepage.href=https://tautulli.${LOCAL_DOMAIN}

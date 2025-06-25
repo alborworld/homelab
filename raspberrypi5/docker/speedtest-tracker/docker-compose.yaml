@@ -25,7 +25,7 @@ services:
       - traefik.http.routers.speedtest.tls=true
       - traefik.http.routers.speedtest.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Monitoring
+      - homepage.group=Monitoring & Health
       - homepage.name=SpeedTest Tracker
       - homepage.icon=speedtest-tracker.png
       - homepage.href=https://speedtest.${LOCAL_DOMAIN}

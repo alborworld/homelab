@@ -21,7 +21,7 @@ services:
       - traefik.http.routers.adguardhome.tls=true
       - traefik.http.routers.adguardhome.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Networking
+      - homepage.group=Networking & Security
       - homepage.name=Adguard Home
       - homepage.icon=adguard-home.png
       - homepage.href=https://adguard.${LOCAL_DOMAIN}
