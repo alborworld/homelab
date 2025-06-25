@@ -1,18 +1,8 @@
 services:
   unbound:
-    container_name: Unbound
     image: mvance/unbound-rpi:latest
-    networks:
-      dns-net:
-        ipv4_address: 172.20.0.3
+    container_name: Unbound
+    network_mode: host
     volumes:
-      - ${CONFIGDIR}/unbound:/opt/unbound/etc/unbound
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-    healthcheck:
-      disable: true
-    labels:
-      - diun.enable=true
+      - ${VOLUMEDIR}/unbound:/opt/unbound/etc/unbound
     restart: always

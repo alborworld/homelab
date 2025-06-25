@@ -28,6 +28,8 @@ services:
       - homepage.widget.url=https://adguard-replica.${LOCAL_DOMAIN}
       - homepage.widget.username=${ADGUARD_SYNC_REPLICA_USERNAME}
       - homepage.widget.password=${ADGUARD_SYNC_REPLICA_PASSWORD}
+    depends_on:
+      - unbound-replica
     cap_add:
       - NET_ADMIN
     restart: always
