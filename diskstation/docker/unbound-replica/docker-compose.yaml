@@ -1,0 +1,8 @@
+services:
+  unbound-replica:
+    image: mvance/unbound:latest
+    container_name: UnboundReplica
+    network_mode: host
+    volumes:
+      - ${VOLUMEDIR}/unbound-replica:/opt/unbound/etc/unbound
+    restart: always

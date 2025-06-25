@@ -26,6 +26,8 @@ services:
       - homepage.widget.url=https://adguard.${LOCAL_DOMAIN}
       - homepage.widget.username=${ADGUARD_HOME_USERNAME}
       - homepage.widget.password=${ADGUARD_HOME_PASSWORD}
+    depends_on:
+      - unbound
     cap_add:
       - NET_ADMIN
     restart: always
