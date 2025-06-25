@@ -13,7 +13,7 @@ services:
       - traefik.http.routers.beszel.tls=true
       - traefik.http.routers.beszel.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Monitoring
+      - homepage.group=Monitoring & Health
       - homepage.name=Beszel
       - homepage.icon=beszel.png
       - homepage.href=https://beszel.${LOCAL_DOMAIN}

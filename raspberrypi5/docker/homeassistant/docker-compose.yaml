@@ -19,7 +19,7 @@ services:
       - traefik.http.routers.homeassistant.tls=true
       - traefik.http.routers.homeassistant.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Utilities
+      - homepage.group=Home & Utilities
       - homepage.name=Home Assistant
       - homepage.icon=home-assistant.png
       - homepage.href=https://homeassistant.${LOCAL_DOMAIN}
