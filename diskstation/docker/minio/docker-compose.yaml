@@ -37,7 +37,7 @@ services:
       - traefik.http.routers.minio-console.tls=true
       - traefik.http.routers.minio-console.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Infrastructure
+      - homepage.group=Core Infrastructure
       - homepage.name=Minio
       - homepage.icon=minio.png
       - homepage.href=https://console.minio.${LOCAL_DOMAIN}

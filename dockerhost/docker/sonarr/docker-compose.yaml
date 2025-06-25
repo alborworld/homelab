@@ -22,7 +22,7 @@ services:
       - traefik.http.routers.sonarr.tls=true
       - traefik.http.routers.sonarr.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Media
+      - homepage.group=Media Automation
       - homepage.name=Sonarr
       - homepage.icon=sonarr.png
       - homepage.href=https://sonarr.${LOCAL_DOMAIN}

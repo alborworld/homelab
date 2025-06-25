@@ -25,7 +25,7 @@ services:
       - "traefik.http.routers.pocket-id.tls=true"
       - "traefik.http.routers.pocket-id.tls.certresolver=cloudflare"
       # HOMEPAGE
-      - homepage.group=Infrastructure
+      - homepage.group=Networking & Security
       - homepage.name=Pocket Id
       - homepage.icon=pocket-id.png
       - homepage.href=https://id.${LOCAL_DOMAIN}
