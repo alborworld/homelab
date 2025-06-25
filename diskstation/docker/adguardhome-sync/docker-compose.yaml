@@ -7,10 +7,10 @@ services:
     ports:
       - 8082:8080
     environment:
-      - ORIGIN_URL=http://10.0.4.94:8080
+      - ORIGIN_URL=https://adguard.${LOCAL_DOMAIN}
       - ORIGIN_USERNAME=${ADGUARD_ORIGIN_USERNAME}
       - ORIGIN_PASSWORD=${ADGUARD_ORIGIN_PASSWORD}
-      - REPLICA_URL=http://AdGuardHomeReplica:80
+      - REPLICA_URL=https://adguard-replica.${LOCAL_DOMAIN}
       - REPLICA_USERNAME=${ADGUARD_REPLICA_USERNAME}
       - REPLICA_PASSWORD=${ADGUARD_REPLICA_PASSWORD}
       - RUNONSTART=true
@@ -26,7 +26,7 @@ services:
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.adguardhome-sync.loadbalancer.server.port=8082
-      - traefik.http.routers.adguardhome-sync.rule=Host(`adguardhome-sync.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.adguardhome-sync.rule=Host(`adguard-sync.${LOCAL_DOMAIN}`)
       - traefik.http.routers.adguardhome-sync.entrypoints=websecure
       - traefik.http.routers.adguardhome-sync.service=adguardhome-sync
       - traefik.http.routers.adguardhome-sync.tls=true
