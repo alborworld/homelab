@@ -5,8 +5,8 @@ services:
     image: lscr.io/linuxserver/syncthing:latest
     container_name: Syncthing
     environment:
-      - PUID=1026
-      - PGID=100
+      - PUID=${UID}
+      - PGID=${GID}
       - TZ=Europe/Amsterdam
     volumes:
       - ${VOLUMEDIR}/syncthing:/config
