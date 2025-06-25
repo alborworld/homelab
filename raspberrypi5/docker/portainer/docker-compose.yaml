@@ -18,7 +18,7 @@ services:
       - traefik.http.routers.portainer.tls=true
       - traefik.http.routers.portainer.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Infrastructure
+      - homepage.group=Core Infrastructure
       - homepage.name=Portainer
       - homepage.icon=portainer.png
       - homepage.href=https://portainer.${LOCAL_DOMAIN}

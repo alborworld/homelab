@@ -18,7 +18,7 @@ services:
       - traefik.http.routers.upsnap.tls=true
       - traefik.http.routers.upsnap.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Networking
+      - homepage.group=Monitoring & Health
       - homepage.name=Upsnap
       - homepage.icon=upsnap.png
       - homepage.href=https://upsnap.${LOCAL_DOMAIN}

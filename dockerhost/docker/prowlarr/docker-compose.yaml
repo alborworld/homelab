@@ -19,7 +19,7 @@ services:
       - traefik.http.routers.prowlarr.tls=true
       - traefik.http.routers.prowlarr.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Media
+      - homepage.group=Media Automation
       - homepage.name=Prowlarr
       - homepage.icon=prowlarr.png
       - homepage.href=https://prowlarr.${LOCAL_DOMAIN}

@@ -12,7 +12,7 @@ services:
       - traefik.http.routers.uptimekuma.tls=true
       - traefik.http.routers.uptimekuma.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Monitoring
+      - homepage.group=Monitoring & Health
       - homepage.name=Uptime Kuma
       - homepage.icon=uptime-kuma.png
       - homepage.href=https://uptimekuma.${LOCAL_DOMAIN}

@@ -20,7 +20,7 @@ services:
       - traefik.http.routers.overseerr.tls=true
       - traefik.http.routers.overseerr.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Plex
+      - homepage.group=Media Servers
       - homepage.name=Overseerr
       - homepage.icon=overseerr.png
       - homepage.href=https://overseerr.${LOCAL_DOMAIN}

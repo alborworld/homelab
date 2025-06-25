@@ -32,7 +32,7 @@ services:
       - traefik.http.routers.plex.tls=true
       - traefik.http.routers.plex.tls.certresolver=cloudflare
       # HOMEPAGE
-      - homepage.group=Plex
+      - homepage.group=Media Servers
       - homepage.name=Plex
       - homepage.icon=plex.png
       - homepage.href=https://plex.${LOCAL_DOMAIN}
