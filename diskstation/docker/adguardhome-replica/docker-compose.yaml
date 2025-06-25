@@ -17,6 +17,17 @@ services:
       - traefik.http.routers.adguardhome-replica.service=adguardhome-replica
       - traefik.http.routers.adguardhome-replica.tls=true
       - traefik.http.routers.adguardhome-replica.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Networking & Security
+      - homepage.name=AdGuard Home Replica
+      - homepage.icon=adguard-home.png
+      - homepage.href=https://adguard-replica.${LOCAL_DOMAIN}
+      - homepage.siteMonitor=https://adguard-replica.${LOCAL_DOMAIN}
+      - homepage.description=DNS Ad-blocker
+      - homepage.widget.type=adguard
+      - homepage.widget.url=https://adguard-replica.${LOCAL_DOMAIN}
+      - homepage.widget.username=${ADGUARD_SYNC_REPLICA_USERNAME}
+      - homepage.widget.password=${ADGUARD_SYNC_REPLICA_PASSWORD}
     cap_add:
       - NET_ADMIN
     restart: always
