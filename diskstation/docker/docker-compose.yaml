@@ -3,7 +3,7 @@
 name: ${HOSTNAME}
 
 include:
-  - adguardhome-ds/docker-compose.yaml
+  - adguardhome-replica/docker-compose.yaml
   - adguardhome-sync/docker-compose.yaml
   - beszel-agent-ds/docker-compose.yaml
   - dockerproxy-ds/docker-compose.yaml
