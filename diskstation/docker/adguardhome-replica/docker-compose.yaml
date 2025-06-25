@@ -4,20 +4,14 @@ services:
   adguardhome-replica:
     container_name: AdGuardHomeReplica
     image: adguard/adguardhome:latest
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp"
-      - "3000:3000/tcp"
-      - "8080:80/tcp"
-      - "8443:443/tcp"
+    network_mode: host
     volumes:
-      - ${VOLUMEDIR}/adguardhome/work:/opt/adguardhome/work
-      - ${VOLUMEDIR}/adguardhome/conf:/opt/adguardhome/conf
+      - ${VOLUMEDIR}/adguardhome-replica/work:/opt/adguardhome/work
+      - ${VOLUMEDIR}/adguardhome-replica/conf:/opt/adguardhome/conf
     labels:
       # TRAEFIK
       - traefik.enable=true
-      - traefik.http.services.adguardhome-replica.loadbalancer.server.port=8080
+      - traefik.http.services.adguardhome-replica.loadbalancer.server.port=8081
       - traefik.http.routers.adguardhome-replica.rule=Host(`adguard-replica.${LOCAL_DOMAIN}`)
       - traefik.http.routers.adguardhome-replica.entrypoints=websecure
       - traefik.http.routers.adguardhome-replica.service=adguardhome-replica
