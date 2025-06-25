@@ -10,7 +10,7 @@ services:
       - ORIGIN_URL=http://10.0.4.94:8080
       - ORIGIN_USERNAME=${ADGUARD_ORIGIN_USERNAME}
       - ORIGIN_PASSWORD=${ADGUARD_ORIGIN_PASSWORD}
-      - REPLICA_URL=http://AdGuardHome-DS:80
+      - REPLICA_URL=http://AdGuardHomeReplica:80
       - REPLICA_USERNAME=${ADGUARD_REPLICA_USERNAME}
       - REPLICA_PASSWORD=${ADGUARD_REPLICA_PASSWORD}
       - RUNONSTART=true
@@ -32,5 +32,5 @@ services:
       - traefik.http.routers.adguardhome-sync.tls=true
       - traefik.http.routers.adguardhome-sync.tls.certresolver=cloudflare
     depends_on:
-      - adguardhome-ds
+      - adguardhome-replica
     restart: always
