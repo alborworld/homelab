@@ -6,7 +6,7 @@ services:
     network_mode: "service:gluetun"
     depends_on:
       gluetun:
-        condition: service_started
+        condition: service_healthy
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-info}
     volumes:
