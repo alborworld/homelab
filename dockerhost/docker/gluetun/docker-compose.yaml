@@ -16,14 +16,14 @@ services:
     environment:
       - VPN_SERVICE_PROVIDER=nordvpn
       - VPN_TYPE=wireguard
-      - DNS_ADDRESS=9.9.9.9
-      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - DNS_ADDRESS=${GLUETUN_DNS_ADDRESS}
+      - WIREGUARD_PRIVATE_KEY=${GLUETUN_WIREGUARD_PRIVATE_KEY}
       - SERVER_COUNTRIES=Netherlands
       - SERVER_CITIES=Amsterdam
-      - FIREWALL_OUTBOUND_SUBNETS=10.0.4.0/24
+      - FIREWALL_OUTBOUND_SUBNETS=${GLUETUN_FIREWALL_OUTBOUND_SUBNETS}
       - VPN_INTERFACE=tun0
       - TZ=Europe/Amsterdam
-      - HEALTH_ADDRESS_TO_PING=9.9.9.9
+      - HEALTH_ADDRESS_TO_PING=${GLUETUN_DNS_ADDRESS}
     volumes:
       - ${VOLUMEDIR}/gluetun:/gluetun
       - /etc/localtime:/etc/localtime:ro
