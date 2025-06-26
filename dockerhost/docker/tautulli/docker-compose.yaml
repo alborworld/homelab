@@ -28,13 +28,10 @@ services:
       - homepage.icon=tautulli.png
       - homepage.href=https://tautulli.${LOCAL_DOMAIN}
       - homepage.description=Plex Statistics
-      # For some reason the siteMonitor for Tautulli wants http and not https
-      #- homepage.siteMonitor=https://tautulli.${LOCAL_DOMAIN}
-      - homepage.siteMonitor=http://dockerhost.home:8181
+      - homepage.ping=https://tautulli.${LOCAL_DOMAIN}
       - homepage.widget.type=tautulli
       - homepage.widget.url=https://tautulli.${LOCAL_DOMAIN}
       - homepage.widget.key=${TAUTULLI_API_KEY}
-      - homepage.widget.enableUser=true
       - homepage.widget.showEpisodeNumber=true
       - homepage.widget.expandOneStreamToTwoRows=false
     restart: always
