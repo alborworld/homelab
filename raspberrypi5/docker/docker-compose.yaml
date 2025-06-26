@@ -12,7 +12,6 @@ include:
   - homepage/docker-compose.yaml
   - pocket-id/docker-compose.yaml
   - portainer/docker-compose.yaml
-  - postfix/docker-compose.yaml
   - redis/docker-compose.yaml
   - speedtest-tracker/docker-compose.yaml
   - traefik/docker-compose.yaml
