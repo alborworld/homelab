@@ -10,8 +10,6 @@ api:
   insecure: false
 
 entryPoints:
-  smtp:
-    address: ":25"
   submission:
     address: ":587"
   web:

@@ -2,9 +2,6 @@ services:
   postfix:
     image: boky/postfix
     container_name: PostfixRelay
-    ports:
-      - "25:25"     # SMTP (MTA-to-MTA)
-      - "587:587"   # Submission (authenticated/client)
     environment:
       RELAYHOST: ${POSTFIX_RELAYHOST}
       RELAYHOST_USERNAME: ${POSTFIX_RELAYHOST_USERNAME}
@@ -14,26 +11,15 @@ services:
       ALLOWED_SENDER_DOMAINS: ${POSTFIX_ALLOWED_SENDER_DOMAINS}
       POSTFIX_mynetworks: ${POSTFIX_mynetworks}
       LOGLEVEL: 'info'
-      POSTFIX_smtpd_tls_security_level: 'may'
+      POSTFIX_smtp_tls_security_level: 'no'
+      POSTFIX_smtpd_tls_security_level: 'no'
       POSTFIX_smtpd_use_tls: 'no'
       POSTFIX_smtpd_tls_wrappermode: 'no'
     labels:
       - traefik.enable=true
-
-      # =========================
-      # SMTP (MTA-to-MTA, port 25, STARTTLS)
-      - traefik.tcp.routers.postfix-smtp.entrypoints=smtp
-      - traefik.tcp.routers.postfix-smtp.rule=HostSNI(`*`)
-      - traefik.tcp.routers.postfix-smtp.service=postfix-smtp
-      - traefik.tcp.services.postfix-smtp.loadbalancer.server.port=25
-      # Terminate TLS in Traefik:
-      - traefik.tcp.routers.postfix-smtp.tls=true
-      - traefik.tcp.routers.postfix-smtp.tls.certresolver=cloudflare
-    
-      # =========================
       # Submission (port 587, client auth)
       - traefik.tcp.routers.postfix-sub.entrypoints=submission
-      - traefik.tcp.routers.postfix-sub.rule=HostSNI(`smtp-relay.home.alborworld.com`)
+      - traefik.tcp.routers.postfix-sub.rule=HostSNI(`smtp.${LOCAL_DOMAIN}`)
       - traefik.tcp.routers.postfix-sub.service=postfix-sub
       - traefik.tcp.services.postfix-sub.loadbalancer.server.port=587
       # Terminate TLS in Traefik:
