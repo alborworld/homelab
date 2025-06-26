@@ -8,6 +8,9 @@ services:
       - TZ=Europe/Amsterdam
     ports:
       - "5055:5055"
+    depends_on:
+      plex:
+        condition: service_started
     volumes:
       - ${VOLUMEDIR}/overseerr:/config
     labels:
