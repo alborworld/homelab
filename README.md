@@ -149,11 +149,12 @@ docker compose up -d
 ## 🚧 Roadmap
 
 - [x] Set up private HTTPS Access (with Traefik, CloudFlare)
-- [ ] Set up Authorization with PocketID + OAuth2-Proxy
-- [ ] Implement Ansible playbooks for automated provisioning
+- [x] Set up Authorization with PocketID
+- [ ] Set up K3s cluster on pve
+- [ ] Use Terraform/OpenTofu to provision VMs in Proxmox and deploy Cloudflare distributions
+- [ ] Use Ansible playbooks for automated setup and orchestration of VMs, Diskstation, and Raspberry Pi
 - [ ] Deploy Prometheus and Grafana for infrastructure monitoring
 - [ ] Set up CI/CD pipelines for automated deployments
-- [ ] Set up K3s cluster on pve
 - [ ] Set up GitOps with ArgoCD
 - [ ] Set up Unbound for recursive DNS
 - [ ] Document comprehensive backup and recovery procedures
