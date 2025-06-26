@@ -14,6 +14,8 @@ services:
       - ${VOLUMEDIR}/tdarr/logs:/app/logs
       - ${VOLUMEDIR}/tdarr/transcode:/transcode
       - ${MEDIADIR}:/media # shared with Plex
+    devices:
+      - /dev/dri:/dev/dri
     labels:
       # TRAEFIK
       - traefik.enable=true
