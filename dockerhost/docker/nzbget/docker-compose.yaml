@@ -10,6 +10,9 @@ services:
       - ./config:/config
       - ${MEDIADIR}/downloads:/downloads
     network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
     labels:
       - traefik.enable=true
       - traefik.http.services.nzbget.loadbalancer.server.port=6789

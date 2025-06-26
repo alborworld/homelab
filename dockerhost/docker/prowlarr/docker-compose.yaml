@@ -9,6 +9,13 @@ services:
     volumes:
       - ${VOLUMEDIR}/prowlarr:/config
     network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+      qbittorrent:
+        condition: service_started
+      nzbget:
+        condition: service_started
     labels:
       # TRAEFIK
       - traefik.enable=true

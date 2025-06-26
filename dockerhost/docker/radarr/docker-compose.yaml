@@ -12,6 +12,13 @@ services:
       - ${MEDIADIR}/downloads:/app/qBittorrent/downloads
       - ${MEDIADIR}/downloads/complete/Movies:/downloads/complete/Movies
     network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+      qbittorrent:
+        condition: service_started
+      nzbget:
+        condition: service_started
     labels:
       # TRAEFIK
       - traefik.enable=true
@@ -31,7 +38,4 @@ services:
       - homepage.widget.type=radarr
       - homepage.widget.url=https://radarr.${LOCAL_DOMAIN}
       - homepage.widget.key=${RADARR_API_KEY}
-    depends_on:
-      gluetun:
-        condition: service_healthy
     restart: always
