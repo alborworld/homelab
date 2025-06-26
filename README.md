@@ -148,19 +148,8 @@ docker compose up -d
 
 ## 🚧 Roadmap
 
-- [x] Set up private HTTPS Access (with Traefik, CloudFlare)
-- [x] Set up Authorization with PocketID
-- [ ] Set up K3s cluster on pve
-- [ ] Use Terraform/OpenTofu to provision VMs in Proxmox and deploy Cloudflare distributions
-- [ ] Use Ansible playbooks for automated setup and orchestration of VMs, Diskstation, and Raspberry Pi
-- [ ] Deploy Prometheus and Grafana for infrastructure monitoring
-- [ ] Set up CI/CD pipelines for automated deployments
-- [ ] Set up GitOps with ArgoCD
-- [ ] Set up Unbound for recursive DNS
-- [ ] Document comprehensive backup and recovery procedures
-- [ ] Implement automated testing for infrastructure changes
-
-... and much more.
+The latest roadmap is maintained on [GitHub Projects](https://github.com/users/alborworld/projects/3/views/4).  
+Check there for up-to-date plans and progress!
 
 ## 📄 License
 
