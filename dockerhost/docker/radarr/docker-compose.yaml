@@ -31,4 +31,7 @@ services:
       - homepage.widget.type=radarr
       - homepage.widget.url=https://radarr.${LOCAL_DOMAIN}
       - homepage.widget.key=${RADARR_API_KEY}
+    depends_on:
+      gluetun:
+        condition: service_healthy
     restart: always
