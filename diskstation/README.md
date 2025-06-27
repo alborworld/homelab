@@ -1,8 +1,8 @@
-# 🧪 Synology Diskstation — HomeLab Docker Stack
+# 🧪 Synology DS218+ — HomeLab Docker Stack
 
-This folder contains the Docker Compose configuration and related files for services running on the Synology Diskstation in the [alborworld/homelab](https://github.com/alborworld/homelab) setup.
+This folder contains the Docker Compose configuration and related files for services running on the Synology DS218+ in the [alborworld/homelab](https://github.com/alborworld/homelab) setup.
 
-> For common setup instructions, SOPS usage, and general information, please refer to the [main README](../README.md).
+> For common setup instructions, SOPS usage, and general information, please refer to the [main README](../README.md). For a detailed architecture overview, see [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md).
 
 ## 📦 Services
 
@@ -12,17 +12,18 @@ The services are defined by the `docker-compose.yaml` file in each relative subf
 
 ```bash
 /volume1/docker/
-├── compose/           # ← This repo's content is symlinked here
+├── compose/           # ← This repo's docker/ content is symlinked here
 │   ├── docker-compose.yaml
 │   ├── .env.sops.enc
 │   └── ...
 └── volumes/           # ← Local persistent data (NOT versioned)
-~/homelab/            # ← Cloned repo
+~/homelab/             # ← Cloned repo
 ```
 
 ## 📋 Host-Specific Notes
 
 - Managed via Synology's Docker package
+- Secondary DNS server
 - Scheduled downtime: midnight to 6 AM
 - Requires Docker Compose v2.21.0 or later
 - Located at `/volume1/docker/compose` when symlinked
