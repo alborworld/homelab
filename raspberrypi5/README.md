@@ -2,7 +2,7 @@
 
 This folder contains the Docker Compose configuration and related files for services running on the Raspberry Pi 5 in the [alborworld/homelab](https://github.com/alborworld/homelab) setup.
 
-> For common setup instructions, SOPS usage, and general information, please refer to the [main README](../README.md).
+> For common setup instructions, SOPS usage, and general information, please refer to the [main README](../README.md). For a detailed architecture overview, see [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md).
 
 ## 📦 Services
 
@@ -12,12 +12,12 @@ The services are defined by the `docker-compose.yaml` file in each relative subf
 
 ```bash
 ~/docker/
-├── compose/           # ← This repo's content is symlinked here
+├── compose/           # ← This repo's docker/ content is symlinked here
 │   ├── docker-compose.yaml
 │   ├── .env.sops.enc
 │   └── ...
 └── volumes/           # ← Local persistent data (NOT versioned)
-~/homelab/            # ← Cloned repo
+~/homelab/             # ← Cloned repo
 ```
 
 ## 📋 Host-Specific Notes
@@ -38,6 +38,6 @@ The services are defined by the `docker-compose.yaml` file in each relative subf
 2. Deploy:
    ```bash
    make decrypt-raspberrypi5
-   cd ~/raspberrypi5/docker
+   cd ~/docker/compose
    docker compose up -d
    ```

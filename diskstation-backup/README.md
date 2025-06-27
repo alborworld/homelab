@@ -1,4 +1,4 @@
-# DiskStation Backup (DS214)
+# 🧪 Synology DS214
 
 The Synology DiskStation DS214 is used exclusively for backups.
 

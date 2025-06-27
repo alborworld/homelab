@@ -23,6 +23,7 @@ This repository contains the configuration and orchestration files for a persona
 ### Core Components
 - **Router**: Synology RT2600ac
 - **NAS**: Synology DiskStation DS218+ (10 GB RAM, 2 x 5 TB HD)
+- **Backup NAS**: Synology DiskStation DS214 (512 MB RAM, 2 x 1.8 TB HD)
 - **Compute Node**: Intel NUC 13 (64 GB RAM, 2 TB SSD) running Proxmox VE
 - **Edge Node**: Raspberry Pi 5 (4 GB RAM, 64 GB SSD)
 
@@ -30,18 +31,21 @@ This repository contains the configuration and orchestration files for a persona
 
 ### Docker Hosts
 - **raspberrypi5**: Always-on edge node
-  - Critical services (AdGuard Home)
-  - High-availability DNS
+  - Main DNS server
+  - Critical services
 - **diskstation**: Synology Docker host
-  - Managed via Synology's Docker package
-- **dockerhost**: Ubuntu VM on Proxmox VE
-  - Main container orchestration
   - Secondary DNS server
+  - S3-compatible object storage
+  - File Synchronization
+  - Zoom recordings download automation
+  - etc.
+- **dockerhost**: Ubuntu VM on Proxmox VE
+  - Media services
+  - etc.
 
 ### Infrastructure Features
-- **DNS**: High-availability setup using AdGuard Home
-- **Power Management**: Automated shutdown schedule (midnight to 6 AM) for diskstation and dockerhost
-- **Security**: Secrets management using SOPS encryption
+
+For a detailed overview of infrastructure features—including DNS, power management, and security—see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## 🛠️ Technology Stack
 
@@ -49,7 +53,7 @@ This repository contains the configuration and orchestration files for a persona
 - **Containerization**: Docker & Docker Compose v2.21.0+
 - **Secrets Management**: Mozilla SOPS for encrypted .env files
 - **Reverse Proxy**: Traefik v3.4 with automatic SSL
-- **DNS**: AdGuard Home with high-availability setup
+- **DNS**: AdGuard Home / Unbound with high-availability setup
 - **VPN**: WireGuard via Gluetun container
 - **Monitoring**: 
   - Uptime Kuma for service monitoring
@@ -65,36 +69,57 @@ This repository contains the configuration and orchestration files for a persona
   - Tautulli for Plex analytics
   - Tdarr for media transcoding
 
-### Productivity
-- **File Sharing**: Nextcloud with OnlyOffice integration
-- **Document Management**: OnlyOffice Document Server
-- **Version Control**: GitLab Runner for CI/CD
-
 ### Infrastructure
 - **Container Management**: Portainer Agent
 - **Service Discovery**: Traefik Kop for multi-host setup
 - **Automation**: Watchtower for container updates
-- **Monitoring**: Beszel Agent for disk monitoring
+- **Monitoring**: Beszel for host health monitoring
+
+## 📚 Documentation Overview
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md):  
+  _Detailed architecture of the homelab, including hardware, network topology, orchestration, and security practices._
+
+- [raspberrypi5/README.md](raspberrypi5/README.md):  
+  _Setup and management instructions for the Raspberry Pi 5 edge node._
+
+- [dockerhost/README.md](dockerhost/README.md):  
+  _Setup and management instructions for the Dockerhost (Proxmox VM) node._
+
+- [diskstation/README.md](diskstation/README.md):  
+  _Setup and management instructions for the Synology DS218+ node._
+
+- [diskstation-backup/README.md](diskstation-backup/README.md):  
+  _Instructions for configuring the Synology DS214 as a dedicated backup node, including Beszel Agent installation._
 
 ## 📁 Repository Structure
 
 ```
 homelab/
-├── diskstation/          # Synology NAS configurations
-│   ├── docker-compose.yaml
-│   └── .env.sops.enc     # Encrypted environment variables
-├── dockerhost/          # Proxmox VM configurations
-│   ├── docker-compose.yaml
-│   └── .env.sops.enc
-└── raspberrypi5/        # Raspberry Pi configurations
-    ├── docker-compose.yaml
-    └── .env.sops.enc
+├── diskstation/             # Synology DS218+ Docker stack and configs
+│   ├── docker/              # Docker Compose files for DS218+
+│   └── README.md
+├── dockerhost/              # Proxmox VM Docker stack and configs
+│   ├── docker/              # Docker Compose files for Dockerhost
+│   └── README.md
+├── raspberrypi5/            # Raspberry Pi 5 Docker stack and configs
+│   ├── docker/              # Docker Compose files for Raspberry Pi 5
+│   └── README.md
+├── diskstation-backup/      # Synology DS214 general information and setup instructions
+│   └── README.md
+├── docs/                    # Documentation and images
+│   ├── images/
+│   └── ARCHITECTURE.md
+├── LICENSE
+├── Makefile
+└── README.md                # Main project overview
 ```
-
-Each host directory contains:
-- `docker-compose.yaml`: Service definitions
-- `.env.sops.enc`: Encrypted environment variables
-- `volumes/`: Persistent data (git-ignored)
+- Each host directory contains:
+  - `docker/`: Docker Compose files and service configs
+  - `README.md`: Host-specific notes and instructions
+  - `.env.sops.enc`: Encrypted environment variables (not shown above)
+- `diskstation-backup/`: Special instructions for the backup-only DS214
+- `docs/`: Architecture diagrams, images, and extended documentation
 
 ## 🔐 Security
 
@@ -104,14 +129,42 @@ Each host directory contains:
 
 ### SOPS Usage
 
-#### Encryption
-To encrypt an existing `.env` file:
+#### Encryption & Decryption with Makefile
+
+To simplify encryption and decryption of `.env` files, use the provided `Makefile` targets. This ensures consistent usage of SOPS options and reduces manual steps.
+
+**Examples:**
+
+- Encrypt the `.env` file for a target (e.g., diskstation):
+  ```bash
+  make encrypt-diskstation
+  ```
+  This will encrypt `diskstation/docker/.env` to `diskstation/docker/.env.sops.enc`.
+
+- Decrypt the `.env.sops.enc` file for a target (e.g., raspberrypi5):
+  ```bash
+  make decrypt-raspberrypi5
+  ```
+  This will decrypt `raspberrypi5/docker/.env.sops.enc` to `raspberrypi5/docker/.env`.
+
+- Clean (remove) the decrypted `.env` file for a target:
+  ```bash
+  make clean-dockerhost
+  ```
+
+- Show the decrypted `.env` file for a target (print to stdout):
+  ```bash
+  make show-diskstation
+  ```
+
+#### Manual Encryption
+To encrypt an existing `.env` file manually:
 ```bash
-sops --encrypt .env > .env.sops.enc
+sops --input-type dotenv --output-type dotenv --encrypt .env > .env.sops.enc
 ```
 
-#### Decryption
-After cloning, decrypt with:
+#### Manual Decryption
+To decrypt manually:
 ```bash
 sops --input-type dotenv --output-type dotenv --decrypt .env.sops.enc > .env
 ```
@@ -148,8 +201,19 @@ docker compose up -d
 
 ## 🚧 Roadmap
 
-The latest roadmap is maintained on [GitHub Projects](https://github.com/users/alborworld/projects/3/views/4).  
-Check there for up-to-date plans and progress!
+With the number of services now approaching 50, it's time to upgrade the homelab's orchestration to Kubernetes for improved scalability, reliability, and management.
+
+Here are some of the planned improvements and features for the homelab:
+
+- [ ] Set up K3s cluster on pve
+- [ ] Set up GitOps with ArgoCD
+- [ ] Use Terraform/OpenTofu to provision VMs in Proxmox and deploy Cloudflare distributions
+- [ ] Use Ansible playbooks for automated setup and orchestration of VMs, Diskstation, and Raspberry Pi
+- [ ] Deploy HashiCorp Vault / OpenBao for centralized and seamless secrets management
+- [ ] Deploy Prometheus and Grafana for infrastructure monitoring
+- [ ] Set up CI/CD pipelines for automated deployments
+
+For the latest roadmap and planned features, see the [GitHub Projects board](https://github.com/users/alborworld/projects/3/views/4).
 
 ## 📄 License
 
