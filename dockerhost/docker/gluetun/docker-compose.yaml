@@ -13,6 +13,7 @@ services:
       - 7878:7878     # Radarr
       - 8989:8989     # Sonarr
       - 8787:8787     # Readarr
+      - 11011:11011   # Cleanuparr
     environment:
       - VPN_SERVICE_PROVIDER=nordvpn
       - VPN_TYPE=wireguard
