@@ -1,0 +1,41 @@
+services:
+  cleanuparr:
+    image: ghcr.io/cleanuparr/cleanuparr:latest
+    container_name: Cleanuparr
+    volumes:
+      - ${VOLUMEDIR}/cleanuparr:/config
+    environment:
+      - PORT=11011
+      - BASE_PATH=
+      - PUID=${UID}
+      - PGID=${GID}
+      - UMASK=022
+      - TZ=Europe/Amsterdam
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+      qbittorrent:
+        condition: service_started
+      nzbget:
+        condition: service_started
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.cleanuparr.loadbalancer.server.port=11011
+      - traefik.http.routers.cleanuparr.rule=Host(`cleanuparr.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.cleanuparr.entrypoints=websecure
+      - traefik.http.routers.cleanuparr.service=cleanuparr
+      - traefik.http.routers.cleanuparr.tls=true
+      - traefik.http.routers.cleanuparr.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Media Automation
+      - homepage.name=Cleanuparr
+      - homepage.icon=cleanuperr.png
+      - homepage.href=https://cleanuparr.${LOCAL_DOMAIN}
+      - homepage.description=Media Cleanup Automation
+      - homepage.siteMonitor=https://cleanuparr.${LOCAL_DOMAIN}
+#      - homepage.widget.type=cleanuparr
+#      - homepage.widget.url=https://cleanuparr.${LOCAL_DOMAIN}
+#      - homepage.widget.key=${CLEANUPARR_API_KEY}
+    restart: unless-stopped

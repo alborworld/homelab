@@ -6,6 +6,7 @@ include:
   - dockerproxy-dh/docker-compose.yaml
   - beszel-agent-dh/docker-compose.yaml
   - byparr/docker-compose.yaml
+  - cleanuparr/docker-compose.yaml
   - gluetun/docker-compose.yaml
 #  - grafana/docker-compose.yaml
   - nzbget/docker-compose.yaml
