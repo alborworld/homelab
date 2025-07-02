@@ -27,20 +27,3 @@ variable "proxmox_node_name" {
   type        = string
   default     = "nuc"
 }
-
-## VM Variables
-variable "bios" {
-  description = "VM bios, setting to `ovmf` will automatically create a EFI disk."
-  type        = string
-  default     = "seabios"
-  validation {
-    condition     = contains(["seabios", "ovmf"], var.bios)
-    error_message = "Invalid bios setting: ${var.bios}. Valid options: 'seabios' or 'ovmf'."
-  }
-}
-
-variable "ci_ssh_key" {
-  description = "File path to SSH key for 'default' user, e.g. `~/.ssh/id_ed25519.pub`."
-  type        = string
-  default     = "~/.ssh/id_rsa.pub"
-}
