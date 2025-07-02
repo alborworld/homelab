@@ -16,6 +16,18 @@ variable "proxmox_api_token_secret" {
   sensitive   = true
 }
 
+variable "proxmox_datastore_name" {
+  description = "The name of the Proxmox datastore"
+  type        = string
+  default     = "local"
+}
+
+variable "proxmox_node_name" {
+  description = "The name of the Proxmox node"
+  type        = string
+  default     = "nuc"
+}
+
 ## VM Variables
 variable "bios" {
   description = "VM bios, setting to `ovmf` will automatically create a EFI disk."

@@ -1,7 +1,7 @@
 ## Quick and dirty Ubuntu VM
 resource "proxmox_virtual_environment_vm" "ubuntu_quick_vm" {
   name      = "ubuntu-quick-vm"
-  node_name = "nuc"
+  node_name = var.proxmox_node_name
 
   cpu {
     cores = 2
@@ -22,7 +22,7 @@ resource "proxmox_virtual_environment_vm" "ubuntu_quick_vm" {
 
   cdrom {
     enabled      = true
-    file_id      = "local:iso/ubuntu-23.10-live-server-amd64.iso"
+    file_id      = "${var.proxmox_datastore_name}:iso/ubuntu-23.10-live-server-amd64.iso"
   }
 
   network_device {
