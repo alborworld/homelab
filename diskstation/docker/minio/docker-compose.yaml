@@ -8,12 +8,17 @@ services:
     ports:
       - "9002:9000"
       - "9003:9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-      - MINIO_DOMAIN=minio.${LOCAL_DOMAIN}
-      - MINIO_SERVER_URL=https://minio.${LOCAL_DOMAIN}
-      - MINIO_BROWSER_REDIRECT_URL=https://console.minio.${LOCAL_DOMAIN}
+      - MINIO_DOMAIN=s3.${LOCAL_DOMAIN}
+      - MINIO_SERVER_URL=https://s3.${LOCAL_DOMAIN}
+      - MINIO_BROWSER_REDIRECT_URL=https://console.s3.${LOCAL_DOMAIN}
     volumes:
       - ${MINIO_DATA_DIR}:/data
       - ${VOLUMEDIR}/minio/config:/root/.minio
@@ -24,14 +29,14 @@ services:
       - traefik.enable=true
       # Api
       - traefik.http.services.minio.loadbalancer.server.port=9002
-      - traefik.http.routers.minio.rule=Host(`minio.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.minio.rule=Host(`s3.${LOCAL_DOMAIN}`)
       - traefik.http.routers.minio.entrypoints=websecure
       - traefik.http.routers.minio.service=minio
       - traefik.http.routers.minio.tls=true
       - traefik.http.routers.minio.tls.certresolver=cloudflare
       # Console
       - traefik.http.services.minio-console.loadbalancer.server.port=9003
-      - traefik.http.routers.minio-console.rule=Host(`console.minio.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.minio-console.rule=Host(`console.s3.${LOCAL_DOMAIN}`)
       - traefik.http.routers.minio-console.entrypoints=websecure
       - traefik.http.routers.minio-console.service=minio-console
       - traefik.http.routers.minio-console.tls=true
@@ -40,8 +45,8 @@ services:
       - homepage.group=Core Infrastructure
       - homepage.name=Minio
       - homepage.icon=minio.png
-      - homepage.href=https://console.minio.${LOCAL_DOMAIN}
-      - homepage.siteMonitor=https://console.minio.${LOCAL_DOMAIN}
+      - homepage.href=https://console.s3.${LOCAL_DOMAIN}
+      - homepage.siteMonitor=https://console.s3.${LOCAL_DOMAIN}
       - homepage.description=S3 Compatible Storage
     restart: always
 
