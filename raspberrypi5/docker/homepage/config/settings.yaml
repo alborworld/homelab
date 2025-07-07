@@ -5,6 +5,29 @@
 title: AlborWorld HomeLab
 startUrl: http://homepage.home.alborworld.com
 
+layout:
+  - Core Infrastructure:
+      style: row
+      columns: 3
+  - Home & Utilities:
+      style: row
+      columns: 2
+  - Networking & Security:
+      style: row
+      columns: 2
+  - Monitoring & Health:
+      style: row
+      columns: 2
+  - Media Servers:
+      style: row
+      columns: 3
+  - Media Automation:
+      style: row
+      columns: 3
+  - Download Clients:
+      style: row
+      columns: 2
+
 background: 
   image: https://www.pixelstalk.net/wp-content/uploads/images1/Desktop-Jungle-Images.jpg
   blur: lg # sm, xs, md, xl... see https://tailwindcss.com/docs/backdrop-blur
