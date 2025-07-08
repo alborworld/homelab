@@ -16,19 +16,19 @@
         siteMonitor: https://pbs.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
 
     - Synology DiskStation:
-        icon: synology.png
+        icon: mdi-nas
         href: https://diskstation.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         description: Synology DS218+ NAS
         siteMonitor: https://diskstation.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
 
     - Synology DiskStation Backup:
-        icon: synology.png
+        icon: mdi-nas
         href: https://diskstation-backup.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
         description: Synology DS214 NAS
         siteMonitor: https://diskstation-backup.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
 
     - Synology Router:
-        icon: synology.png
+        icon: router.png
         href: https://alborworld-router.synology.me:8001
         description: Synology RT2600ac Router
         siteMonitor: https://alborworld-router.synology.me
