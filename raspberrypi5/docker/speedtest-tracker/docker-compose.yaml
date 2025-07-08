@@ -13,6 +13,10 @@ services:
       - FORCE_HTTPS=false
       - DB_CONNECTION=sqlite
       - TZ=Europe/Amsterdam
+      - APP_TIMEZONE=Europe/Amsterdam  
+      - DISPLAY_TIMEZONE=Europe/Amsterdam
+      - SPEEDTEST_SCHEDULE=30 6,18 * * * # every day at 6am
+      - SPEEDTEST_SERVERS=52365
     volumes:
       - ${VOLUMEDIR}/speedtest-tracker:/config
     labels:
