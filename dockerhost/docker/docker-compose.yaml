@@ -9,6 +9,7 @@ include:
   - cleanuparr/docker-compose.yaml
   - gluetun/docker-compose.yaml
 #  - grafana/docker-compose.yaml
+  - iperf-dh/docker-compose.yaml
   - nzbget/docker-compose.yaml
   - overseerr/docker-compose.yaml
   - plex/docker-compose.yaml
