@@ -1,6 +1,6 @@
 services:
   qbittorrent:
-    image: ghcr.io/hotio/qbittorrent:release-4.6.0
+    image: ghcr.io/hotio/qbittorrent:release
     container_name: qBittorrent
     environment:
       - PUID=${UID}
