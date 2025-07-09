@@ -1,0 +1,6 @@
+services:
+  iperf3-dh:
+    image: frauhottelmann/docker-iperf3:latest
+    container_name: iPerf3-DH
+    network_mode: host
+    restart: always

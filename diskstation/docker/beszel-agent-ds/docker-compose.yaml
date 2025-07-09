@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   beszel-agent-ds:
     image: "henrygd/beszel-agent"
