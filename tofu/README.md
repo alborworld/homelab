@@ -1,4 +1,4 @@
-# Tofu Configuration Directory
+# OpenTofu Configuration
 
 This directory contains Tofu (Terraform) configurations for managing infrastructure as code in the homelab.
 
@@ -6,7 +6,7 @@ This directory contains Tofu (Terraform) configurations for managing infrastruct
 
 ```
 tofu/
-├── cloudflare/         # Cloudflare infrastructure configuration
+├── cloudflare/        # Cloudflare infrastructure configuration
 │   ├── main.tf        # Main Terraform configuration
 │   ├── variables.tf   # Input variables
 │   └── outputs.tf     # Output values
@@ -26,7 +26,7 @@ This directory contains Tofu (Terraform) configurations for managing different a
 
 ## Security Note
 
-Sensitive information (API keys, credentials) should be encrypted using SOPS. See the repository's root Makefile for encryption/decryption instructions.
+Sensitive information (API keys, credentials) should be encrypted using SOPS. See the repository's [root Makefile](../Makefile) for encryption/decryption instructions.
 
 ## Usage
 
@@ -51,10 +51,6 @@ Sensitive information (API keys, credentials) should be encrypted using SOPS. Se
 To add a new Tofu configuration:
 1. Create a new subdirectory under `tofu/`
 2. Add your main.tf configuration
-3. Create variables.tf and outputs.tf as needed
+3. Create `variables.tf` and `outputs.tf` as needed
 4. Add any required modules to the modules/ directory
 5. Encrypt sensitive variables using SOPS
-
-## License
-
-See the [LICENSE](../LICENSE) file for details.

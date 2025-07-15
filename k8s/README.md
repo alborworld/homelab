@@ -1,52 +1,43 @@
-# Kubernetes Configuration Directory
+# Kubernetes Configuration (Planned)
 
-This directory contains Kubernetes manifests and configuration files for the homelab infrastructure.
+> **⚠️ Work in Progress**: This directory is being prepared for a future Kubernetes migration. The homelab currently runs on Docker.  
+> For current setup instructions, see the [main documentation](../docs/).
 
-## Directory Structure
+## 🚧 Planned Architecture
 
+### Goals
+- **Proxmox-based Kubernetes** on Intel NUC 13
+- **Cluster Architecture**:
+  - **Management Cluster**: k3s-based CAPI (Cluster API) management cluster deployed with Terraform
+  - **Workload Clusters**: Managed via Cluster API for declarative cluster lifecycle
+- **GitOps workflow** with ArgoCD/Flux
+- **Secrets Management**: SOPS integration
+- **Monitoring**: Prometheus, Grafana, Loki stack
+- **Storage**: CSI drivers for Synology/Longhorn
+- **Automated Backups**: Velero for cluster and volume backups
+- **Multi-tenancy**: Logical separation of workloads
+
+### Proposed Structure
 ```
 k8s/
-├── manifests/           # Kubernetes manifest files
-│   ├── apps/          # Application deployments
-│   ├── ingress/       # Ingress configurations
-│   ├── secrets/       # Encrypted secrets (using SOPS)
-│   └── configmaps/    # Configuration maps
-├── helm/              # Helm charts and values
-└── scripts/           # Helper scripts for k8s operations
+├── clusters/           # Cluster API definitions
+├── infrastructure/     # Base cluster components
+│   ├── cert-manager/   # TLS certificates
+│   ├── ingress-nginx/  # Ingress controller
+│   └── monitoring/     # Monitoring stack
+└── apps/              # Application deployments
+    ├── base/          # Common configurations
+    └── overlays/      # Environment-specific configs
 ```
 
-## Purpose
+## 📅 Next Steps
+1. Set up initial cluster using [Cluster API](https://cluster-api.sigs.k8s.io/) for declarative cluster management
+2. Implement GitOps workflow with ArgoCD/Flux
+3. Set up monitoring and observability stack
+4. Migrate services incrementally from Docker
 
-This directory holds all Kubernetes-related configuration for the homelab, including:
-- Application deployments
-- Ingress configurations
-- Secrets management
-- Helm charts
-- Configuration maps
+## 🔗 Related Documentation
+- [Architecture Overview](../docs/ARCHITECTURE.md)
+- [Security Practices](../docs/SECURITY.md)
+- [Setup Guide](../docs/SETUP.md)
 
-## Security Note
-
-Sensitive information (secrets) should be encrypted using SOPS. See the repository's root Makefile for encryption/decryption instructions.
-
-## Usage
-
-1. Apply manifests using:
-   ```bash
-   kubectl apply -f manifests/
-   ```
-2. Deploy Helm charts:
-   ```bash
-   helm install -f helm/values.yaml ./helm/chart-name
-   ```
-
-## Adding New Services
-
-To add a new service:
-1. Create a new manifest file in `manifests/apps/`
-2. Add any required secrets in `manifests/secrets/` (using SOPS encryption)
-3. Create configuration maps in `manifests/configmaps/` if needed
-4. Update the ingress configuration in `manifests/ingress/` if applicable
-
-## License
-
-See the [LICENSE](../LICENSE) file for details.

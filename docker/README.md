@@ -1,43 +1,112 @@
-# Docker Nodes Configuration Directory
+# Docker Configuration
 
-This directory contains Docker configuration for different nodes in the homelab infrastructure. Each subdirectory represents a different Docker node with its own Docker Compose configuration.
+This directory contains the Docker configuration for all nodes in the homelab. Each node is a separate Docker host with its own services and configuration.
 
-## Directory Structure
+## 📁 Subdirectory Structure
 
 ```
 docker/
-├── diskstation/          # Synology DiskStation configuration
-├── dockerhost/          # Main Docker host configuration
-├── raspberrypi5/        # Raspberry Pi 5 configuration
-└── ...                 # Additional Docker nodes
+├── diskstation/      # Synology DS218+ services
+├── dockerhost/       # Proxmox VM (main Docker host)
+└── raspberrypi5/     # Edge node services
 ```
 
-Each node directory contains:
-- `docker-compose.yml` - Main Docker Compose configuration
-- `.env` - Environment variables (encrypted with SOPS)
-- `.env.sops.enc` - Encrypted environment variables
-- Additional configuration files specific to the node
+### Node Roles
 
-## Purpose
+1. **raspberrypi5** (Edge Node)
+   - Always-on, low-power node
+   - Critical infrastructure services
+   - Main DNS server (AdGuard Home)
+   - [Details](raspberrypi5/README.md)
 
-Each subdirectory represents a different Docker node in the homelab infrastructure:
-- `diskstation/` - Configuration for Synology DiskStation services
-- `dockerhost/` - Configuration for the main Docker host
-- `raspberrypi5/` - Configuration for Raspberry Pi 5 services
-- Additional nodes can be added as needed
+2. **diskstation** (Synology DS218+)
+   - Secondary infrastructure services
+   - S3-compatible storage
+   - File synchronization
+   - [Details](diskstation/README.md)
 
-## Security Note
+3. **dockerhost** (Proxmox VM)
+   - Resource-intensive applications
+   - Media services stack
+   - [Details](dockerhost/README.md)
 
-Environment variables are encrypted using SOPS. Use the root Makefile to manage encryption/decryption of `.env` files.
+## 🔧 Getting Started
 
-## Adding New Nodes
+### Prerequisites
+- Docker Engine and Docker Compose installed on each host
+- SOPS with age encryption configured
+- Access to the homelab network
 
-To add a new Docker node:
-1. Create a new subdirectory under `docker/`
-2. Add your `docker-compose.yml` configuration
-3. Create a `.env` file with environment variables
-4. Encrypt the `.env` file using the root Makefile
+### Quick Start
 
-## License
+1. **Clone the repository** on each host:
+   ```bash
+   git clone git@github.com:alborworld/homelab.git ~/homelab
+   ```
 
-See the [LICENSE](../LICENSE) file for details.
+2. **Set up environment and symlinks** (run the appropriate section for your host):
+
+   **Raspberry Pi 5**:
+   ```bash
+   # Add to ~/.zprofile_local or your shell's login profile
+   echo 'export COMPOSEDIR=~/docker/compose' >> ~/.zprofile_local
+   
+   # Create symlink
+   ln -s ~/homelab/docker/raspberrypi5 $COMPOSEDIR
+   ```
+
+   **Dockerhost (Proxmox VM)**:
+   ```bash
+   # Add to ~/.zprofile_local or your shell's login profile
+   echo 'export COMPOSEDIR=~/docker/compose' >> ~/.zprofile_local
+   
+   # Create symlink
+   ln -s ~/homelab/docker/dockerhost $COMPOSEDIR
+   ```
+
+   **Diskstation (DS218+)**:
+   ```bash
+   # Add to ~/.profile or your shell's login profile
+   echo 'export COMPOSEDIR=/volume1/docker/compose' >> ~/.profile
+   
+   # Create symlink
+   ln -s ~/homelab/docker/diskstation $COMPOSEDIR
+   ```
+
+   After adding the export, either log out and back in or run `source ~/.zprofile_local` (or the appropriate profile file) to apply the changes.
+
+3. **Deploy services**:
+   ```bash
+   cd $COMPOSEDIR
+   make decrypt  # Decrypt environment variables
+   docker compose up -d
+   ```
+
+## 🔒 Security
+
+- All secrets are encrypted using SOPS with age
+- Never commit unencrypted `.env` files
+- Use the provided [Makefile](../Makefile) targets for encryption/decryption
+
+### Managing Secrets
+
+For detailed information on secrets management using SOPS, including encryption/decryption procedures and best practices, please refer to the [Secrets Management with SOPS](../docs/SECURITY.md#secrets-management-with-sops) section in the security documentation.
+
+## 🛠️ Maintenance
+
+### Updating Services
+```bash
+cd $COMPOSEDIR
+# Pull latest images and recreate containers
+docker compose pull
+docker compose up -d --force-recreate
+
+# Remove unused images
+docker image prune -f
+```
+
+## 📚 Documentation
+
+- [Architecture](../docs/ARCHITECTURE.md)
+- [Setup Guide](../docs/SETUP.md)
+- [Security Practices](../docs/SECURITY.md)
