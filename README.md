@@ -80,16 +80,16 @@ For a detailed overview of infrastructure features—including DNS, power manage
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md):  
   _Detailed architecture of the homelab, including hardware, network topology, orchestration, and security practices._
 
-- [raspberrypi5/README.md](raspberrypi5/README.md):  
+- [docker/raspberrypi5/README.md](docker/raspberrypi5/README.md):  
   _Setup and management instructions for the Raspberry Pi 5 edge node._
 
-- [dockerhost/README.md](dockerhost/README.md):  
+- [docker/dockerhost/README.md](docker/dockerhost/README.md):  
   _Setup and management instructions for the Dockerhost (Proxmox VM) node._
 
-- [diskstation/README.md](diskstation/README.md):  
+- [docker/diskstation/README.md](docker/diskstation/README.md):  
   _Setup and management instructions for the Synology DS218+ node._
 
-- [diskstation-backup/README.md](diskstation-backup/README.md):  
+- [docs/README_diskstation-backup.md](docs/README_diskstation_backup.md):  
   _Instructions for configuring the Synology DS214 as a dedicated backup node, including Beszel Agent installation._
 
 ## 📁 Repository Structure
@@ -182,13 +182,13 @@ sops --input-type dotenv --output-type dotenv --decrypt .env.sops.enc > .env
 2. For each host, create a symlink to the appropriate directory:
    ```bash
    # For Raspberry Pi
-   ln -s ~/homelab/raspberrypi5 ~/docker/compose
+   ln -s ~/homelab/docker/raspberrypi5 ~/docker/compose
    
    # For Dockerhost
-   ln -s ~/homelab/dockerhost ~/docker/compose
+   ln -s ~/homelab/docker/dockerhost ~/docker/compose
    
    # For Diskstation
-   ln -s ~/homelab/diskstation /volume1/docker/compose
+   ln -s ~/homelab/docker/diskstation /volume1/docker/compose
    ```
 
 ### Deployment

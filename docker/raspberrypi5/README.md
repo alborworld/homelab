@@ -2,7 +2,7 @@
 
 This folder contains the Docker Compose configuration and related files for services running on the Raspberry Pi 5 in the [alborworld/homelab](https://github.com/alborworld/homelab) setup.
 
-> For common setup instructions, SOPS usage, and general information, please refer to the [main README](../README.md). For a detailed architecture overview, see [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md).
+> For common setup instructions, SOPS usage, and general information, please refer to the [main README](../../README.md). For a detailed architecture overview, see [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md).
 
 ## 📦 Services
 
@@ -32,7 +32,7 @@ The services are defined by the `docker-compose.yaml` file in each relative subf
 1. Clone and symlink:
    ```bash
    git clone git@github.com:alborworld/homelab.git ~/homelab
-   ln -s ~/homelab/raspberrypi5/docker ~/docker/compose
+   ln -s ~/homelab/dockerraspberrypi5 ~/docker/compose
    ```
 
 2. Deploy:

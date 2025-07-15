@@ -55,6 +55,11 @@ This document provides a detailed overview of the architecture for AlborWorld's 
 
 For the latest roadmap and planned features, see the [GitHub Projects board](https://github.com/users/alborworld/projects/3/views/4).
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ---
 
 *For more details on each host and service, refer to the respective README files in each directory.*
+
