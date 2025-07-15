@@ -4,26 +4,31 @@ A modular, GitOps-driven homelab infrastructure designed to provide security, pr
 
 > ⚠️ **Work in Progress**: This repository is under active development. Expect changes and improvements over time.
 
+## 📚 Documentation
+
+- [**Architecture**](docs/ARCHITECTURE.md) - Detailed overview of the homelab's architecture
+- [**Setup Guide**](docs/SETUP.md) - Step-by-step instructions for setting up the homelab
+- [**Security Practices**](docs/SECURITY.md) - Security guidelines and secrets management
+- [**Deployment Guide**](docs/DEPLOYMENT.md) - Procedures for deploying and updating services
+
 ## 🏠 Overview
 
 This repository contains the configuration and orchestration files for a personal homelab environment. The infrastructure is designed to be:
-- Modular and maintainable
-- Reproducible across different environments
-- GitOps-driven for automated deployments
-- Energy-efficient with scheduled power management
+- 🔄 **Modular and maintainable**
+- 🔄 **Reproducible** across different environments
+- 🔄 **GitOps-driven** for automated deployments
+- 🔄 **Energy-efficient** with scheduled power management
 
-## 📊 Dashboard
+### 📊 Dashboard
 
 ![Homelab Dashboard](docs/images/dashboard.png)
-
-*Overview of running services and applications across the homelab infrastructure*
 
 ## 🖥️ Hardware Infrastructure
 
 ### Core Components
 - **Router**: Synology RT2600ac
 - **NAS**: Synology DiskStation DS218+ (10 GB RAM, 2 x 5 TB HD)
-- **Backup NAS**: Synology DiskStation DS214 (512 MB RAM, 2 x 1.8 TB HD)
+- **Backup NAS**: Synology DiskStation DS214 (512 MB RAM, 2 x 1.8 TB HD) - Offsite backup
 - **Compute Node**: Intel NUC 13 (64 GB RAM, 2 TB SSD) running Proxmox VE
 - **Edge Node**: Raspberry Pi 5 (4 GB RAM, 64 GB SSD)
 
@@ -36,168 +41,55 @@ This repository contains the configuration and orchestration files for a persona
 - **diskstation**: Synology Docker host
   - Secondary DNS server
   - S3-compatible object storage
-  - File Synchronization
-  - Zoom recordings download automation
-  - etc.
+  - File synchronization
 - **dockerhost**: Ubuntu VM on Proxmox VE
-  - Media services
-  - etc.
+  - Media services stack
+  - Resource-intensive applications
 
-### Infrastructure Features
-
-For a detailed overview of infrastructure features—including DNS, power management, and security—see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+For detailed architecture and service information, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## 🛠️ Technology Stack
 
-### Core Technologies
+### Core Infrastructure
 - **Containerization**: Docker & Docker Compose v2.21.0+
-- **Secrets Management**: Mozilla SOPS for encrypted .env files
+- **Secrets Management**: SOPS with age encryption
 - **Reverse Proxy**: Traefik v3.4 with automatic SSL
-- **DNS**: AdGuard Home / Unbound with high-availability setup
-- **VPN**: WireGuard via Gluetun container
-- **Monitoring**: 
-  - Uptime Kuma for service monitoring
-  - Speedtest Tracker for network performance
-  - UpSnap for device power management
+- **DNS**: AdGuard Home / Unbound (HA setup)
+- **Monitoring**: Uptime Kuma, Speedtest Tracker, UpSnap
 
 ### Media Stack
-- **Media Management**: 
-  - Plex for media streaming
-  - Sonarr, Radarr, Readarr for media automation
-  - Prowlarr for indexer management
-  - NZBGet & qBittorrent for downloads
-  - Tautulli for Plex analytics
-  - Tdarr for media transcoding
-
-### Infrastructure
-- **Container Management**: Portainer Agent
-- **Service Discovery**: Traefik Kop for multi-host setup
-- **Automation**: Watchtower for container updates
-- **Monitoring**: Beszel for host health monitoring
-
-## 📚 Documentation Overview
-
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md):  
-  _Detailed architecture of the homelab, including hardware, network topology, orchestration, and security practices._
-
-- [docker/raspberrypi5/README.md](docker/raspberrypi5/README.md):  
-  _Setup and management instructions for the Raspberry Pi 5 edge node._
-
-- [docker/dockerhost/README.md](docker/dockerhost/README.md):  
-  _Setup and management instructions for the Dockerhost (Proxmox VM) node._
-
-- [docker/diskstation/README.md](docker/diskstation/README.md):  
-  _Setup and management instructions for the Synology DS218+ node._
-
-- [docs/README_diskstation-backup.md](docs/README_diskstation_backup.md):  
-  _Instructions for configuring the Synology DS214 as a dedicated backup node, including Beszel Agent installation._
+- **Media Management**: Plex, Sonarr, Radarr, Readarr
+- **Download Clients**: NZBGet, qBittorrent
+- **Media Processing**: Tdarr, Tautulli
 
 ## 📁 Repository Structure
 
 ```
 homelab/
-├── diskstation/             # Synology DS218+ Docker stack and configs
-│   ├── docker/              # Docker Compose files for DS218+
-│   └── README.md
-├── dockerhost/              # Proxmox VM Docker stack and configs
-│   ├── docker/              # Docker Compose files for Dockerhost
-│   └── README.md
-├── raspberrypi5/            # Raspberry Pi 5 Docker stack and configs
-│   ├── docker/              # Docker Compose files for Raspberry Pi 5
-│   └── README.md
-├── diskstation-backup/      # Synology DS214 general information and setup instructions
-│   └── README.md
-├── docs/                    # Documentation and images
-│   ├── images/
-│   └── ARCHITECTURE.md
-├── LICENSE
-├── Makefile
-└── README.md                # Main project overview
+├── ansible/          # Infrastructure as Code
+├── docker/           # Docker configurations (see docker/README.md)
+├── k8s/              # Kubernetes configurations (future)
+├── docs/             # Documentation
+└── Makefile          # Common tasks
 ```
-- Each host directory contains:
-  - `docker/`: Docker Compose files and service configs
-  - `README.md`: Host-specific notes and instructions
-  - `.env.sops.enc`: Encrypted environment variables (not shown above)
-- `diskstation-backup/`: Special instructions for the backup-only DS214
-- `docs/`: Architecture diagrams, images, and extended documentation
 
 ## 🔐 Security
 
-- Environment variables and secrets are encrypted using [SOPS](https://github.com/mozilla/sops)
+- All secrets are encrypted using [SOPS](https://github.com/mozilla/sops) with age
 - Encrypted `.env.sops.enc` files are version controlled
 - Plaintext secrets are never committed to the repository
+- See [Security Practices](docs/SECURITY.md) for details on secrets management
 
-### SOPS Usage
+## 🚀 Getting Started
 
-#### Encryption & Decryption with Makefile
-
-To simplify encryption and decryption of `.env` files, use the provided `Makefile` targets. This ensures consistent usage of SOPS options and reduces manual steps.
-
-**Examples:**
-
-- Encrypt the `.env` file for a target (e.g., diskstation):
-  ```bash
-  make encrypt-diskstation
-  ```
-  This will encrypt `diskstation/docker/.env` to `diskstation/docker/.env.sops.enc`.
-
-- Decrypt the `.env.sops.enc` file for a target (e.g., raspberrypi5):
-  ```bash
-  make decrypt-raspberrypi5
-  ```
-  This will decrypt `raspberrypi5/docker/.env.sops.enc` to `raspberrypi5/docker/.env`.
-
-- Clean (remove) the decrypted `.env` file for a target:
-  ```bash
-  make clean-dockerhost
-  ```
-
-- Show the decrypted `.env` file for a target (print to stdout):
-  ```bash
-  make show-diskstation
-  ```
-
-#### Manual Encryption
-To encrypt an existing `.env` file manually:
-```bash
-sops --input-type dotenv --output-type dotenv --encrypt .env > .env.sops.enc
-```
-
-#### Manual Decryption
-To decrypt manually:
-```bash
-sops --input-type dotenv --output-type dotenv --decrypt .env.sops.enc > .env
-```
-
-> **Note**: When decrypting with SOPS, specifying `--input-type dotenv --output-type dotenv` ensures that the file is correctly interpreted and formatted as a dotenv file, preserving its structure and avoiding misinterpretation or formatting issues.
-
-## 🚀 Common Usage
-
-### Clone and Setup
 1. Clone the repository:
    ```bash
    git clone git@github.com:alborworld/homelab.git ~/homelab
    ```
 
-2. For each host, create a symlink to the appropriate directory:
-   ```bash
-   # For Raspberry Pi
-   ln -s ~/homelab/docker/raspberrypi5 ~/docker/compose
-   
-   # For Dockerhost
-   ln -s ~/homelab/docker/dockerhost ~/docker/compose
-   
-   # For Diskstation
-   ln -s ~/homelab/docker/diskstation /volume1/docker/compose
-   ```
+2. Follow the [Setup Guide](docs/SETUP.md) for host-specific instructions
 
-### Deployment
-For each host, deploy using:
-```bash
-cd ~/docker/compose  # or /volume1/docker/compose for Diskstation
-sops --input-type dotenv --output-type dotenv --decrypt .env.sops.enc > .env
-docker compose up -d
-```
+3. For Docker deployments, see [docker/README.md](docker/README.md)
 
 ## 🚧 Roadmap
 
