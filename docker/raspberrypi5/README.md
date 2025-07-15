@@ -32,11 +32,12 @@ The services are defined by the `docker-compose.yaml` file in each relative subf
 1. Clone and symlink:
    ```bash
    git clone git@github.com:alborworld/homelab.git ~/homelab
-   ln -s ~/homelab/dockerraspberrypi5 ~/docker/compose
+   ln -s ~/homelab/docker/raspberrypi5 ~/docker/compose
    ```
 
 2. Deploy:
    ```bash
+   cd ~/homelab
    make decrypt-raspberrypi5
    cd ~/docker/compose
    docker compose up -d

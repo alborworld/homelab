@@ -38,6 +38,7 @@ The services are defined by the `docker-compose.yaml` file in each relative subf
 
 2. Deploy:
    ```bash
+   cd ~/homelab
    make decrypt-diskstation
    cd /volume1/docker/compose
    docker compose up -d

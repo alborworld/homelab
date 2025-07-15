@@ -1,43 +1,61 @@
-# 🧪 Dockerhost (Proxmox VM) — HomeLab Docker Stack
+# 🐳 Docker Host (Proxmox VM)
 
-This folder contains the Docker Compose configuration and related files for services running on the Dockerhost Proxmox VM in the [alborworld/homelab](https://github.com/alborworld/homelab) setup.
-
-> For common setup instructions, SOPS usage, and general information, please refer to the [main README](../../README.md). For a detailed architecture overview, see [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md).
+> **Note**: For general setup, security practices, and deployment instructions, please refer to the [main documentation](../../docs/).
 
 ## 📦 Services
 
-The services are defined by the `docker-compose.yaml` file in each relative subfolder.
+This directory contains the Docker Compose configuration for services running on the Docker host Proxmox VM.
 
-## 📂 Local Folder Structure
+## 📂 Directory Structure
 
-```bash
-~/docker/
-├── compose/           # ← This repo's docker/ content is symlinked here
-│   ├── docker-compose.yaml
-│   ├── .env.sops.enc
-│   └── ...
-└── volumes/           # ← Local persistent data (NOT versioned)
-~/homelab/             # ← Cloned repo
+```
+dockerhost/
+├── docker-compose.yaml    # Main Compose file
+├── .env.sops.enc         # Encrypted environment variables
+├── config/               # Service configurations
+└── scripts/              # Helper scripts
 ```
 
-## 📋 Host-Specific Notes
+## 🏷️ Host-Specific Configuration
 
-- Main container orchestration
-- Secondary DNS server
-- Scheduled downtime: midnight to 6 AM
-- Located at `~/docker/compose` when symlinked
+- **Role**: Main container orchestration host
+- **Location**: `~/docker/compose` (symlinked)
+- **Availability**: 24/7 (except maintenance windows)
+- **Scheduled Maintenance**: Midnight to 6 AM daily
 
 ## 🚀 Quick Start
 
-1. Clone and symlink:
+1. **Clone the repository**:
    ```bash
    git clone git@github.com:alborworld/homelab.git ~/homelab
+   ```
+
+2. **Set up the directory structure**:
+   ```bash
+   mkdir -p ~/docker/compose
    ln -s ~/homelab/docker/dockerhost ~/docker/compose
    ```
 
-2. Deploy:
+3. **Decrypt secrets**:
    ```bash
+   cd ~/homelab
    make decrypt-dockerhost
+   ```
+
+4. **Start services**:
+   ```bash
    cd ~/docker/compose
    docker compose up -d
    ```
+
+## 🔧 Maintenance
+
+- **Logs**: `docker compose logs -f`
+- **Updates**: `docker compose pull && docker compose up -d`
+- **Backups**: Managed by Proxmox Backup Server
+
+## 🔗 Related Documentation
+
+- [Deployment Guide](../../docs/DEPLOYMENT.md)
+- [Security Practices](../../docs/SECURITY.md)
+- [Setup Guide](../../docs/SETUP.md)

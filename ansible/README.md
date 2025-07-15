@@ -1,42 +1,16 @@
-# Ansible Configuration Directory
+# Ansible Configuration (WIP)
 
-This directory contains Ansible playbooks, roles, and configuration files for managing the homelab infrastructure.
+> **⚠️ Work in Progress**: This directory contains Ansible playbooks for provisioning and configuring homelab nodes. The configuration is actively being developed and may change.
 
-## Directory Structure
+## 🎯 Purpose
 
-- `playbooks/` - Main Ansible playbooks for different deployment scenarios
-- `roles/` - Reusable Ansible roles for common tasks
-- `inventory/` - Host inventory files and group definitions
-- `vars/` - Variable files for different environments
-- `group_vars/` - Group-specific variables
-- `host_vars/` - Host-specific variables
+This Ansible setup is designed to automate the provisioning and configuration of all homelab nodes, including:
+- Raspberry Pi 5 (edge node)
+- Synology DS218+ (NAS)
+- Docker host (Proxmox VM)
 
-## Usage
+## 🔗 Related Documentation
 
-1. Update the inventory files in `inventory/` with your host information
-2. Modify variables in `vars/` and `group_vars/` as needed
-3. Run playbooks using:
-   ```bash
-   ansible-playbook -i inventory/hosts playbooks/main.yml
-   ```
-
-## Requirements
-
-- Ansible >= 2.9
-- Python >= 3.6
-- Access to target hosts
-
-## Security Note
-
-Sensitive information should be encrypted using SOPS. See the repository's root Makefile for encryption/decryption instructions.
-
-## Contributing
-
-1. Create a new branch for your changes
-2. Make your modifications
-3. Test the changes thoroughly
-4. Submit a pull request
-
-## License
-
-See the [LICENSE](../LICENSE) file for details.
+- [Main Documentation](../docs/)
+- [Security Practices](../docs/SECURITY.md)
+- [Setup Guide](../docs/SETUP.md)

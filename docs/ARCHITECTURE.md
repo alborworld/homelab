@@ -1,4 +1,4 @@
-# Homelab Architecture
+# 🏗️ Homelab Architecture
 
 ## Overview
 
@@ -7,9 +7,9 @@ This document provides a detailed overview of the architecture for AlborWorld's 
 ## Hardware Topology
 
 - **Router:** Synology RT2600ac
-- **NAS:** Synology DiskStation DS218+ (primary) and DS214 (backup)
 - **Compute Node:** Intel NUC 13 running Proxmox VE (VM host)
 - **Edge Node:** Raspberry Pi 5 (always-on, critical services)
+- **NAS:** Synology DiskStation DS218+ (primary) and DS214 (backup)
 
 ## Network Layout
 
@@ -55,11 +55,6 @@ This document provides a detailed overview of the architecture for AlborWorld's 
 
 For the latest roadmap and planned features, see the [GitHub Projects board](https://github.com/users/alborworld/projects/3/views/4).
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ---
 
 *For more details on each host and service, refer to the respective README files in each directory.*
-
