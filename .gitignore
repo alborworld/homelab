@@ -4,14 +4,25 @@
 !.env.sops.enc$ # Explicitly include this file
 !.env.template$ # Explicitly include this file
 
-# Ignore runtime data and volume mounts
-volumes/
-**/volumes/
-**/data/
-**/logs/
-**/cache/
-**/storage/
-**/__pycache__/
+# Ignore Terraform/OpenTofu state, backups, and crash logs
+# (Covers both .terraform and .opentofu directories)
+**/.terraform/
+**/.terraform.lock.hcl
+**/.terraform.tfstate
+**/.terraform.tfstate.*
+**/.opentofu/
+**/.opentofu.lock.hcl
+**/.opentofu.tfstate
+**/.opentofu.tfstate.*
+terraform.tfstate
+terraform.tfstate.*
+opentofu.tfstate
+opentofu.tfstate.*
+*.tfplan
+*.tfstate.backup
+*.tofuplan
+*.tofustate.backup
+crash.log
 
 # Ignore common local files
 *.db
