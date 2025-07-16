@@ -11,7 +11,7 @@
   - **Management Cluster**: k3s-based CAPI (Cluster API) management cluster deployed with Terraform
   - **Workload Clusters**: Managed via Cluster API for declarative cluster lifecycle
 - **GitOps workflow** with ArgoCD/Flux
-- **Secrets Management**: SOPS integration
+- **Secrets Management**: [SOPS](https://github.com/getsops/sops) integration
 - **Monitoring**: Prometheus, Grafana, Loki stack
 - **Storage**: CSI drivers for Synology/Longhorn
 - **Automated Backups**: Velero for cluster and volume backups

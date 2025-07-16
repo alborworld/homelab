@@ -34,7 +34,7 @@ docker/
 
 ### Prerequisites
 - Docker Engine and Docker Compose installed on each host
-- SOPS with age encryption configured
+- [SOPS](https://github.com/getsops/sops) with [age](https://github.com/FiloSottile/age) encryption configured
 - Access to the homelab network
 
 ### Quick Start
@@ -84,13 +84,13 @@ docker/
 
 ## 🔒 Security
 
-- All secrets are encrypted using SOPS with age
+- All secrets are encrypted using [SOPS](https://github.com/getsops/sops) with [age](https://github.com/FiloSottile/age)
 - Never commit unencrypted `.env` files
 - Use the provided [Makefile](../Makefile) targets for encryption/decryption
 
 ### Managing Secrets
 
-For detailed information on secrets management using SOPS, including encryption/decryption procedures and best practices, please refer to the [Secrets Management with SOPS](../docs/SECURITY.md#secrets-management-with-sops) section in the security documentation.
+For detailed information on secrets management using [SOPS](https://github.com/getsops/sops), including encryption/decryption procedures and best practices, please refer to the [Secrets Management with SOPS](../docs/SECURITY.md#secrets-management-with-sops) section in the security documentation.
 
 ## 🛠️ Maintenance
 

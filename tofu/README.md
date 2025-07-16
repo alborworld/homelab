@@ -7,13 +7,8 @@ This directory contains Tofu (Terraform) configurations for managing infrastruct
 ```
 tofu/
 ├── cloudflare/        # Cloudflare infrastructure configuration
-│   ├── main.tf        # Main Terraform configuration
-│   ├── variables.tf   # Input variables
-│   └── outputs.tf     # Output values
+├── minio/             # MinIO S3 buckets configuration
 ├── proxmox/           # Proxmox infrastructure configuration
-│   ├── main.tf        # Main Terraform configuration
-│   ├── variables.tf   # Input variables
-│   └── outputs.tf     # Output values
 └── modules/           # Reusable Terraform modules
 ```
 
@@ -26,22 +21,22 @@ This directory contains Tofu (Terraform) configurations for managing different a
 
 ## Security Note
 
-Sensitive information (API keys, credentials) should be encrypted using SOPS. See the repository's [root Makefile](../Makefile) for encryption/decryption instructions.
+Sensitive information (API keys, credentials) should be encrypted using [SOPS](https://github.com/getsops/sops). Please refer to the [Secrets Management with SOPS](../docs/SECURITY.md#secrets-management-with-sops) section in the security documentation for encryption/decryption instructions.
 
 ## Usage
 
-1. Initialize Tofu:
+1. Initialize OpenTofu in any subdirectory (e.g., proxmox, minio, cloudflare):
    ```bash
-   cd tofu/cloudflare
+   cd tofu/<subdirectory>
    tofu init
    ```
 
-2. Plan changes:
+2. Plan the changes:
    ```bash
    tofu plan
    ```
 
-3. Apply changes:
+3. Apply the configuration:
    ```bash
    tofu apply
    ```
@@ -53,4 +48,4 @@ To add a new Tofu configuration:
 2. Add your main.tf configuration
 3. Create `variables.tf` and `outputs.tf` as needed
 4. Add any required modules to the modules/ directory
-5. Encrypt sensitive variables using SOPS
+5. Encrypt sensitive variables using [SOPS](https://github.com/getsops/sops)

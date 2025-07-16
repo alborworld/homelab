@@ -4,7 +4,7 @@
 
 ### Initial Setup
 
-1. **Install SOPS**:
+1. **Install [SOPS](https://github.com/getsops/sops)**:
    ```bash
    # On macOS
    brew install sops
@@ -13,7 +13,7 @@
    sudo apt-get install sops
    ```
 
-2. **Generate age key** (if you don't have one):
+2. **Generate [age](https://github.com/FiloSottile/age) key** (if you don't have one):
    ```bash
    age-keygen -o ~/.sops/age/keys.txt
    # Your public key will be shown and saved to the file

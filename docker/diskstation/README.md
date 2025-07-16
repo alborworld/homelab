@@ -2,7 +2,7 @@
 
 This folder contains the Docker Compose configuration and related files for services running on the Synology DS218+ in the [alborworld/homelab](https://github.com/alborworld/homelab) setup.
 
-> For common setup instructions, SOPS usage, and general information, please refer to the [main README](../../README.md). For a detailed architecture overview, see [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md).
+> For common setup instructions, [SOPS](https://github.com/getsops/sops) usage, and general information, please refer to the [main README](../../README.md). For a detailed architecture overview, see [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md).
 
 ## 📦 Services
 

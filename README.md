@@ -52,7 +52,7 @@ For detailed architecture and service information, see [docs/ARCHITECTURE.md](do
 
 ### Core Infrastructure
 - **Containerization**: Docker & Docker Compose v2.21.0+
-- **Secrets Management**: SOPS with age encryption
+- **Secrets Management**: [SOPS](https://github.com/getsops/sops) with [age](https://github.com/FiloSottile/age) encryption
 - **Reverse Proxy**: Traefik v3.4 with automatic SSL
 - **DNS**: AdGuard Home / Unbound (HA setup)
 - **Monitoring**: Uptime Kuma, Speedtest Tracker, UpSnap
@@ -75,7 +75,7 @@ homelab/
 
 ## 🔐 Security
 
-- All secrets are encrypted using [SOPS](https://github.com/mozilla/sops) with age
+- All secrets are encrypted using [SOPS](https://github.com/mozilla/sops) with [age](https://github.com/FiloSottile/age)
 - Encrypted `.env.sops.enc` files are version controlled
 - Plaintext secrets are never committed to the repository
 - See [Security Practices](docs/SECURITY.md) for details on secrets management
