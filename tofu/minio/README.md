@@ -1,56 +1,54 @@
-# OpenTofu Configuration
+# MinIO S3 Bucket Configuration
 
-This directory contains Tofu (Terraform) configurations for managing infrastructure as code in the homelab.
+This directory contains OpenTofu configurations for managing S3 buckets in a MinIO object storage server.
 
 ## Directory Structure
 
 ```
-tofu/
-├── cloudflare/        # Cloudflare infrastructure configuration
-│   ├── main.tf        # Main Terraform configuration
-│   ├── variables.tf   # Input variables
-│   └── outputs.tf     # Output values
-├── proxmox/           # Proxmox infrastructure configuration
-│   ├── main.tf        # Main Terraform configuration
-│   ├── variables.tf   # Input variables
-│   └── outputs.tf     # Output values
-└── modules/           # Reusable Terraform modules
+minio/
+├── provider.tf          # MinIO provider configuration
+├── variables.tf         # Input variables for MinIO configuration
+├── tstate_bucket.tf     # S3 bucket for Terraform state storage
+└── tfstate_policy.json  # IAM policy for the state bucket
 ```
 
 ## Purpose
 
-This directory contains Tofu (Terraform) configurations for managing different aspects of the homelab infrastructure:
-- Cloudflare DNS and security settings
-- Proxmox virtualization infrastructure
-- Additional infrastructure configurations as needed
+This configuration manages S3 buckets in a MinIO server, specifically:
+- Creates and configures S3 buckets
+- Manages bucket versioning
+- Applies IAM bucket policies
+- Configured for use as a Terraform backend for state storage
 
-## Security Note
+## Configuration
 
-Sensitive information (API keys, credentials) should be encrypted using SOPS. See the repository's [root Makefile](../Makefile) for encryption/decryption instructions.
+### Required Variables
+- `minio_server`: MinIO server endpoint (e.g., "minio.example.com:9000")
+- `minio_user`: MinIO access key or username
+- `minio_password`: MinIO secret key or password
+
+### Optional Variables
+- `minio_region`: MinIO region (default: "main")
+- `minio_api_version`: MinIO API version (default: "v4")
+- `minio_ssl`: Enable SSL/TLS (default: false)
 
 ## Usage
 
-1. Initialize Tofu:
+1. Initialize OpenTofu:
    ```bash
-   cd tofu/cloudflare
    tofu init
    ```
 
-2. Plan changes:
+2. Plan the changes:
    ```bash
    tofu plan
    ```
 
-3. Apply changes:
+3. Apply the configuration:
    ```bash
    tofu apply
    ```
 
-## Adding New Configurations
+## Security Note
 
-To add a new Tofu configuration:
-1. Create a new subdirectory under `tofu/`
-2. Add your main.tf configuration
-3. Create `variables.tf` and `outputs.tf` as needed
-4. Add any required modules to the modules/ directory
-5. Encrypt sensitive variables using SOPS
+Sensitive credentials (minio_user and minio_password) should be provided through environment variables or a secure secrets management system.
