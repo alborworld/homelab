@@ -7,6 +7,7 @@ include:
   - beszel-agent-rp/docker-compose.yaml
   - beszel/docker-compose.yaml
   - dockerproxy-rp/docker-compose.yaml
+  - github-runner-rp/docker-compose.yaml
 #  - homarr/docker-compose.yaml
   - homeassistant/docker-compose.yaml
   - homepage/docker-compose.yaml
