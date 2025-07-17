@@ -1,0 +1,15 @@
+services:
+  github-runner-rp:
+    image: myoung34/github-runner:latest
+    container_name: GitHubRunner-RP
+    environment:
+      REPO_URL: ${GITHUB_RUNNER_REPO_URL}
+      RUNNER_TOKEN: ${GITHUB_RUNNER_TOKEN}
+      RUNNER_NAME: "homelab-raspberrypi5-runner"
+      LABELS: "docker,homelab,raspberrypi5"
+      # Uncomment below for Org-wide runner
+      # ORG_RUNNER: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # if you want docker-in-docker
+      - ${VOLUMEDIR}/github-runner-rp:/runner/_work
+    restart: unless-stopped
