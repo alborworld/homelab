@@ -19,8 +19,8 @@ services:
       - VPN_TYPE=wireguard
       - DNS_ADDRESS=${GLUETUN_DNS_ADDRESS}
       - WIREGUARD_PRIVATE_KEY=${GLUETUN_WIREGUARD_PRIVATE_KEY}
-      - SERVER_COUNTRIES=Netherlands
-      - SERVER_CITIES=Amsterdam
+      - SERVER_COUNTRIES=Singapore
+      - SERVER_CITIES=Singapore
       - FIREWALL_OUTBOUND_SUBNETS=${GLUETUN_FIREWALL_OUTBOUND_SUBNETS}
       - VPN_INTERFACE=tun0
       - TZ=Europe/Amsterdam
