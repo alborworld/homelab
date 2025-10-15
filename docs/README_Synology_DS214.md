@@ -46,7 +46,9 @@ EnvironmentFile=/opt/beszel/beszel-agent.env
 # Environment="EXTRA_FILESYSTEMS=sdb"
 Restart=on-failure
 RestartSec=5
-StateDirectory=beszel-agent
+# StateDirectory=beszel-agent  
+# (disabled: this version of systemd reports “Unknown lvalue ‘StateDirectory’ in section ‘Service’”,
+# so including it breaks the unit at boot)
 
 # Security/sandboxing settings (optional, uncomment as needed)
 #KeyringMode=private
