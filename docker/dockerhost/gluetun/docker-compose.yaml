@@ -24,7 +24,8 @@ services:
       - FIREWALL_OUTBOUND_SUBNETS=${GLUETUN_FIREWALL_OUTBOUND_SUBNETS}
       - VPN_INTERFACE=tun0
       - TZ=Europe/Amsterdam
-      - HEALTH_ADDRESS_TO_PING=${GLUETUN_DNS_ADDRESS}
+      - HEALTH_VPN_DURATION_INITIAL=60s
+      - HEALTH_TARGET_ADDRESS=1.1.1.1
     volumes:
       - ${VOLUMEDIR}/gluetun:/gluetun
       - /etc/localtime:/etc/localtime:ro
