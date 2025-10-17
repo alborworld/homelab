@@ -4,7 +4,7 @@ services:
     container_name: GitHubRunner-RP
     environment:
       REPO_URL: ${GITHUB_RUNNER_REPO_URL}
-      RUNNER_TOKEN: ${GITHUB_RUNNER_TOKEN}
+      ACCESS_TOKEN: ${GITHUB_RUNNER_ACCESS_TOKEN}
       RUNNER_NAME: "homelab-raspberrypi5-runner"
       LABELS: "docker,homelab,raspberrypi5"
       # Uncomment below for Org-wide runner
