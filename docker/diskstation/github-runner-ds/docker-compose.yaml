@@ -4,7 +4,7 @@ services:
     container_name: GitHubRunner-DS
     environment:
       REPO_URL: ${GITHUB_RUNNER_REPO_URL}
-      RUNNER_TOKEN: ${GITHUB_RUNNER_TOKEN}
+      ACCESS_TOKEN: ${GITHUB_RUNNER_ACCESS_TOKEN}
       RUNNER_NAME: "homelab-diskstation-runner"
       LABELS: "docker,homelab,diskstation"
       # Uncomment below for Org-wide runner
