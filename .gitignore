@@ -32,3 +32,6 @@ volumes/
 *.swo
 .idea/
 .vscode/
+
+# Claude Code
+.claude/
