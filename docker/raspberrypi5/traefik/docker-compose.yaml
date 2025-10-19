@@ -18,6 +18,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    # Disable IPv6 to prevent "network unreachable" errors when requesting Let's Encrypt certificates
+    # The Go HTTP client tries IPv6 first, but the host only has link-local IPv6 addresses
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.default.disable_ipv6=1
     labels:
       # TRAEFIK
       - traefik.enable=true
