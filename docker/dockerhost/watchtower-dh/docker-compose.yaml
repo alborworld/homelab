@@ -4,7 +4,9 @@ services:
     container_name: WatchTower-DH
     network_mode: bridge
     environment:
-      - WATCHTOWER_SCHEDULE=0 15 6 * * *
+      # Cron expressions like defined here: https://pkg.go.dev/github.com/robfig/cron#hdr-CRON_Expression_Format
+      # Run every day at 6:30 AM
+      - WATCHTOWER_SCHEDULE=0 30 6 * * *
       - TZ=Europe/Amsterdam
       - WATCHTOWER_NOTIFICATIONS_HOSTNAME=${HOSTNAME}
       - WATCHTOWER_CLEANUP=true
