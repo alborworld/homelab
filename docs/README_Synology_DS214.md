@@ -97,7 +97,7 @@ sudo journalctl -u beszel-agent.service -f
 To update the Beszel Agent, run:
 
 ```bash
-bash /opt/beszel/beszel-agent update
+sudo /opt/beszel/beszel-agent update
 ```
 
 > Note:
