@@ -1,7 +1,7 @@
 services:
   # https://www.reddit.com/r/Traefik/comments/w8v52z/running_traefik_with_multiple_docker_hosts/
   traefik-kop-ds:
-    image: "ghcr.io/jittering/traefik-kop:latest"
+    image: "ghcr.io/jittering/traefik-kop:0.19"
     container_name: TreaefikKop-DS
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
