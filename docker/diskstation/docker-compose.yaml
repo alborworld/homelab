@@ -1,4 +1,14 @@
 # Main docker-compose file for the Diskstation setup
+#
+# NOTE: github-runner-ds is intentionally NOT included here to prevent
+# GitHub Actions workflows from restarting the runner that's executing them.
+# The runner is managed separately and Watchtower will still automatically update it.
+#
+# To manually manage the GitHub runner:
+#   cd github-runner-ds
+#   docker compose --env-file ../.env up -d      # Start/update
+#   docker compose --env-file ../.env restart    # Restart
+#   docker compose --env-file ../.env down       # Stop
 
 name: ${HOSTNAME}
 
@@ -7,7 +17,6 @@ include:
   - adguardhome-sync/docker-compose.yaml
   - beszel-agent-ds/docker-compose.yaml
   - dockerproxy-ds/docker-compose.yaml
-  - github-runner-ds/docker-compose.yaml
   - iperf-ds/docker-compose.yaml
   - minio/docker-compose.yaml
   - portainer-agent-ds/docker-compose.yaml

@@ -1,4 +1,14 @@
 # Main docker-compose file for the Raspberrypi5 setup
+#
+# NOTE: github-runner-rp is intentionally NOT included here to prevent
+# GitHub Actions workflows from restarting the runner that's executing them.
+# The runner is managed separately and Watchtower will still automatically update it.
+#
+# To manually manage the GitHub runner:
+#   cd github-runner-rp
+#   docker compose --env-file ../.env up -d      # Start/update
+#   docker compose --env-file ../.env restart    # Restart
+#   docker compose --env-file ../.env down       # Stop
 
 name: ${HOSTNAME}
 
@@ -7,7 +17,6 @@ include:
   - beszel-agent-rp/docker-compose.yaml
   - beszel/docker-compose.yaml
   - dockerproxy-rp/docker-compose.yaml
-  - github-runner-rp/docker-compose.yaml
 #  - homarr/docker-compose.yaml
   - homeassistant/docker-compose.yaml
   - homepage/docker-compose.yaml

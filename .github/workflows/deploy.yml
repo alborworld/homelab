@@ -1,0 +1,103 @@
+name: Deploy Homelab Services
+
+on:
+  workflow_dispatch:
+    inputs:
+      host:
+        description: 'Which host(s) to deploy to'
+        required: true
+        type: choice
+        options:
+          - all
+          - raspberrypi5
+          - dockerhost
+          - diskstation
+
+jobs:
+  deploy-raspberrypi5:
+    name: Deploy to raspberrypi5
+    if: ${{ github.event.inputs.host == 'all' || github.event.inputs.host == 'raspberrypi5' }}
+    runs-on: [self-hosted, raspberrypi5]
+    env:
+      COMPOSE_DIR: docker/raspberrypi5
+    steps:
+      - name: Pull latest changes
+        run: |
+          git config --global --add safe.directory /homelab
+          cd /homelab
+          git -c url."https://github.com/".insteadOf="git@github.com:" fetch origin
+          git reset --hard origin/main
+
+      - name: Deploy services
+        run: |
+          cd /homelab/${COMPOSE_DIR}
+          docker compose --project-name raspberrypi5 pull
+          docker compose --project-name raspberrypi5 up -d --remove-orphans
+
+      - name: Show service status
+        run: |
+          cd /homelab/${COMPOSE_DIR}
+          docker compose --project-name raspberrypi5 ps
+
+  deploy-dockerhost:
+    name: Deploy to dockerhost
+    if: ${{ github.event.inputs.host == 'all' || github.event.inputs.host == 'dockerhost' }}
+    runs-on: [self-hosted, dockerhost]
+    env:
+      COMPOSE_DIR: docker/dockerhost
+    steps:
+      - name: Pull latest changes
+        run: |
+          git config --global --add safe.directory /homelab
+          cd /homelab
+          git -c url."https://github.com/".insteadOf="git@github.com:" fetch origin
+          git reset --hard origin/main
+
+      - name: Deploy services
+        run: |
+          cd /homelab/${COMPOSE_DIR}
+          docker compose --project-name dockerhost pull
+          docker compose --project-name dockerhost up -d --remove-orphans
+
+      - name: Show service status
+        run: |
+          cd /homelab/${COMPOSE_DIR}
+          docker compose --project-name dockerhost ps
+
+  deploy-diskstation:
+    name: Deploy to diskstation
+    if: ${{ github.event.inputs.host == 'all' || github.event.inputs.host == 'diskstation' }}
+    runs-on: [self-hosted, diskstation]
+    env:
+      COMPOSE_DIR: docker/diskstation
+    steps:
+      - name: Pull latest changes
+        run: |
+          git config --global --add safe.directory /homelab
+          cd /homelab
+          git -c url."https://github.com/".insteadOf="git@github.com:" fetch origin
+          git reset --hard origin/main
+
+      - name: Deploy services
+        run: |
+          cd /homelab/${COMPOSE_DIR}
+          docker compose --project-name diskstation pull
+          docker compose --project-name diskstation up -d --remove-orphans
+
+      - name: Show service status
+        run: |
+          cd /homelab/${COMPOSE_DIR}
+          docker compose --project-name diskstation ps
+
+  summary:
+    name: Deployment Summary
+    needs: [deploy-raspberrypi5, deploy-dockerhost, deploy-diskstation]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check deployment results
+        run: |
+          echo "Deployment completed for: ${{ github.event.inputs.host }}"
+          echo "raspberrypi5: ${{ needs.deploy-raspberrypi5.result }}"
+          echo "dockerhost: ${{ needs.deploy-dockerhost.result }}"
+          echo "diskstation: ${{ needs.deploy-diskstation.result }}"

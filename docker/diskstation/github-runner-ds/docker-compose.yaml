@@ -10,6 +10,7 @@ services:
       # Uncomment below for Org-wide runner
       # ORG_RUNNER: "true"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock  # if you want docker-in-docker
-      - ${VOLUMEDIR}/github-runner-ds:/runner/_work
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker-in-Docker access
+      - ${VOLUMEDIR}/github-runner-ds:/runner/_work  # Runner working directory
+      - /volume1/homes/Alessandro/homelab:/homelab  # Access to homelab repo
     restart: unless-stopped

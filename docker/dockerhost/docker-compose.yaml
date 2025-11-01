@@ -1,4 +1,14 @@
 # Main docker-compose file for the Dockerhost setup
+#
+# NOTE: github-runner-dh is intentionally NOT included here to prevent
+# GitHub Actions workflows from restarting the runner that's executing them.
+# The runner is managed separately and Watchtower will still automatically update it.
+#
+# To manually manage the GitHub runner:
+#   cd github-runner-dh
+#   docker compose --env-file ../.env up -d      # Start/update
+#   docker compose --env-file ../.env restart    # Restart
+#   docker compose --env-file ../.env down       # Stop
 
 name: ${HOSTNAME}
 
@@ -7,7 +17,6 @@ include:
   - beszel-agent-dh/docker-compose.yaml
   - byparr/docker-compose.yaml
   - cleanuparr/docker-compose.yaml
-  - github-runner-dh/docker-compose.yaml
   - gluetun/docker-compose.yaml
 #  - grafana/docker-compose.yaml
   - iperf-dh/docker-compose.yaml
