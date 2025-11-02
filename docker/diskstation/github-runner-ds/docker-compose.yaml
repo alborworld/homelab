@@ -7,9 +7,16 @@ services:
       ACCESS_TOKEN: ${GITHUB_RUNNER_ACCESS_TOKEN}
       RUNNER_NAME: "homelab-diskstation-runner"
       LABELS: "docker,homelab,diskstation"
+      RUNNER_WAIT_FOR_DOCKER_SECONDS: "60"  # Wait for Docker/network at startup
       # Uncomment below for Org-wide runner
       # ORG_RUNNER: "true"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # if you want docker-in-docker
       - ${VOLUMEDIR}/github-runner-ds:/runner/_work
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f https://api.github.com || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s  # Give 2 minutes at boot for network to be ready
