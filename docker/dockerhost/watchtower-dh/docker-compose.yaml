@@ -1,6 +1,6 @@
 services:
   watchtower-dh:
-    image: containrrr/watchtower
+    image: nickfedor/watchtower
     container_name: WatchTower-DH
     network_mode: bridge
     environment:
