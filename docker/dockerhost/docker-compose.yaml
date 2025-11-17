@@ -1,4 +1,4 @@
-# Main docker-compose file for the Dockerhost setup
+# Main docker-compose file for the DockerHost setup
 
 name: ${HOSTNAME}
 
@@ -22,6 +22,7 @@ include:
   - radarr/docker-compose.yaml
   - readarr/docker-compose.yaml
   - sonarr/docker-compose.yaml
+  - stirling-pdf/docker-compose.yaml
   - tautulli/docker-compose.yaml
   - tdarr/docker-compose.yaml
   - tdarr-node/docker-compose.yaml

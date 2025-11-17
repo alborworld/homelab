@@ -1,0 +1,33 @@
+services:
+  stirling-pdf:
+    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
+    container_name: StirlingPDF
+    ports:
+      - '8082:8080'
+    volumes:
+      - ${VOLUMEDIR}/stirling-pdf/trainingData:/usr/share/tessdata # Required for extra OCR languages
+      - ${VOLUMEDIR}/stirling-pdf/extraConfigs:/configs
+      - ${VOLUMEDIR}/stirling-pdf/customFiles:/customFiles/
+      - ${VOLUMEDIR}/stirling-pdf/logs:/logs/
+      - ${VOLUMEDIR}/stirling-pdf/pipeline:/pipeline/
+    environment:
+      - DISABLE_ADDITIONAL_FEATURES=false
+      - LANGS=en_GB
+      - DOCKER_ENABLE_SECURITY=false
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.stirling-pdf.loadbalancer.server.port=8082
+      - traefik.http.routers.stirling-pdf.rule=Host(`stirlingpdf.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.stirling-pdf.entrypoints=websecure
+      - traefik.http.routers.stirling-pdf.service=stirling-pdf
+      - traefik.http.routers.stirling-pdf.tls=true
+      - traefik.http.routers.stirling-pdf.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Utilities
+      - homepage.name=StirlingPDF
+      - homepage.icon=stirling-pdf.png
+      - homepage.href=https://stirlingpdf.${LOCAL_DOMAIN}
+      - homepage.description=Advanced PDF Management
+      - homepage.siteMonitor=https://stirlingpdf.${LOCAL_DOMAIN}
+    restart: always
