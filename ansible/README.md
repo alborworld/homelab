@@ -1,16 +1,34 @@
-# Ansible Configuration (WIP)
+# Ansible Configuration
 
-> **⚠️ Work in Progress**: This directory contains Ansible playbooks for provisioning and configuring homelab nodes. The configuration is actively being developed and may change.
+Ansible playbooks for provisioning and configuring homelab nodes.
 
-## 🎯 Purpose
+## Structure
 
-This Ansible setup is designed to automate the provisioning and configuration of all homelab nodes, including:
-- Raspberry Pi 5 (edge node)
-- Synology DS218+ (NAS)
-- Docker host (Proxmox VM)
+```
+ansible/
+├── ansible.cfg          # Ansible configuration
+├── inventory.yml        # Host inventory
+└── playbooks/
+    └── tailscale.yml    # Tailscale subnet router setup
+```
 
-## 🔗 Related Documentation
+## Hosts
 
-- [Main Documentation](../docs/)
-- [Security Practices](../docs/SECURITY.md)
-- [Setup Guide](../docs/SETUP.md)
+| Host         | Role                    |
+|--------------|-------------------------|
+| raspberrypi5 | Edge node, subnet router|
+| diskstation  | NAS                     |
+| dockerhost   | Proxmox VM              |
+
+## Playbooks
+
+### Tailscale Subnet Router
+
+Installs Tailscale and configures it as a subnet router for remote access.
+
+```bash
+cd ansible
+ansible-playbook playbooks/tailscale.yml
+```
+
+**Post-run:** Approve the advertised routes in the [Tailscale admin console](https://login.tailscale.com/admin/machines).

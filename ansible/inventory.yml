@@ -1,0 +1,12 @@
+all:
+  children:
+    homelab:
+      hosts:
+        raspberrypi5:
+        diskstation:
+        dockerhost:
+
+    tailscale_subnet_routers:
+      hosts:
+        raspberrypi5:
+          tailscale_routes: "10.0.4.0/24"
