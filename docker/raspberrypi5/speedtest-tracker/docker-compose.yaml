@@ -17,6 +17,7 @@ services:
       - DISPLAY_TIMEZONE=Europe/Amsterdam
       - SPEEDTEST_SCHEDULE=30 6,18 * * * # every day at 6am
       - SPEEDTEST_SERVERS=52365
+      - PUBLIC_DASHBOARD=true
     volumes:
       - ${VOLUMEDIR}/speedtest-tracker:/config
     labels:
