@@ -8,8 +8,8 @@ include:
   - beszel-agent-ds/docker-compose.yaml
   - dockerproxy-ds/docker-compose.yaml
   - github-runner-ds/docker-compose.yaml
+  - garage/docker-compose.yaml
   - iperf-ds/docker-compose.yaml
-  - minio/docker-compose.yaml
   - portainer-agent-ds/docker-compose.yaml
   - syncthing/docker-compose.yaml
   - traefik-kop-ds/docker-compose.yaml

@@ -1,0 +1,30 @@
+# Garage S3-compatible object storage configuration
+# https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/
+
+metadata_dir = "/meta"
+data_dir = "/data"
+
+db_engine = "sqlite"
+
+replication_factor = 1
+
+# Compression: level 2 provides good balance of speed and compression
+# Deduplication is enabled by default via content-addressed storage
+compression_level = 2
+
+# Block size for deduplication (1MB default)
+block_size = "1M"
+
+rpc_bind_addr = "[::]:3901"
+# rpc_secret is set via GARAGE_RPC_SECRET environment variable
+
+# S3 API configuration
+[s3_api]
+s3_region = "garage"
+api_bind_addr = "[::]:3900"
+root_domain = ".s3.garage"
+
+# Admin API (required for WebUI)
+[admin]
+api_bind_addr = "[::]:3903"
+# admin_token is set via GARAGE_ADMIN_TOKEN environment variable

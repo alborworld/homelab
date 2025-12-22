@@ -1,0 +1,67 @@
+services:
+  garage:
+    image: dxflrs/garage:v2.1.0
+    container_name: Garage
+    user: "${UID}:${GID}"
+    ports:
+      - "3900:3900"   # S3 API
+      - "3903:3903"   # Admin API
+    environment:
+      - GARAGE_RPC_SECRET=${GARAGE_RPC_SECRET}
+      - GARAGE_ADMIN_TOKEN=${GARAGE_ADMIN_TOKEN}
+    volumes:
+      - ${GARAGE_DATA_DIR}:/data
+      - ${GARAGE_META_DIR}:/meta
+      - ./garage.toml:/etc/garage.toml:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/TZ:/etc/timezone:ro
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      # S3 API
+      - traefik.http.services.garage-s3.loadbalancer.server.port=3900
+      - traefik.http.routers.garage-s3.rule=Host(`s3.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.garage-s3.entrypoints=websecure
+      - traefik.http.routers.garage-s3.service=garage-s3
+      - traefik.http.routers.garage-s3.tls=true
+      - traefik.http.routers.garage-s3.tls.certresolver=cloudflare
+    restart: always
+
+  garage-webui:
+    image: khairul169/garage-webui:latest
+    container_name: GarageWebUI
+    ports:
+      - "3909:3909"   # WebUI
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://127.0.0.1:3909"]
+      interval: 30s
+      timeout: 2s
+      retries: 3
+      start_period: 10s
+    environment:
+      - API_BASE_URL=http://garage:3903
+      - API_ADMIN_KEY=${GARAGE_ADMIN_TOKEN}
+      - S3_ENDPOINT_URL=http://garage:3900
+      - S3_REGION=garage
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/TZ:/etc/timezone:ro
+    depends_on:
+      - garage
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.garage-webui.loadbalancer.server.port=3909
+      - traefik.http.routers.garage-webui.rule=Host(`webui.s3.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.garage-webui.entrypoints=websecure
+      - traefik.http.routers.garage-webui.service=garage-webui
+      - traefik.http.routers.garage-webui.tls=true
+      - traefik.http.routers.garage-webui.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Core Infrastructure
+      - homepage.name=Garage S3
+      - homepage.icon=garage.png
+      - homepage.href=https://webui.s3.${LOCAL_DOMAIN}
+      - homepage.siteMonitor=https://webui.s3.${LOCAL_DOMAIN}
+      - homepage.description=S3 Compatible Storage
+    restart: always
