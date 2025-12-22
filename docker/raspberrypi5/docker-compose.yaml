@@ -8,7 +8,6 @@ include:
   - beszel/docker-compose.yaml
   - dockerproxy-rp/docker-compose.yaml
   - github-runner-rp/docker-compose.yaml
-#  - homarr/docker-compose.yaml
   - homeassistant/docker-compose.yaml
   - homepage/docker-compose.yaml
   - pocket-id/docker-compose.yaml
