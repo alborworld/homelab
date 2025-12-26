@@ -3,7 +3,7 @@
 # https://gethomepage.dev/configs/settings/
 
 title: AlborWorld HomeLab
-startUrl: http://homepage.home.alborworld.com
+startUrl: https://home.alborworld.com
 
 layout:
   - Core Infrastructure:
