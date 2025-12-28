@@ -1,0 +1,33 @@
+services:
+  agregarr:
+    image: agregarr/agregarr:latest
+    container_name: Agregarr
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${VOLUMEDIR}/agregarr:/app/config
+      - ${MEDIADIR}/movies:/data/movies
+      - ${MEDIADIR}/series:/data/tv
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.agregarr.loadbalancer.server.port=7171
+      - traefik.http.routers.agregarr.rule=Host(`agregarr.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.agregarr.entrypoints=websecure
+      - traefik.http.routers.agregarr.service=agregarr
+      - traefik.http.routers.agregarr.tls=true
+      - traefik.http.routers.agregarr.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Media Automation
+      - homepage.name=Agregarr
+      - homepage.icon=agregarr.png
+      - homepage.href=https://agregarr.${LOCAL_DOMAIN}
+      - homepage.description=Plex Collections Manager
+      - homepage.siteMonitor=https://agregarr.${LOCAL_DOMAIN}
+    restart: always
