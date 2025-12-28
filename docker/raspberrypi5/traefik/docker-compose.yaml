@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:3.6.1
+    image: traefik:3.6.5
     container_name: Traefik
     user: "${UID}:${GID}"
     group_add:
