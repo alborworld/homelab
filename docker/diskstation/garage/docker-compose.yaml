@@ -25,6 +25,13 @@ services:
       - traefik.http.routers.garage-s3.service=garage-s3
       - traefik.http.routers.garage-s3.tls=true
       - traefik.http.routers.garage-s3.tls.certresolver=cloudflare
+      # Admin API (for OpenTofu garage provider)
+      - traefik.http.services.garage-admin.loadbalancer.server.port=3903
+      - traefik.http.routers.garage-admin.rule=Host(`admin.s3.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.garage-admin.entrypoints=websecure
+      - traefik.http.routers.garage-admin.service=garage-admin
+      - traefik.http.routers.garage-admin.tls=true
+      - traefik.http.routers.garage-admin.tls.certresolver=cloudflare
     restart: always
 
   garage-webui:

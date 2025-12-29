@@ -31,3 +31,16 @@ show-%:
 
 # Declare targets as phony (not actual files)
 .PHONY: $(ENV_TARGETS)
+
+# Tofu targets for managing encrypted .env files in tofu/
+tofu-encrypt-%:
+	sops --input-type dotenv --output-type dotenv --encrypt tofu/$*/.env > tofu/$*/.env.sops.enc
+
+tofu-decrypt-%:
+	sops --input-type dotenv --output-type dotenv --decrypt tofu/$*/.env.sops.enc > tofu/$*/.env
+
+tofu-clean-%:
+	rm -f tofu/$*/.env
+
+tofu-show-%:
+	sops --input-type dotenv --output-type dotenv --decrypt tofu/$*/.env.sops.enc

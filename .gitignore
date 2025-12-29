@@ -34,10 +34,6 @@ terraform.rc
 tfplan
 plan.txt
 
-# Ignore generated files
-backend.tf
-provider.tf
-
 # Ignore sensitive environment variables
 .env
 .env.local
