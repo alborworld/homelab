@@ -28,8 +28,8 @@ layout:
       style: row
       columns: 2
 
-background: 
-  image: https://www.pixelstalk.net/wp-content/uploads/images1/Desktop-Jungle-Images.jpg
+background:
+  image: https://bingw.jasonzeng.dev/?index=random&w=1920&h=1080
   blur: lg # sm, xs, md, xl... see https://tailwindcss.com/docs/backdrop-blur
   saturate: 75 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
   brightness: 50 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
