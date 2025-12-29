@@ -1,6 +1,9 @@
 # Local .terraform directories
 **/.terraform/*
 
+# Include dependency lock files (overrides global gitignore)
+!.terraform.lock.hcl
+
 # Terragrunt cache
 **/.terragrunt-cache/*
 

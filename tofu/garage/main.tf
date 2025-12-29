@@ -21,5 +21,5 @@ resource "garage_bucket_permission" "tofu_tfstate" {
   access_key_id = garage_key.tofu.id
   read          = true
   write         = true
-  owner         = false
+  owner         = true
 }

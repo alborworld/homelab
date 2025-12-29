@@ -11,6 +11,6 @@ output "tofu_key_id" {
 
 output "tofu_key_secret" {
   description = "Secret access key for OpenTofu (use as TOFU_KEY_SECRET)"
-  value       = garage_key.tofu.secret
+  value       = garage_key.tofu.secret_access_key
   sensitive   = true
 }
