@@ -13,6 +13,10 @@ This stack manages Garage S3 resources for OpenTofu state storage using the [jko
 - Admin API exposed at `https://admin.s3.home.alborworld.com`
 - Secrets decrypted from `.env.sops.enc`
 
+## State Locking
+
+S3-native state locking is enabled via `use_lockfile = true`. Garage supports conditional writes (`If-None-Match` header), so concurrent operations will fail safely instead of corrupting state.
+
 ## Usage
 
 ```bash
