@@ -2,11 +2,11 @@
 #
 # This stack manages:
 # - Access key for OpenTofu state operations
-# - Bucket permissions for the tfstate bucket
+# - Bucket permissions for the tofu-state bucket
 
-# Reference existing tfstate bucket (already created manually)
+# Reference existing tofu-state bucket (already created manually)
 data "garage_bucket" "tfstate" {
-  global_alias = "tfstate"
+  global_alias = "tofu-state"
 }
 
 # Access key for OpenTofu

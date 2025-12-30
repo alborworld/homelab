@@ -2,7 +2,7 @@
 
 terraform {
   backend "s3" {
-    bucket                      = "tfstate"
+    bucket                      = "tofu-state"
     key                         = "alborworld/garage.tfstate"
     region                      = "garage"
     skip_credentials_validation = true

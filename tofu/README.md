@@ -16,7 +16,7 @@ tofu/
 
 ## State Storage
 
-All stacks store their state in Garage S3 at `https://s3.home.alborworld.com` in the `tfstate` bucket.
+All stacks store their state in Garage S3 at `https://s3.home.alborworld.com` in the `tofu-state` bucket.
 
 ### S3 Backend Configuration
 
@@ -25,7 +25,7 @@ Add this to your stack's `backend.tf`:
 ```hcl
 terraform {
   backend "s3" {
-    bucket                      = "tfstate"
+    bucket                      = "tofu-state"
     key                         = "alborworld/<STACK_NAME>.tfstate"
     region                      = "garage"
     skip_credentials_validation = true
