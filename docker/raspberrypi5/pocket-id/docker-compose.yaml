@@ -11,6 +11,7 @@ services:
       PGID: ${GID}
       APP_URL: https://id.${LOCAL_DOMAIN}
       TRUST_PROXY: true
+      ENCRYPTION_KEY: ${POCKET_ID_ENCRYPTION_KEY}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:1411/healthz"]
       interval: 1m30s
