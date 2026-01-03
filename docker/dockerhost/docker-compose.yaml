@@ -24,7 +24,6 @@ include:
   - readarr/docker-compose.yaml
   - sonarr/docker-compose.yaml
   - stirling-pdf/docker-compose.yaml
-  - tailscale-exit/docker-compose.yaml
   - tautulli/docker-compose.yaml
   - tdarr/docker-compose.yaml
   - tdarr-node/docker-compose.yaml

@@ -32,4 +32,27 @@ if [[ -n "${CLOUDFLARE_ZONE_ID:-}" ]]; then
   export TF_VAR_cloudflare_zone_id="$CLOUDFLARE_ZONE_ID"
 fi
 
+# Alias PROXMOX_* to TF_VAR_proxmox_*
+if [[ -n "${PROXMOX_ENDPOINT:-}" ]]; then
+  export TF_VAR_proxmox_endpoint="$PROXMOX_ENDPOINT"
+fi
+
+if [[ -n "${PROXMOX_API_TOKEN_ID:-}" ]]; then
+  export TF_VAR_proxmox_api_token_id="$PROXMOX_API_TOKEN_ID"
+fi
+
+if [[ -n "${PROXMOX_API_TOKEN_SECRET:-}" ]]; then
+  export TF_VAR_proxmox_api_token_secret="$PROXMOX_API_TOKEN_SECRET"
+fi
+
+# Alias TAILSCALE_* to TF_VAR_tailscale_*
+if [[ -n "${TAILSCALE_AUTHKEY:-}" ]]; then
+  export TF_VAR_tailscale_authkey="$TAILSCALE_AUTHKEY"
+fi
+
+# Alias WIREGUARD_* to TF_VAR_wireguard_*
+if [[ -n "${WIREGUARD_PRIVATE_KEY:-}" ]]; then
+  export TF_VAR_wireguard_private_key="$WIREGUARD_PRIVATE_KEY"
+fi
+
 echo "OpenTofu environment configured"

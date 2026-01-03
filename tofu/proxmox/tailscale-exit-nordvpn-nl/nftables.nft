@@ -1,0 +1,86 @@
+#!/usr/sbin/nft -f
+# Tailscale Exit Node Firewall Rules
+# Kill-switch: blocks all egress unless WireGuard is up
+
+table inet filter {
+    chain input {
+        type filter hook input priority 0; policy drop;
+
+        # Allow established/related connections
+        ct state established,related accept
+
+        # Allow loopback
+        iif "lo" accept
+
+        # Allow ICMP
+        ip protocol icmp accept
+        ip6 nexthdr icmpv6 accept
+
+        # Allow Tailscale UDP
+        udp dport 41641 accept
+
+        # Allow WireGuard UDP
+        udp dport 51820 accept
+
+        # Allow traffic from Tailscale interface
+        iifname "tailscale0" accept
+
+        # Allow SSH from LAN (for emergency access)
+        ip saddr 10.0.0.0/8 tcp dport 22 accept
+    }
+
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+
+        # Allow established/related
+        ct state established,related accept
+
+        # Allow Tailscale -> WireGuard (VPN egress)
+        iifname "tailscale0" oifname "wg0" accept
+
+        # Allow WireGuard -> Tailscale (return traffic)
+        iifname "wg0" oifname "tailscale0" accept
+    }
+
+    chain output {
+        type filter hook output priority 0; policy drop;
+
+        # Allow established/related
+        ct state established,related accept
+
+        # Allow loopback
+        oif "lo" accept
+
+        # Allow ICMP
+        ip protocol icmp accept
+        ip6 nexthdr icmpv6 accept
+
+        # Allow DNS (for initial resolution)
+        udp dport 53 accept
+        tcp dport 53 accept
+
+        # Allow Tailscale control plane (HTTPS)
+        tcp dport 443 ip daddr { 100.64.0.0/10, 104.18.0.0/16, 172.67.0.0/16 } accept
+
+        # Allow Tailscale UDP (DERP and direct)
+        udp dport { 41641, 3478 } accept
+
+        # Allow WireGuard to NordVPN
+        udp dport 51820 accept
+
+        # Allow everything through WireGuard tunnel
+        oifname "wg0" accept
+
+        # Allow to Tailscale interface
+        oifname "tailscale0" accept
+    }
+}
+
+table inet nat {
+    chain postrouting {
+        type nat hook postrouting priority 100; policy accept;
+
+        # NAT Tailscale traffic through WireGuard
+        oifname "wg0" masquerade
+    }
+}
