@@ -119,6 +119,21 @@ tofu apply
 rm .env                               # Cleanup
 ```
 
+## Tailscale VPN
+
+All hosts connected via Tailscale mesh. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#tailscale-vpn) for full details.
+
+Key IPs:
+- `100.77.35.97` - raspberrypi5 (AdGuard, exit node)
+- `100.68.31.112` - diskstation (AdGuard replica)
+- `100.90.91.69` - exit-nordvpn-nl (NordVPN exit)
+
+```bash
+tailscale set --exit-node=exit-nordvpn-nl  # Use NordVPN
+tailscale set --exit-node=                  # Disable exit
+tailscale status                            # Check status
+```
+
 ## Useful Commands
 
 ```bash

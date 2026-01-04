@@ -17,6 +17,57 @@ This document provides a detailed overview of the architecture for AlborWorld's 
 - The router provides DHCP, firewall, and VPN gateway services.
 - The NAS and compute nodes are on a protected LAN; the Raspberry Pi is on a separate VLAN for edge services.
 
+## Tailscale VPN
+
+All hosts are connected via [Tailscale](https://tailscale.com) mesh VPN, enabling secure remote access and inter-node communication.
+
+### Nodes
+
+| Host | Tailscale IP | LAN IP | Role |
+|------|--------------|--------|------|
+| raspberrypi5 | 100.77.35.97 | 10.0.4.94 | Edge node, AdGuard Home, exit node |
+| dockerhost | - | 10.0.4.x | Media stack (Plex, *arr) |
+| diskstation | 100.68.31.112 | 10.0.4.111 | NAS, AdGuard replica |
+| nuc13 | - | 10.0.4.x | Proxmox host |
+| exit-nordvpn-nl | 100.90.91.69 | - | NordVPN Amsterdam exit node (LXC) |
+
+### DNS Configuration
+
+DNS is handled by AdGuard Home with high-availability setup. Tailscale DNS must use **Tailscale IPs** (not LAN IPs) to work with exit nodes.
+
+**Global Nameservers:**
+- `100.77.35.97` - raspberrypi5 (AdGuard Home primary)
+- `100.68.31.112` - diskstation (AdGuard Home replica)
+
+**Split DNS Routes** (required for local domain resolution via exit nodes):
+- `home.alborworld.com` → `100.77.35.97`, `100.68.31.112`
+- `ts.net` → Tailscale's resolvers
+
+> **Important:** Always use Tailscale IPs (100.x.x.x) for DNS servers, not LAN IPs (10.0.4.x).
+> LAN IPs are not routable when using exit nodes.
+
+### Exit Nodes
+
+Two exit nodes are available for routing internet traffic:
+
+| Node | Purpose | Exit IP Location |
+|------|---------|------------------|
+| raspberrypi5 | Direct home internet | Home ISP |
+| exit-nordvpn-nl | Privacy/geo-unblock | Amsterdam, NL (NordVPN) |
+
+```bash
+# Use NordVPN exit
+tailscale set --exit-node=exit-nordvpn-nl
+
+# Use home exit
+tailscale set --exit-node=raspberrypi5
+
+# Disable exit node
+tailscale set --exit-node=
+```
+
+Admin console: https://login.tailscale.com/admin
+
 ## Service Orchestration
 
 - **Docker Compose** is used for container orchestration on all nodes.
