@@ -7,3 +7,5 @@ creation_rules:
     input_type: dotenv
     encrypted_regex: '^[^#\s].*'
     age: age1vamq6l5n5zk7dywt4xgksxundrla9n8nr9fjydducd7zzrywj97snscv0w
+  - path_regex: ansible/secrets\.yml$
+    age: age1vamq6l5n5zk7dywt4xgksxundrla9n8nr9fjydducd7zzrywj97snscv0w
