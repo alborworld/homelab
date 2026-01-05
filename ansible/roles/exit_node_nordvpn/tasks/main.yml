@@ -69,6 +69,8 @@
       wg-quick up wg0
       # Fix: Tailscale IPs must use table 52, not wg-quick's table 51820
       ip rule add to 100.64.0.0/10 lookup 52 priority 5200 2>/dev/null || true
+      # Route Tailscale control plane traffic via eth0, not through WireGuard tunnel
+      ip route add 192.200.0.0/24 via {{ ansible_default_ipv4.gateway }} dev eth0 2>/dev/null || true
     mode: "0755"
 
 - name: Enable local service at boot

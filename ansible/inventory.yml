@@ -17,6 +17,6 @@ all:
           ansible_host: 10.0.4.100  # LAN IP (use Tailscale hostname after provisioning)
           ansible_user: root
           tailscale_hostname: exit-nordvpn-nl
-          nordvpn_endpoint: "nl1092.nordvpn.com:51820"
+          nordvpn_endpoint: "nl1097.nordvpn.com:51820"
           nordvpn_public_key: "5p4RkybdRU5uaDi90eu4KZPTFif0lKCg4Qp6t1c4F30="
           expected_vpn_country: "NL"

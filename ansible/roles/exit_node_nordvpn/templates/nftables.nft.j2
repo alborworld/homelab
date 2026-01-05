@@ -63,8 +63,8 @@ table inet filter {
         udp dport 53 accept
         tcp dport 53 accept
 
-        # Allow Tailscale control plane (HTTPS)
-        tcp dport 443 ip daddr { 100.64.0.0/10, 104.18.0.0/16, 172.67.0.0/16 } accept
+        # Allow HTTPS/HTTP for Tailscale control plane and DERP
+        tcp dport { 80, 443 } accept
 
         # Allow Tailscale UDP (DERP and direct)
         udp dport { 41641, 3478 } accept
