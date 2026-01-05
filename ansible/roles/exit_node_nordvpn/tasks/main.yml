@@ -2,6 +2,12 @@
 # Tailscale Exit Node via NordVPN - Ansible Role
 # Requires: wireguard_private_key, tailscale_authkey variables
 
+- name: Add Alpine edge/community repository for latest Tailscale
+  ansible.builtin.lineinfile:
+    path: /etc/apk/repositories
+    line: "https://dl-cdn.alpinelinux.org/alpine/edge/community"
+    state: present
+
 - name: Install packages
   community.general.apk:
     name:
@@ -12,6 +18,7 @@
       - jq
     state: present
     update_cache: true
+    upgrade: true
 
 # ------------------------------------------------------------------------------
 # IP Forwarding
