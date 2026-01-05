@@ -1,0 +1,100 @@
+---
+# Beszel Agent installation for Alpine Linux
+
+- name: Check if beszel-agent is installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/beszel-agent
+  register: beszel_binary
+
+- name: Get latest beszel version
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/henrygd/beszel/releases/latest
+    return_content: true
+  register: beszel_release
+  when: not beszel_binary.stat.exists or beszel_agent_version == "latest"
+
+- name: Set beszel version
+  ansible.builtin.set_fact:
+    beszel_version: "{{ beszel_release.json.tag_name | regex_replace('^v', '') }}"
+  when: beszel_release is not skipped
+
+- name: Install tar for extraction
+  community.general.apk:
+    name: tar
+    state: present
+  when: not beszel_binary.stat.exists
+
+- name: Download beszel-agent
+  ansible.builtin.get_url:
+    url: "https://github.com/henrygd/beszel/releases/download/v{{ beszel_version }}/beszel-agent_linux_amd64.tar.gz"
+    dest: /tmp/beszel-agent.tar.gz
+    mode: "0644"
+  when: not beszel_binary.stat.exists
+
+- name: Extract beszel-agent
+  ansible.builtin.shell: tar -xzf /tmp/beszel-agent.tar.gz -C /usr/local/bin/ beszel-agent
+  args:
+    creates: /usr/local/bin/beszel-agent
+  when: not beszel_binary.stat.exists
+
+- name: Clean up download
+  ansible.builtin.file:
+    path: /tmp/beszel-agent.tar.gz
+    state: absent
+
+- name: Create beszel config directory
+  ansible.builtin.file:
+    path: /etc/beszel
+    state: directory
+    mode: "0700"
+
+- name: Configure beszel-agent
+  ansible.builtin.template:
+    src: beszel-agent.env.j2
+    dest: /etc/beszel/beszel-agent.env
+    mode: "0600"
+  notify: Restart beszel-agent
+
+- name: Create beszel-agent wrapper script
+  ansible.builtin.copy:
+    dest: /usr/local/bin/beszel-agent-wrapper
+    content: |
+      #!/bin/sh
+      set -a
+      . /etc/beszel/beszel-agent.env
+      set +a
+      exec /usr/local/bin/beszel-agent
+    mode: "0755"
+  notify: Restart beszel-agent
+
+- name: Create OpenRC init script
+  ansible.builtin.copy:
+    dest: /etc/init.d/beszel-agent
+    content: |
+      #!/sbin/openrc-run
+
+      name="beszel-agent"
+      description="Beszel Agent - Lightweight server monitoring"
+      command="/usr/local/bin/beszel-agent-wrapper"
+      command_background="yes"
+      pidfile="/run/${RC_SVCNAME}.pid"
+      output_log="/var/log/beszel-agent.log"
+      error_log="/var/log/beszel-agent.log"
+
+      depend() {
+          need net
+          after firewall
+      }
+    mode: "0755"
+  notify: Restart beszel-agent
+
+- name: Enable beszel-agent at boot
+  ansible.builtin.service:
+    name: beszel-agent
+    enabled: true
+    runlevel: default
+
+- name: Start beszel-agent
+  ansible.builtin.service:
+    name: beszel-agent
+    state: started

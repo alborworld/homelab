@@ -12,6 +12,7 @@
 # Required variables (in secrets.yml or via -e):
 #   - wireguard_private_key: NordVPN WireGuard private key
 #   - tailscale_authkey: Tailscale auth key with exit node capability
+#   - beszel_agent_key: Beszel hub public key (optional, for monitoring)
 
 - name: Provision NordVPN Exit Node
   hosts: exit_nodes
@@ -27,3 +28,4 @@
 
   roles:
     - exit_node_nordvpn
+    - beszel_agent

@@ -13,7 +13,8 @@ ansible/
 │   ├── tailscale.yml        # Tailscale subnet router setup
 │   └── exit-node-nordvpn.yml # NordVPN exit node provisioning
 └── roles/
-    └── exit_node_nordvpn/   # Tailscale exit node via NordVPN role
+    ├── exit_node_nordvpn/   # Tailscale exit node via NordVPN
+    └── beszel_agent/        # Beszel monitoring agent
 ```
 
 ## Host Groups
@@ -55,6 +56,34 @@ ansible-playbook playbooks/exit-node-nordvpn.yml -e @secrets.yml
 **Post-run:** Approve the exit node in [Tailscale admin console](https://login.tailscale.com/admin/machines).
 
 See [`tofu/proxmox/tailscale-exit-nordvpn-nl/README.md`](../tofu/proxmox/tailscale-exit-nordvpn-nl/README.md) for full documentation.
+
+## Roles
+
+### exit_node_nordvpn
+
+Provisions a Tailscale exit node that routes traffic through NordVPN WireGuard.
+
+**Required variables:**
+- `wireguard_private_key` - NordVPN WireGuard private key
+- `tailscale_authkey` - Tailscale auth key with exit node capability
+
+### beszel_agent
+
+Installs the [Beszel](https://beszel.dev) lightweight monitoring agent.
+
+**Required variables:**
+- `beszel_agent_key` - SSH public key from Beszel hub
+
+**Optional variables:**
+- `beszel_agent_port` - Port to listen on (default: 45876)
+
+**Usage:**
+```yaml
+roles:
+  - beszel_agent
+```
+
+The role downloads the latest beszel-agent binary, creates an OpenRC service, and starts the agent listening on the configured port.
 
 ## Secrets Management
 

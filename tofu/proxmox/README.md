@@ -22,8 +22,9 @@ tofu/proxmox/
     ├── .env.template        # Secrets template
     └── README.md            # Stack documentation
 
-ansible/
-└── roles/exit_node_nordvpn/ # Provisioning (WireGuard, Tailscale, nftables)
+ansible/roles/
+├── exit_node_nordvpn/       # Provisioning (WireGuard, Tailscale, nftables)
+└── beszel_agent/            # Monitoring agent
 ```
 
 ## Usage

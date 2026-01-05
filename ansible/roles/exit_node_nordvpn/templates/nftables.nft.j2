@@ -28,6 +28,9 @@ table inet filter {
 
         # Allow SSH from LAN (for emergency access)
         ip saddr 10.0.0.0/8 tcp dport 22 accept
+
+        # Allow Beszel agent from LAN
+        ip saddr 10.0.0.0/8 tcp dport {{ beszel_agent_port | default(45876) }} accept
     }
 
     chain forward {

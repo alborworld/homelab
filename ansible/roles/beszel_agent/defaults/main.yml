@@ -1,0 +1,8 @@
+---
+# Beszel Agent defaults
+
+beszel_agent_port: 45876
+beszel_agent_version: "latest"
+
+# Required variables (should be in secrets.yml or inventory):
+# beszel_agent_key: "ssh-ed25519 ..."
