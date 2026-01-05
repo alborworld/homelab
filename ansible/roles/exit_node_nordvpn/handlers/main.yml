@@ -1,0 +1,22 @@
+---
+- name: Restart WireGuard
+  ansible.builtin.shell: |
+    wg-quick down wg0 || true
+    wg-quick up wg0
+    ip rule add to 100.64.0.0/10 lookup 52 priority 5200 2>/dev/null || true
+  changed_when: true
+
+- name: Restart nftables
+  ansible.builtin.service:
+    name: nftables
+    state: restarted
+
+- name: Restart Tailscale
+  ansible.builtin.service:
+    name: tailscale
+    state: restarted
+
+- name: Restart crond
+  ansible.builtin.service:
+    name: crond
+    state: restarted

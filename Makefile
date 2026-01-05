@@ -61,3 +61,21 @@ tofu-clean:
 tofu-show:
 	@test -n "$(STACK)" || (echo "Usage: make tofu-show STACK=<path>"; exit 1)
 	sops --input-type dotenv --output-type dotenv --decrypt tofu/$(STACK)/.env.sops.enc
+
+# Ansible targets for managing secrets.yml with ansible-vault
+# Usage: make ansible-encrypt
+#        make ansible-decrypt
+#        make ansible-edit
+ansible-encrypt:
+	ansible-vault encrypt ansible/secrets.yml
+
+ansible-decrypt:
+	ansible-vault decrypt ansible/secrets.yml
+
+ansible-edit:
+	ansible-vault edit ansible/secrets.yml
+
+ansible-clean:
+	rm -f ansible/secrets.yml
+
+.PHONY: tofu-encrypt tofu-decrypt tofu-clean tofu-show ansible-encrypt ansible-decrypt ansible-edit ansible-clean

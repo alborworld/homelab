@@ -1,0 +1,256 @@
+---
+# Tailscale Exit Node via NordVPN - Ansible Role
+# Requires: wireguard_private_key, tailscale_authkey variables
+
+- name: Install packages
+  community.general.apk:
+    name:
+      - wireguard-tools
+      - tailscale
+      - nftables
+      - curl
+      - jq
+    state: present
+    update_cache: true
+
+# ------------------------------------------------------------------------------
+# IP Forwarding
+# ------------------------------------------------------------------------------
+
+- name: Configure IP forwarding
+  ansible.builtin.copy:
+    dest: /etc/sysctl.d/99-forwarding.conf
+    content: |
+      net.ipv4.ip_forward = 1
+      net.ipv6.conf.all.forwarding = 1
+    mode: "0644"
+  register: sysctl_config
+
+- name: Apply sysctl settings
+  ansible.builtin.command: sysctl -p /etc/sysctl.d/99-forwarding.conf
+  when: sysctl_config.changed
+  changed_when: true
+
+- name: Enable sysctl service at boot
+  ansible.builtin.service:
+    name: sysctl
+    enabled: true
+    runlevel: boot
+
+# ------------------------------------------------------------------------------
+# WireGuard
+# ------------------------------------------------------------------------------
+
+- name: Create WireGuard directory
+  ansible.builtin.file:
+    path: /etc/wireguard
+    state: directory
+    mode: "0700"
+
+- name: Configure WireGuard
+  ansible.builtin.template:
+    src: wg0.conf.j2
+    dest: /etc/wireguard/wg0.conf
+    mode: "0600"
+  notify: Restart WireGuard
+
+- name: Create WireGuard boot script
+  ansible.builtin.copy:
+    dest: /etc/local.d/wireguard.start
+    content: |
+      #!/bin/sh
+      wg-quick up wg0
+      # Fix: Tailscale IPs must use table 52, not wg-quick's table 51820
+      ip rule add to 100.64.0.0/10 lookup 52 priority 5200 2>/dev/null || true
+    mode: "0755"
+
+- name: Enable local service at boot
+  ansible.builtin.service:
+    name: local
+    enabled: true
+    runlevel: default
+
+# ------------------------------------------------------------------------------
+# nftables
+# ------------------------------------------------------------------------------
+
+- name: Create nftables directory
+  ansible.builtin.file:
+    path: /etc/nftables.d
+    state: directory
+    mode: "0755"
+
+- name: Configure nftables rules
+  ansible.builtin.template:
+    src: nftables.nft.j2
+    dest: /etc/nftables.d/exit-node.nft
+    mode: "0644"
+  register: nftables_rules
+
+- name: Configure nftables main config
+  ansible.builtin.copy:
+    dest: /etc/nftables.conf
+    content: |
+      #!/usr/sbin/nft -f
+      flush ruleset
+      include "/etc/nftables.d/*.nft"
+    mode: "0644"
+  register: nftables_conf
+
+- name: Enable nftables at boot
+  ansible.builtin.service:
+    name: nftables
+    enabled: true
+    runlevel: boot
+
+# ------------------------------------------------------------------------------
+# Health Check
+# ------------------------------------------------------------------------------
+
+- name: Create health check script
+  ansible.builtin.template:
+    src: health-check.sh.j2
+    dest: /usr/local/bin/health-check.sh
+    mode: "0755"
+
+- name: Create periodic 5min directory
+  ansible.builtin.file:
+    path: /etc/periodic/5min
+    state: directory
+    mode: "0755"
+
+- name: Create health check cron wrapper
+  ansible.builtin.copy:
+    dest: /etc/periodic/5min/health-check
+    content: |
+      #!/bin/sh
+      /usr/local/bin/health-check.sh
+    mode: "0755"
+
+- name: Add 5min periodic to crontab
+  ansible.builtin.lineinfile:
+    path: /etc/crontabs/root
+    line: "*/5 * * * * run-parts /etc/periodic/5min"
+    create: true
+    mode: "0600"
+  notify: Restart crond
+
+# ------------------------------------------------------------------------------
+# Auto-upgrade
+# ------------------------------------------------------------------------------
+
+- name: Create auto-upgrade script
+  ansible.builtin.template:
+    src: auto-upgrade.sh.j2
+    dest: /etc/periodic/weekly/auto-upgrade
+    mode: "0755"
+
+# ------------------------------------------------------------------------------
+# Services
+# ------------------------------------------------------------------------------
+
+- name: Enable crond at boot
+  ansible.builtin.service:
+    name: crond
+    enabled: true
+    runlevel: default
+
+- name: Enable tailscale at boot
+  ansible.builtin.service:
+    name: tailscale
+    enabled: true
+    runlevel: default
+
+# Flush handlers to ensure WireGuard is up before nftables blocks traffic
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+# ------------------------------------------------------------------------------
+# Start Services (order matters)
+# ------------------------------------------------------------------------------
+
+- name: Check if WireGuard is running
+  ansible.builtin.command: wg show wg0
+  register: wg_status
+  changed_when: false
+  failed_when: false
+
+- name: Start WireGuard
+  ansible.builtin.shell: |
+    wg-quick up wg0
+    ip rule add to 100.64.0.0/10 lookup 52 priority 5200 2>/dev/null || true
+  when: wg_status.rc != 0
+  changed_when: true
+
+- name: Wait for WireGuard handshake
+  ansible.builtin.shell: |
+    for i in 1 2 3 4 5; do
+      HANDSHAKE=$(wg show wg0 latest-handshakes 2>/dev/null | awk '{print $2}')
+      [ -n "$HANDSHAKE" ] && [ "$HANDSHAKE" -gt 0 ] && exit 0
+      sleep 2
+    done
+    exit 1
+  changed_when: false
+
+# NOTE: Start Tailscale BEFORE nftables, otherwise firewall blocks Tailscale control plane
+- name: Start tailscale
+  ansible.builtin.service:
+    name: tailscale
+    state: started
+
+- name: Wait for tailscaled socket
+  ansible.builtin.wait_for:
+    path: /run/tailscale/tailscaled.sock
+    timeout: 30
+
+- name: Configure Tailscale as exit node
+  ansible.builtin.command: >
+    tailscale up
+    --auth-key={{ tailscale_authkey }}
+    --hostname={{ tailscale_hostname }}
+    --advertise-exit-node
+    --accept-routes={{ tailscale_accept_routes | lower }}
+    --accept-dns={{ tailscale_accept_dns | lower }}
+    --reset
+  changed_when: true
+  no_log: true
+
+# Start nftables AFTER Tailscale is connected (kill-switch won't block established connections)
+- name: Start nftables
+  ansible.builtin.service:
+    name: nftables
+    state: "{{ 'restarted' if (nftables_rules.changed | default(false)) or (nftables_conf.changed | default(false)) else 'started' }}"
+
+- name: Start crond
+  ansible.builtin.service:
+    name: crond
+    state: started
+
+# ------------------------------------------------------------------------------
+# Verification
+# ------------------------------------------------------------------------------
+
+- name: Verify WireGuard
+  ansible.builtin.command: wg show wg0
+  register: wg_verify
+  changed_when: false
+
+- name: Verify Tailscale
+  ansible.builtin.command: tailscale status
+  register: ts_verify
+  changed_when: false
+
+- name: Get exit IP
+  ansible.builtin.uri:
+    url: https://ipinfo.io/json
+    return_content: true
+    timeout: 10
+  register: exit_ip
+  failed_when: false
+
+- name: Display verification results
+  ansible.builtin.debug:
+    msg: |
+      WireGuard: {{ 'OK' if wg_verify.rc == 0 else 'FAIL' }}
+      Tailscale: {{ 'OK' if ts_verify.rc == 0 else 'FAIL' }}
+      Exit IP: {{ (exit_ip.json.city | default('unknown')) + ', ' + (exit_ip.json.country | default('unknown')) }}

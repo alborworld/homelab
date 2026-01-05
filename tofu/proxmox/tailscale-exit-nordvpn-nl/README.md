@@ -5,6 +5,26 @@ Alpine LXC container that acts as a Tailscale exit node, routing all traffic thr
 ## Architecture
 
 ```
+                      ┌─────────────────────────────────────────┐
+                      │          DEPLOYMENT FLOW                │
+                      └─────────────────────────────────────────┘
+                                       │
+              ┌────────────────────────┼────────────────────────┐
+              ▼                        ▼                        ▼
+      ┌───────────────┐      ┌─────────────────┐      ┌─────────────────┐
+      │   OpenTofu    │      │     Ansible     │      │   Auto-heal     │
+      │ (infra only)  │ ───► │  (provisioning) │ ───► │   (runtime)     │
+      └───────────────┘      └─────────────────┘      └─────────────────┘
+      • LXC container        • Packages              • Health check
+      • TUN device           • WireGuard             • Server rotation
+      • SSH bootstrap        • nftables              • Service restart
+                             • Tailscale
+                             • Cron jobs
+
+                      ┌─────────────────────────────────────────┐
+                      │          TRAFFIC FLOW                   │
+                      └─────────────────────────────────────────┘
+
 Client Device
     │
     ▼ (Tailscale)
@@ -24,11 +44,11 @@ Client Device
   - Tailscale disconnected → restart
   - Wrong VPN exit IP (3x failures) → rotate to new NordVPN server
 - **Auto-upgrades:** Weekly Alpine package updates with service restart
-- **Tailscale exemption:** Control plane traffic always allowed (prevents lockout)
+- **Declarative:** OpenTofu for infra, Ansible for config (idempotent, diffable)
 
 ## Prerequisites
 
-1. Proxmox VE with SSH access
+1. Proxmox VE with SSH access (host `nuc13`)
 2. NordVPN subscription with WireGuard support
 3. Tailscale account
 4. Garage S3 credentials for state backend
@@ -50,43 +70,45 @@ Client Device
 - API endpoint (e.g., `https://pve.home.alborworld.com`)
 - API token (create in PVE: Datacenter → Permissions → API Tokens)
 
-### 2. Setup Environment
+### 2. Create LXC with OpenTofu
 
 ```bash
 cd tofu/proxmox/tailscale-exit-nordvpn-nl
 
-# Copy and fill in template
-cp .env.template .env
-# Edit .env with your credentials
-
-# Encrypt with sops (from repo root)
-cd ../../..
-sops --input-type dotenv --output-type dotenv --encrypt \
-  tofu/proxmox/tailscale-exit-nordvpn-nl/.env > \
-  tofu/proxmox/tailscale-exit-nordvpn-nl/.env.sops.enc
-
-# Remove unencrypted file
-rm tofu/proxmox/tailscale-exit-nordvpn-nl/.env
-```
-
-### 3. Deploy
-
-```bash
-cd tofu/proxmox/tailscale-exit-nordvpn-nl
-
-# Decrypt secrets
-sops --input-type dotenv --output-type dotenv --decrypt .env.sops.enc > .env
-
-# Source environment
-source ../../scripts/tofu-env.sh
+# Decrypt secrets (or create from .env.template)
+make tofu-decrypt STACK=proxmox/tailscale-exit-nordvpn-nl
 
 # Deploy
+source ../../scripts/tofu-env.sh
 tofu init
 tofu plan
 tofu apply
 
 # Cleanup
 rm .env
+```
+
+This creates:
+- Alpine LXC container (VMID 200)
+- TUN device access for WireGuard/Tailscale
+- SSH access for Ansible
+
+### 3. Provision with Ansible
+
+```bash
+cd ansible
+
+# Create secrets file
+cp secrets.yml.template secrets.yml
+# Edit secrets.yml with wireguard_private_key and tailscale_authkey
+
+# Optionally encrypt with ansible-vault
+ansible-vault encrypt secrets.yml
+
+# Run playbook
+ansible-playbook playbooks/exit-node-nordvpn.yml -e @secrets.yml
+# Or if vault-encrypted:
+ansible-playbook playbooks/exit-node-nordvpn.yml -e @secrets.yml --ask-vault-pass
 ```
 
 ### 4. Approve Exit Node
@@ -106,18 +128,24 @@ rm .env
 
 ## Files
 
+### OpenTofu (this directory)
+
 | File | Description |
 |------|-------------|
-| `main.tf` | LXC container and provisioning |
-| `setup.sh` | Idempotent container setup (packages, services, config) |
+| `main.tf` | LXC container + TUN config + SSH bootstrap |
 | `provider.tf` | Proxmox provider config |
 | `backend.tf` | S3 state backend (Garage) |
 | `variables.tf` | Input variables |
-| `wireguard.conf.tpl` | WireGuard config template |
-| `nftables.nft` | Firewall rules (kill-switch) |
-| `health-check.sh` | Health check script (5-min cron) |
-| `auto-upgrade.sh` | Weekly upgrade script |
 | `.env.template` | Environment template |
+
+### Ansible (`ansible/`)
+
+| File | Description |
+|------|-------------|
+| `roles/exit_node_nordvpn/` | Provisioning role |
+| `playbooks/exit-node-nordvpn.yml` | Main playbook |
+| `inventory.yml` | Host inventory |
+| `secrets.yml.template` | Secrets template |
 
 ## Operations
 
@@ -125,7 +153,9 @@ rm .env
 
 ```bash
 # SSH into container
-pct enter 200
+ssh exit-nordvpn-nl  # via Tailscale
+# or
+ssh nuc13 "pct exec 200 -- sh"
 
 # Run health check manually
 /usr/local/bin/health-check.sh
@@ -140,45 +170,38 @@ cat /var/lib/health-check/vpn_fail_count
 ### Manual Verification
 
 ```bash
-# Inside container
 wg show                      # WireGuard status
 tailscale status             # Tailscale status
 curl https://ipinfo.io       # Should show NL
 nft list ruleset             # Firewall rules
 ```
 
-### Upgrades
-
-Auto-upgrades run weekly. For manual upgrade:
+### Re-provision with Ansible
 
 ```bash
-pct enter 200
-apk update && apk upgrade
-wg-quick down wg0 && wg-quick up wg0
-ip rule add to 100.64.0.0/10 lookup 52 priority 5200 2>/dev/null || true
-rc-service tailscale restart
-```
-
-### Re-provision
-
-The `setup.sh` script is idempotent. To re-run without destroying the container:
-
-```bash
-# From repo root
-cat tofu/proxmox/tailscale-exit-nordvpn-nl/setup.sh | \
-  ssh nuc13 "cat > /tmp/setup.sh && pct push 200 /tmp/setup.sh /tmp/setup.sh && pct exec 200 -- sh /tmp/setup.sh"
+cd ansible
+ansible-playbook playbooks/exit-node-nordvpn.yml -e @secrets.yml
 ```
 
 ### Change NordVPN Server
 
-Edit `variables.tf` defaults or override in `.env`:
+Update `ansible/inventory.yml`:
+
+```yaml
+exit-nordvpn-nl:
+  nordvpn_endpoint: "nl1234.nordvpn.com:51820"
+  nordvpn_public_key: "new-public-key="
+```
+
+Then re-run Ansible:
 
 ```bash
-# Find NL servers
-curl -s "https://api.nordvpn.com/v1/servers/recommendations?filters\[servers_technologies\]\[identifier\]=wireguard_udp&filters\[country_id\]=153&limit=5" | jq -r '.[].hostname'
+ansible-playbook playbooks/exit-node-nordvpn.yml -e @secrets.yml
+```
 
-# Update and apply
-tofu apply
+Find NL servers:
+```bash
+curl -s "https://api.nordvpn.com/v1/servers/recommendations?filters\[servers_technologies\]\[identifier\]=wireguard_udp&filters\[country_id\]=153&limit=5" | jq -r '.[] | .hostname + " " + (.technologies[] | select(.identifier=="wireguard_udp") | .metadata[] | select(.name=="public_key") | .value)'
 ```
 
 ## Technical Details
@@ -206,15 +229,14 @@ This rule is added at boot via `/etc/local.d/wireguard.start` and must be re-add
 ### WireGuard not connecting
 
 ```bash
-pct enter 200
 wg show
-# Check if endpoint is reachable (get hostname from wg show output)
+# Check if endpoint is reachable
+ping -c 3 $(grep Endpoint /etc/wireguard/wg0.conf | cut -d= -f2 | cut -d: -f1 | tr -d ' ')
 ```
 
 ### Tailscale not connecting
 
 ```bash
-pct enter 200
 tailscale status
 curl -I https://controlplane.tailscale.com
 ```
@@ -232,8 +254,17 @@ journalctl -u pve-container@200
 
 ```bash
 # Temporarily disable (emergency only)
-pct enter 200
 nft flush ruleset
 # Then fix the issue and restart nftables
 rc-service nftables restart
+```
+
+### Ansible can't connect
+
+```bash
+# Verify SSH access
+ssh -o StrictHostKeyChecking=no root@exit-nordvpn-nl
+
+# If using Tailscale hostname, ensure your machine has Tailscale running
+tailscale status
 ```

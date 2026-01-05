@@ -117,8 +117,22 @@ make tofu-clean-garage
 
 ## Stacks
 
-| Stack | Purpose | Provider |
-|-------|---------|----------|
-| `garage/` | S3 credentials and permissions | [jkossis/garage](https://registry.terraform.io/providers/jkossis/garage) |
-| `cloudflare/` | DNS records and security rules | hashicorp/cloudflare |
-| `proxmox/` | VMs and containers | bpg/proxmox |
+| Stack | Purpose | Provider | Provisioning |
+|-------|---------|----------|--------------|
+| `garage/` | S3 credentials and permissions | [jkossis/garage](https://registry.terraform.io/providers/jkossis/garage) | OpenTofu only |
+| `cloudflare/` | DNS records and security rules | hashicorp/cloudflare | OpenTofu only |
+| `proxmox/` | VMs and containers | bpg/proxmox | OpenTofu + Ansible |
+
+## OpenTofu + Ansible Pattern
+
+For complex stacks (like LXC containers), we use a two-stage approach:
+
+1. **OpenTofu** creates infrastructure (LXC, TUN device, SSH bootstrap)
+2. **Ansible** provisions the container (packages, services, config)
+
+This provides:
+- Declarative infrastructure (OpenTofu)
+- Idempotent configuration with diff visibility (Ansible)
+- Separation of infra secrets vs. provisioning secrets
+
+See [`proxmox/tailscale-exit-nordvpn-nl/`](proxmox/tailscale-exit-nordvpn-nl/) for an example.

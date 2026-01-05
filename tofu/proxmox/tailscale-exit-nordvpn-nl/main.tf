@@ -1,11 +1,11 @@
 # Tailscale Exit Node via NordVPN Amsterdam
-# Alpine LXC that routes Tailscale exit traffic through NordVPN WireGuard
+# OpenTofu creates LXC + TUN config; Ansible handles provisioning
 
 locals {
   vmid            = 200
   hostname        = "exit-nordvpn-nl"
   alpine_template = "alpine-3.22-default_20250617_amd64.tar.xz"
-  proxmox_ssh     = "nuc13" # SSH alias for Proxmox host
+  proxmox_ssh     = "nuc13"
 }
 
 # ------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ locals {
 resource "proxmox_virtual_environment_container" "exit_node" {
   node_name     = var.proxmox_node
   vm_id         = local.vmid
-  description   = "Tailscale exit node routing traffic through NordVPN Amsterdam"
+  description   = "Tailscale exit node via NordVPN Amsterdam"
   tags          = ["tailscale", "exit-node", "nordvpn", "nl"]
   started       = true
   start_on_boot = true
@@ -29,24 +29,37 @@ resource "proxmox_virtual_environment_container" "exit_node" {
 
   unprivileged = false # Required for /dev/net/tun
 
-  # NOTE: Cannot set features via API token - requires root@pam password auth
-  # Features (nesting) will be added via SSH in null_resource.tun_config
-
   operating_system {
     template_file_id = "diskstation:vztmpl/${local.alpine_template}"
     type             = "alpine"
   }
 
-  cpu { cores = 1 }
-  memory { dedicated = 256 }
-  disk { datastore_id = "local-lvm"; size = 4 }
-  network_interface { name = "eth0"; bridge = "vmbr0" }
+  cpu {
+    cores = 1
+  }
 
-  lifecycle { ignore_changes = [started] }
+  memory {
+    dedicated = 256
+  }
+
+  disk {
+    datastore_id = "local-lvm"
+    size         = 1
+  }
+
+  network_interface {
+    name   = "eth0"
+    bridge = "vmbr0"
+  }
+
+  lifecycle {
+    ignore_changes = [started]
+  }
 }
 
 # ------------------------------------------------------------------------------
-# TUN Device Configuration
+# TUN Device Configuration (required for WireGuard/Tailscale in LXC)
+# Cannot be done via API token - requires SSH to Proxmox host
 # ------------------------------------------------------------------------------
 
 resource "null_resource" "tun_config" {
@@ -73,10 +86,10 @@ resource "null_resource" "tun_config" {
 }
 
 # ------------------------------------------------------------------------------
-# Provisioning
+# SSH Bootstrap (minimal setup for Ansible access)
 # ------------------------------------------------------------------------------
 
-resource "null_resource" "provision" {
+resource "null_resource" "ssh_bootstrap" {
   depends_on = [null_resource.tun_config]
 
   connection {
@@ -86,66 +99,25 @@ resource "null_resource" "provision" {
     agent = true
   }
 
-  # Copy all config files to Proxmox host
-  provisioner "file" {
-    content = templatefile("${path.module}/wireguard.conf.tpl", {
-      private_key = var.wireguard_private_key
-      public_key  = var.nordvpn_public_key
-      endpoint    = var.nordvpn_endpoint
-    })
-    destination = "/tmp/wg0.conf"
-  }
-
-  provisioner "file" {
-    source      = "${path.module}/nftables.nft"
-    destination = "/tmp/exit-node.nft"
-  }
-
-  provisioner "file" {
-    source      = "${path.module}/health-check.sh"
-    destination = "/tmp/health-check.sh"
-  }
-
-  provisioner "file" {
-    source      = "${path.module}/auto-upgrade.sh"
-    destination = "/tmp/auto-upgrade.sh"
-  }
-
-  provisioner "file" {
-    source      = "${path.module}/setup.sh"
-    destination = "/tmp/setup.sh"
-  }
-
-  # Push files into container and run setup
   provisioner "remote-exec" {
     inline = [
-      # Push config files
-      "pct push ${local.vmid} /tmp/wg0.conf /etc/wireguard/wg0.conf",
-      "pct push ${local.vmid} /tmp/exit-node.nft /etc/nftables.d/exit-node.nft --mkdir",
-      "pct push ${local.vmid} /tmp/health-check.sh /usr/local/bin/health-check.sh --mkdir",
-      "pct push ${local.vmid} /tmp/auto-upgrade.sh /etc/periodic/weekly/auto-upgrade --mkdir",
-      "pct push ${local.vmid} /tmp/setup.sh /tmp/setup.sh",
-
-      # Run setup
-      "pct exec ${local.vmid} -- sh /tmp/setup.sh '${var.tailscale_authkey}'",
-
-      # Cleanup
-      "rm -f /tmp/wg0.conf /tmp/exit-node.nft /tmp/health-check.sh /tmp/auto-upgrade.sh /tmp/setup.sh",
+      # Install and configure SSH
+      "pct exec ${local.vmid} -- apk add --no-cache openssh",
+      "pct exec ${local.vmid} -- rc-update add sshd default",
+      "pct exec ${local.vmid} -- rc-service sshd start",
+      # Add SSH key for Ansible access
+      "pct exec ${local.vmid} -- mkdir -p /root/.ssh",
+      "pct exec ${local.vmid} -- chmod 700 /root/.ssh",
+      "pct push ${local.vmid} ${var.ssh_public_key_path} /root/.ssh/authorized_keys",
+      "pct exec ${local.vmid} -- chmod 600 /root/.ssh/authorized_keys",
     ]
   }
 
-  triggers = {
-    tun_config       = null_resource.tun_config.id
-    nordvpn_endpoint = var.nordvpn_endpoint
-    setup_hash       = filemd5("${path.module}/setup.sh")
-    nftables_hash    = filemd5("${path.module}/nftables.nft")
-    healthcheck_hash = filemd5("${path.module}/health-check.sh")
-    autoupgrade_hash = filemd5("${path.module}/auto-upgrade.sh")
-  }
+  triggers = { tun_config = null_resource.tun_config.id }
 }
 
 # ------------------------------------------------------------------------------
-# Outputs
+# Outputs (for Ansible inventory)
 # ------------------------------------------------------------------------------
 
 output "vmid" {
@@ -154,6 +126,11 @@ output "vmid" {
 }
 
 output "hostname" {
-  description = "Tailscale hostname"
+  description = "Container hostname"
   value       = local.hostname
+}
+
+output "ip_address" {
+  description = "Container IP address (from DHCP)"
+  value       = proxmox_virtual_environment_container.exit_node.initialization[0].ip_config[0].ipv4[0].address
 }

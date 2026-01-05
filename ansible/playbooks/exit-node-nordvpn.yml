@@ -1,0 +1,29 @@
+---
+# Provision Tailscale Exit Node via NordVPN
+#
+# Prerequisites:
+#   1. LXC container created via OpenTofu (tofu/proxmox/tailscale-exit-nordvpn-nl)
+#   2. SSH access bootstrapped by OpenTofu
+#
+# Usage:
+#   cd ansible
+#   ansible-playbook playbooks/exit-node-nordvpn.yml -e @secrets.yml
+#
+# Required variables (in secrets.yml or via -e):
+#   - wireguard_private_key: NordVPN WireGuard private key
+#   - tailscale_authkey: Tailscale auth key with exit node capability
+
+- name: Provision NordVPN Exit Node
+  hosts: exit_nodes
+  gather_facts: false  # Alpine minimal doesn't have Python initially
+
+  pre_tasks:
+    - name: Install Python for Ansible
+      ansible.builtin.raw: apk add --no-cache python3
+      changed_when: true
+
+    - name: Gather facts
+      ansible.builtin.setup:
+
+  roles:
+    - exit_node_nordvpn

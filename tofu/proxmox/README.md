@@ -4,43 +4,59 @@ Infrastructure as Code for Proxmox VE resources.
 
 ## Stacks
 
-| Stack | Description |
-|-------|-------------|
-| [`tailscale-exit-nordvpn-nl/`](tailscale-exit-nordvpn-nl/) | Tailscale exit node via NordVPN Amsterdam |
+| Stack | Description | Provisioning |
+|-------|-------------|--------------|
+| [`tailscale-exit-nordvpn-nl/`](tailscale-exit-nordvpn-nl/) | Tailscale exit node via NordVPN Amsterdam | OpenTofu + Ansible |
 
 ## Structure
 
-Each stack is self-contained:
+Each stack creates infrastructure; provisioning may be handled by Ansible:
 
 ```
 tofu/proxmox/
 └── tailscale-exit-nordvpn-nl/
-    ├── main.tf              # Resources
+    ├── main.tf              # LXC container + TUN config + SSH bootstrap
     ├── provider.tf          # Proxmox provider
     ├── backend.tf           # S3 state (Garage)
     ├── variables.tf         # Inputs
     ├── .env.template        # Secrets template
-    ├── *.tpl, *.nft, *.sh   # Config templates
     └── README.md            # Stack documentation
+
+ansible/
+└── roles/exit_node_nordvpn/ # Provisioning (WireGuard, Tailscale, nftables)
 ```
 
 ## Usage
 
+### Infrastructure Only (OpenTofu)
+
 ```bash
-# Navigate to stack
 cd tofu/proxmox/tailscale-exit-nordvpn-nl
 
-# Setup secrets (first time)
-cp .env.template .env
-# Edit .env, then encrypt with sops
+# Decrypt secrets
+make tofu-decrypt STACK=proxmox/tailscale-exit-nordvpn-nl
 
 # Deploy
-sops -d .env.sops.enc > .env
 source ../../scripts/tofu-env.sh
 tofu init
 tofu plan
 tofu apply
 rm .env
+```
+
+### With Ansible Provisioning
+
+For stacks that use Ansible for configuration:
+
+```bash
+# 1. Create infrastructure with OpenTofu
+cd tofu/proxmox/tailscale-exit-nordvpn-nl
+source ../../scripts/tofu-env.sh
+tofu apply
+
+# 2. Provision with Ansible
+cd ../../../ansible
+ansible-playbook playbooks/exit-node-nordvpn.yml -e @secrets.yml
 ```
 
 ## Adding New Stacks
@@ -50,3 +66,4 @@ rm .env
 3. Update backend key in `backend.tf` to unique path
 4. Add `.env.template` for secrets
 5. Add `README.md` with documentation
+6. (Optional) Create Ansible role in `ansible/roles/` for provisioning

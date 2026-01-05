@@ -1,0 +1,18 @@
+---
+# NordVPN Exit Node Role Defaults
+
+# Tailscale
+tailscale_hostname: "exit-nordvpn-nl"
+tailscale_accept_dns: false
+tailscale_accept_routes: false
+
+# NordVPN WireGuard
+nordvpn_endpoint: "nl1092.nordvpn.com:51820"
+nordvpn_public_key: "5p4RkybdRU5uaDi90eu4KZPTFif0lKCg4Qp6t1c4F30="
+nordvpn_address: "10.5.0.2/32"
+nordvpn_dns:
+  - "103.86.96.100"
+  - "103.86.99.100"
+
+# Expected VPN exit country (for health checks)
+expected_vpn_country: "NL"

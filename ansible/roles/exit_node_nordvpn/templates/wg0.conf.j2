@@ -1,0 +1,13 @@
+# NordVPN WireGuard Configuration
+# Managed by Ansible - do not edit manually
+
+[Interface]
+PrivateKey = {{ wireguard_private_key }}
+Address = {{ nordvpn_address }}
+DNS = {{ nordvpn_dns | join(', ') }}
+
+[Peer]
+PublicKey = {{ nordvpn_public_key }}
+AllowedIPs = 0.0.0.0/0, ::/0
+Endpoint = {{ nordvpn_endpoint }}
+PersistentKeepalive = 25
