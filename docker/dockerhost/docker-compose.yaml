@@ -26,8 +26,6 @@ include:
   - sonarr/docker-compose.yaml
   - stirling-pdf/docker-compose.yaml
   - tautulli/docker-compose.yaml
-  - tdarr/docker-compose.yaml
-  - tdarr-node/docker-compose.yaml
   - traefik-kop-dh/docker-compose.yaml
   - unmanic/docker-compose.yaml
   - watchtower-dh/docker-compose.yaml
