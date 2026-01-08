@@ -1,0 +1,35 @@
+services:
+  unmanic:
+    image: josh5/unmanic:latest
+    container_name: Unmanic
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    ports:
+      - "8888:8888" # Web UI
+    volumes:
+      - ${VOLUMEDIR}/unmanic/config:/config
+      - ${VOLUMEDIR}/unmanic/cache:/tmp/unmanic
+      - ${MEDIADIR}:/library # shared with Plex
+    devices:
+      - /dev/dri:/dev/dri # VAAPI hardware transcoding
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.unmanic.loadbalancer.server.port=8888
+      - traefik.http.routers.unmanic.rule=Host(`unmanic.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.unmanic.entrypoints=websecure
+      - traefik.http.routers.unmanic.service=unmanic
+      - traefik.http.routers.unmanic.tls=true
+      - traefik.http.routers.unmanic.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Media Automation
+      - homepage.name=Unmanic
+      - homepage.icon=unmanic.png
+      - homepage.href=https://unmanic.${LOCAL_DOMAIN}
+      - homepage.description=Library Transcoder
+      - homepage.siteMonitor=https://unmanic.${LOCAL_DOMAIN}
+      - homepage.widget.type=unmanic
+      - homepage.widget.url=https://unmanic.${LOCAL_DOMAIN}
+    restart: unless-stopped
