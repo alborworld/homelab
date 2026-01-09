@@ -8,6 +8,7 @@ include:
   - beszel-agent-dh/docker-compose.yaml
   - byparr/docker-compose.yaml
   - cleanuparr/docker-compose.yaml
+  - huntarr/docker-compose.yaml
   - github-runner-dh/docker-compose.yaml
   - gluetun/docker-compose.yaml
 #  - grafana/docker-compose.yaml

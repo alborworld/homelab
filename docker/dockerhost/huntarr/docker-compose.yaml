@@ -1,0 +1,30 @@
+services:
+  huntarr:
+    image: ghcr.io/plexguide/huntarr:latest
+    container_name: Huntarr
+    volumes:
+      - ${VOLUMEDIR}/huntarr:/config
+    environment:
+      - TZ=Europe/Amsterdam
+      - BASE_URL=
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.huntarr.loadbalancer.server.port=9705
+      - traefik.http.routers.huntarr.rule=Host(`huntarr.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.huntarr.entrypoints=websecure
+      - traefik.http.routers.huntarr.service=huntarr
+      - traefik.http.routers.huntarr.tls=true
+      - traefik.http.routers.huntarr.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Media Automation
+      - homepage.name=Huntarr
+      - homepage.icon=huntarr.png
+      - homepage.href=https://huntarr.${LOCAL_DOMAIN}
+      - homepage.description=Missing and Upgrade Media Hunter
+      - homepage.siteMonitor=https://huntarr.${LOCAL_DOMAIN}
+    restart: unless-stopped
