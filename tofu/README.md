@@ -49,7 +49,7 @@ OpenTofu's S3 backend expects `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`. W
 
 1. Decrypt your stack's secrets:
    ```bash
-   make tofu-decrypt-<stack>
+   make -C ../.. tofu-decrypt STACK=<stack>
    ```
 
 2. Source the environment script:
@@ -66,16 +66,16 @@ Each stack can have encrypted secrets in `.env.sops.enc`:
 
 ```bash
 # Decrypt secrets
-make tofu-decrypt-garage
+make -C ../.. tofu-decrypt STACK=garage
 
 # Encrypt after changes
-make tofu-encrypt-garage
+make -C ../.. tofu-encrypt STACK=garage
 
 # View without writing to disk
-make tofu-show-garage
+make -C ../.. tofu-show STACK=garage
 
 # Clean up decrypted file
-make tofu-clean-garage
+make -C ../.. tofu-clean STACK=garage
 ```
 
 ## Usage
@@ -83,7 +83,7 @@ make tofu-clean-garage
 1. Decrypt secrets and set up environment:
    ```bash
    cd tofu/<stack>
-   make -C ../.. tofu-decrypt-<stack>
+   make -C ../.. tofu-decrypt STACK=<stack>
    source ../scripts/tofu-env.sh
    ```
 

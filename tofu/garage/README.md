@@ -23,7 +23,7 @@ S3-native state locking is enabled via `use_lockfile = true`. Garage supports co
 cd tofu/garage
 
 # Decrypt secrets
-make -C ../.. tofu-decrypt-garage
+make -C ../.. tofu-decrypt STACK=garage
 
 # Source environment (aliases TOFU_* to AWS_*)
 source ../scripts/tofu-env.sh

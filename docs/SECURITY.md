@@ -20,11 +20,19 @@
    ```
 
 3. **Configure SOPS**:
-   Create or edit `~/.sops.yaml`:
+   This repo uses `.sops.yaml` in the project root. You can also keep user-wide rules in `~/.sops.yaml`, but make sure the repo rules stay in sync.
    ```yaml
    creation_rules:
-     - path_regex: .*\.enc\.yaml$
+     - path_regex: docker/.*\.env$
+       input_type: dotenv
+       encrypted_regex: '^[^#\s].*'
        age: "YOUR_PUBLIC_KEY"  # The public key from age-keygen output
+     - path_regex: tofu/.*\.env$
+       input_type: dotenv
+       encrypted_regex: '^[^#\s].*'
+       age: "YOUR_PUBLIC_KEY"
+     - path_regex: ansible/secrets\.yml$
+       age: "YOUR_PUBLIC_KEY"
    ```
 
 #### Encryption & Decryption with Makefile
@@ -37,7 +45,7 @@ To simplify encryption and decryption of `.env` files, use the provided [Makefil
   ```bash
   make encrypt-diskstation
   ```
-  This will encrypt `diskstation/docker/.env` to `diskstation/docker/.env.sops.enc`.
+  This will encrypt `docker/diskstation/.env` to `docker/diskstation/.env.sops.enc`.
 
 ### 🚀 Getting Started
 
@@ -45,7 +53,7 @@ To simplify encryption and decryption of `.env` files, use the provided [Makefil
   ```bash
   make decrypt-raspberrypi5
   ```
-  This will decrypt `raspberrypi5/docker/.env.sops.enc` to `raspberrypi5/docker/.env`.
+  This will decrypt `docker/raspberrypi5/.env.sops.enc` to `docker/raspberrypi5/.env`.
 
 - Clean (remove) the decrypted `.env` file for a target:
   ```bash

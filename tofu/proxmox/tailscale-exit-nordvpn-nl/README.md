@@ -76,7 +76,7 @@ Client Device
 cd tofu/proxmox/tailscale-exit-nordvpn-nl
 
 # Decrypt secrets (or create from .env.template)
-make tofu-decrypt STACK=proxmox/tailscale-exit-nordvpn-nl
+make -C ../../.. tofu-decrypt STACK=proxmox/tailscale-exit-nordvpn-nl
 
 # Deploy
 source ../../scripts/tofu-env.sh

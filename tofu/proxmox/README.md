@@ -35,7 +35,7 @@ ansible/roles/
 cd tofu/proxmox/tailscale-exit-nordvpn-nl
 
 # Decrypt secrets
-make tofu-decrypt STACK=proxmox/tailscale-exit-nordvpn-nl
+make -C ../../.. tofu-decrypt STACK=proxmox/tailscale-exit-nordvpn-nl
 
 # Deploy
 source ../../scripts/tofu-env.sh

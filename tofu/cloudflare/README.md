@@ -18,7 +18,7 @@ This stack manages Cloudflare DNS records and rulesets for alborworld.com using 
 cd tofu/cloudflare
 
 # Decrypt secrets
-make -C ../.. tofu-decrypt-cloudflare
+make -C ../.. tofu-decrypt STACK=cloudflare
 
 # Source environment (aliases TOFU_* to AWS_*)
 source ../scripts/tofu-env.sh
