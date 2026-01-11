@@ -1,0 +1,64 @@
+services:
+  booklore:
+    image: booklore/booklore:latest
+    container_name: Booklore
+    environment:
+      - USER_ID=${UID}
+      - GROUP_ID=${GID}
+      - TZ=Europe/Amsterdam
+      - DATABASE_URL=jdbc:mariadb://booklore-mariadb:3306/booklore
+      - DATABASE_USERNAME=${BOOKLORE_DB_USER}
+      - DATABASE_PASSWORD=${BOOKLORE_DB_PASSWORD}
+      - BOOKLORE_PORT=6060
+    depends_on:
+      booklore-mariadb:
+        condition: service_healthy
+    ports:
+      - "6060:6060"
+    volumes:
+      - ${VOLUMEDIR}/booklore/data:/app/data
+      - ${MEDIADIR}/books:/books
+      - ${VOLUMEDIR}/booklore/bookdrop:/bookdrop
+    healthcheck:
+      test: wget -q -O - http://localhost:6060/api/v1/healthcheck
+      interval: 60s
+      retries: 5
+      start_period: 60s
+      timeout: 10s
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.booklore.loadbalancer.server.port=6060
+      - traefik.http.routers.booklore.rule=Host(`booklore.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.booklore.entrypoints=websecure
+      - traefik.http.routers.booklore.service=booklore
+      - traefik.http.routers.booklore.tls=true
+      - traefik.http.routers.booklore.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Media Servers
+      - homepage.name=Booklore
+      - homepage.icon=book-lore.png
+      - homepage.href=https://booklore.${LOCAL_DOMAIN}
+      - homepage.description=Personal Library
+      - homepage.siteMonitor=https://booklore.${LOCAL_DOMAIN}
+    restart: unless-stopped
+
+  booklore-mariadb:
+    image: lscr.io/linuxserver/mariadb:11.4.5
+    container_name: Booklore-MariaDB
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+      - MYSQL_ROOT_PASSWORD=${BOOKLORE_DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=booklore
+      - MYSQL_USER=${BOOKLORE_DB_USER}
+      - MYSQL_PASSWORD=${BOOKLORE_DB_PASSWORD}
+    volumes:
+      - ${VOLUMEDIR}/booklore/mariadb:/config
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
