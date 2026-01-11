@@ -7,7 +7,7 @@ services:
       - PGID=${GID}
       - TZ=Europe/Amsterdam
     ports:
-      - "13378:13378"
+      - "13378:80"
     volumes:
       - ${VOLUMEDIR}/audiobookshelf/config:/config
       - ${VOLUMEDIR}/audiobookshelf/metadata:/metadata
@@ -16,7 +16,7 @@ services:
     labels:
       # TRAEFIK
       - traefik.enable=true
-      - traefik.http.services.audiobookshelf.loadbalancer.server.port=13378
+      - traefik.http.services.audiobookshelf.loadbalancer.server.port=80
       - traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.${LOCAL_DOMAIN}`)
       - traefik.http.routers.audiobookshelf.entrypoints=websecure
       - traefik.http.routers.audiobookshelf.service=audiobookshelf
