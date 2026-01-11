@@ -1,0 +1,35 @@
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: Audiobookshelf
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=Europe/Amsterdam
+    ports:
+      - "13378:80"
+    volumes:
+      - ${VOLUMEDIR}/audiobookshelf/config:/config
+      - ${VOLUMEDIR}/audiobookshelf/metadata:/metadata
+      - ${MEDIADIR}/audiobooks:/audiobooks
+      - ${MEDIADIR}/podcasts:/podcasts
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.audiobookshelf.loadbalancer.server.port=13378
+      - traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.audiobookshelf.entrypoints=websecure
+      - traefik.http.routers.audiobookshelf.service=audiobookshelf
+      - traefik.http.routers.audiobookshelf.tls=true
+      - traefik.http.routers.audiobookshelf.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Media Servers
+      - homepage.name=Audiobookshelf
+      - homepage.icon=audiobookshelf.png
+      - homepage.href=https://audiobookshelf.${LOCAL_DOMAIN}
+      - homepage.description=Audiobooks and Podcasts
+      - homepage.siteMonitor=https://audiobookshelf.${LOCAL_DOMAIN}
+      - homepage.widget.type=audiobookshelf
+      - homepage.widget.url=https://audiobookshelf.${LOCAL_DOMAIN}
+      - homepage.widget.key=${AUDIOBOOKSHELF_API_KEY}
+    restart: unless-stopped

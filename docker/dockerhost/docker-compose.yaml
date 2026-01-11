@@ -4,6 +4,7 @@ name: ${HOSTNAME}
 
 include:
   - agregarr/docker-compose.yaml
+  - audiobookshelf/docker-compose.yaml
   - beszel-agent-dh/docker-compose.yaml
   - booklore/docker-compose.yaml
   - byparr/docker-compose.yaml
