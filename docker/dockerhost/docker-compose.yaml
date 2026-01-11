@@ -4,14 +4,14 @@ name: ${HOSTNAME}
 
 include:
   - agregarr/docker-compose.yaml
-  - dockerproxy-dh/docker-compose.yaml
   - beszel-agent-dh/docker-compose.yaml
   - byparr/docker-compose.yaml
   - cleanuparr/docker-compose.yaml
-  - huntarr/docker-compose.yaml
+  - dockerproxy-dh/docker-compose.yaml
   - github-runner-dh/docker-compose.yaml
   - gluetun/docker-compose.yaml
 #  - grafana/docker-compose.yaml
+  - huntarr/docker-compose.yaml
   - iperf-dh/docker-compose.yaml
   - n8n/docker-compose.yaml
   - nzbget/docker-compose.yaml

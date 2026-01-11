@@ -4,8 +4,8 @@ name: ${HOSTNAME}
 
 include:
   - adguardhome/docker-compose.yaml
-  - beszel-agent-rp/docker-compose.yaml
   - beszel/docker-compose.yaml
+  - beszel-agent-rp/docker-compose.yaml
   - dockerproxy-rp/docker-compose.yaml
   - github-runner-rp/docker-compose.yaml
   - homeassistant/docker-compose.yaml

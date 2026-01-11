@@ -7,8 +7,8 @@ include:
   - adguardhome-sync/docker-compose.yaml
   - beszel-agent-ds/docker-compose.yaml
   - dockerproxy-ds/docker-compose.yaml
-  - github-runner-ds/docker-compose.yaml
   - garage/docker-compose.yaml
+  - github-runner-ds/docker-compose.yaml
   - iperf-ds/docker-compose.yaml
   - portainer-agent-ds/docker-compose.yaml
   - syncthing/docker-compose.yaml
@@ -16,4 +16,3 @@ include:
   - unbound-replica/docker-compose.yaml
   - watchtower-ds/docker-compose.yaml
   - zoom-recording-downloader/docker-compose.yaml
-  
