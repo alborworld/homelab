@@ -12,7 +12,6 @@ include:
   - dockerproxy-dh/docker-compose.yaml
   - github-runner-dh/docker-compose.yaml
   - gluetun/docker-compose.yaml
-#  - grafana/docker-compose.yaml
   - huntarr/docker-compose.yaml
   - iperf-dh/docker-compose.yaml
   - n8n/docker-compose.yaml
@@ -21,7 +20,6 @@ include:
   - paperless-ngx/docker-compose.yaml
   - plex/docker-compose.yaml
   - portainer-agent-dh/docker-compose.yaml
-#  - prometheus/docker-compose.yaml
   - prowlarr/docker-compose.yaml
   - qbittorrent/docker-compose.yaml
   - radarr/docker-compose.yaml
