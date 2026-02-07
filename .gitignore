@@ -76,6 +76,7 @@ volumes/
 # Claude Code
 .claude/*
 !.claude/CLAUDE.md
+!.claude/settings.json
 
 # Ansible secrets (plaintext)
 ansible/secrets.yml
