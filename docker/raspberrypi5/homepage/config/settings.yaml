@@ -6,27 +6,27 @@ title: AlborWorld HomeLab
 startUrl: https://home.alborworld.com
 
 layout:
-  Core Infrastructure:
-    style: row
-    columns: 3
-  Home & Utilities:
-    style: row
-    columns: 2
-  Networking & Security:
-    style: row
-    columns: 2
-  Monitoring & Health:
-    style: row
-    columns: 2
-  Media Servers:
-    style: row
-    columns: 3
-  Media Automation:
-    style: row
-    columns: 3
-  Download Clients:
-    style: row
-    columns: 2
+  - Core Infrastructure:
+      style: row
+      columns: 3
+  - Home & Utilities:
+      style: row
+      columns: 2
+  - Networking & Security:
+      style: row
+      columns: 2
+  - Monitoring & Health:
+      style: row
+      columns: 2
+  - Media Servers:
+      style: row
+      columns: 3
+  - Media Automation:
+      style: row
+      columns: 3
+  - Download Clients:
+      style: row
+      columns: 2
 
 background:
   image: https://bingw.jasonzeng.dev/?index=random&w=1920&h=1080
