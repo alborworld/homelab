@@ -1,0 +1,31 @@
+---
+# Provision OpenClaw AI Assistant
+#
+# Prerequisites:
+#   1. LXC container created via OpenTofu (tofu/proxmox/openclaw)
+#   2. SSH access bootstrapped by OpenTofu
+#   3. Ollama server provisioned and running
+#
+# Usage:
+#   cd ansible
+#   ansible-playbook playbooks/openclaw.yml -e @secrets.yml
+#
+# Required variables (in secrets.yml or via -e):
+#   - tailscale_authkey: Tailscale auth key
+#
+# Post-provisioning (manual, interactive):
+#   ssh openclaw
+#   sudo -u openclaw openclaw onboard
+#   # Select: QuickStart → Ollama → http://ollama:11434 → configure channels
+#   systemctl enable --now openclaw
+#
+# Dashboard accessible at: http://openclaw:1455 (Tailscale only)
+# Logs: /home/openclaw/.openclaw/logs/gateway.log
+
+- name: Provision OpenClaw AI Assistant
+  hosts: openclaw_servers
+  gather_facts: true
+
+  roles:
+    - openclaw
+    # TODO: beszel_agent role needs Ubuntu support (currently Alpine-only)

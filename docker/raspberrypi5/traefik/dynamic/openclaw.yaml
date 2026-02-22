@@ -1,0 +1,16 @@
+---
+http:
+  routers:
+    openclaw:
+      rule: "Host(`openclaw.home.alborworld.com`)"
+      service: openclaw
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+
+  services:
+    openclaw:
+      loadBalancer:
+        servers:
+          - url: "http://openclaw.home:1455"

@@ -1,0 +1,12 @@
+---
+# Ollama Role Defaults
+
+# Tailscale
+tailscale_hostname: "ollama"
+tailscale_accept_dns: false
+
+# Ollama
+ollama_host: "0.0.0.0"
+ollama_port: 11434
+ollama_models:
+  - "llama3.1:8b"

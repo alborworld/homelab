@@ -1,0 +1,16 @@
+---
+http:
+  routers:
+    ollama:
+      rule: "Host(`ollama.home.alborworld.com`)"
+      service: ollama
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+
+  services:
+    ollama:
+      loadBalancer:
+        servers:
+          - url: "http://ollama.home:11434"

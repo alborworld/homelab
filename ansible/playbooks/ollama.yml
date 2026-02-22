@@ -1,0 +1,22 @@
+---
+# Provision Ollama LLM Inference Server
+#
+# Prerequisites:
+#   1. LXC container created via OpenTofu (tofu/proxmox/ollama)
+#   2. SSH access bootstrapped by OpenTofu
+#
+# Usage:
+#   cd ansible
+#   ansible-playbook playbooks/ollama.yml -e @secrets.yml
+#
+# Required variables (in secrets.yml or via -e):
+#   - tailscale_authkey: Tailscale auth key
+#   - beszel_agent_key: Beszel hub public key (optional, for monitoring)
+
+- name: Provision Ollama LLM Server
+  hosts: ollama_servers
+  gather_facts: true
+
+  roles:
+    - ollama
+    # TODO: beszel_agent role needs Ubuntu support (currently Alpine-only)

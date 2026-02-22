@@ -1,0 +1,109 @@
+---
+# Ollama LLM Inference Server for Ubuntu 24.04
+
+# --- Install Ollama ---
+
+- name: Check if ollama is installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/ollama
+  register: ollama_binary
+
+- name: Install ollama
+  when: not ollama_binary.stat.exists
+  block:
+    - name: Download ollama install script
+      ansible.builtin.get_url:
+        url: https://ollama.com/install.sh
+        dest: /tmp/ollama-install.sh
+        mode: "0755"
+
+    - name: Run ollama install script
+      ansible.builtin.command: /tmp/ollama-install.sh
+      changed_when: true
+
+    - name: Clean up install script
+      ansible.builtin.file:
+        path: /tmp/ollama-install.sh
+        state: absent
+
+# --- Configure ---
+
+- name: Create ollama environment override directory
+  ansible.builtin.file:
+    path: /etc/systemd/system/ollama.service.d
+    state: directory
+    mode: "0755"
+
+- name: Configure ollama listen address
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/ollama.service.d/environment.conf
+    content: |
+      [Service]
+      Environment="OLLAMA_HOST={{ ollama_host }}:{{ ollama_port }}"
+    mode: "0644"
+  notify: Restart ollama
+
+- name: Enable and start ollama
+  ansible.builtin.systemd:
+    name: ollama
+    enabled: true
+    state: started
+    daemon_reload: true
+
+# --- Pull models ---
+
+- name: Wait for ollama to be ready
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:{{ ollama_port }}/api/tags"
+    method: GET
+  register: ollama_ready
+  until: ollama_ready.status == 200
+  retries: 12
+  delay: 5
+
+- name: Pull default models
+  ansible.builtin.command: "ollama pull {{ item }}"
+  loop: "{{ ollama_models }}"
+  register: pull_result
+  changed_when: "'pulling' in pull_result.stdout"
+
+# --- Tailscale ---
+
+- name: Check if tailscale is installed
+  ansible.builtin.command: which tailscale
+  register: tailscale_installed
+  changed_when: false
+  failed_when: false
+
+- name: Install tailscale
+  when: tailscale_installed.rc != 0
+  block:
+    - name: Download tailscale install script
+      ansible.builtin.get_url:
+        url: https://tailscale.com/install.sh
+        dest: /tmp/tailscale-install.sh
+        mode: "0755"
+
+    - name: Run tailscale install script
+      ansible.builtin.command: /tmp/tailscale-install.sh
+      changed_when: true
+
+    - name: Clean up install script
+      ansible.builtin.file:
+        path: /tmp/tailscale-install.sh
+        state: absent
+
+- name: Check tailscale status
+  ansible.builtin.command: tailscale status --json
+  register: tailscale_status
+  changed_when: false
+  failed_when: false
+
+- name: Configure tailscale
+  ansible.builtin.command: >
+    tailscale up
+    --authkey={{ tailscale_authkey }}
+    --hostname={{ tailscale_hostname }}
+    {% if not tailscale_accept_dns %}--accept-dns=false{% endif %}
+  when: tailscale_status.rc != 0 or (tailscale_status.stdout | from_json).BackendState != "Running"
+  changed_when: true

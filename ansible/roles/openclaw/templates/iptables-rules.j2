@@ -1,0 +1,35 @@
+# OpenClaw network hardening
+# Based on: https://merox.dev/blog/moltbot-proxmox-deployment/
+# Only allow outbound HTTPS/HTTP and Tailscale; restrict inbound to Tailscale
+
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT DROP [0:0]
+
+# Loopback
+-A INPUT -i lo -j ACCEPT
+-A OUTPUT -o lo -j ACCEPT
+
+# Established/related connections
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Tailscale interface (full access)
+-A INPUT -i tailscale0 -j ACCEPT
+-A OUTPUT -o tailscale0 -j ACCEPT
+
+# Tailscale UDP (WireGuard transport)
+-A INPUT -p udp --dport 41641 -j ACCEPT
+-A OUTPUT -p udp --dport 41641 -j ACCEPT
+-A OUTPUT -p udp --dport 3478 -j ACCEPT
+
+# Outbound DNS
+-A OUTPUT -p udp --dport 53 -j ACCEPT
+-A OUTPUT -p tcp --dport 53 -j ACCEPT
+
+# Outbound HTTPS/HTTP (for API providers, npm, updates)
+-A OUTPUT -p tcp --dport 443 -j ACCEPT
+-A OUTPUT -p tcp --dport 80 -j ACCEPT
+
+COMMIT

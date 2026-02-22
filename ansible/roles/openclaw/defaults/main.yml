@@ -1,0 +1,15 @@
+---
+# OpenClaw Role Defaults
+
+# Tailscale
+tailscale_hostname: "openclaw"
+tailscale_accept_dns: false
+
+# Node.js
+nodejs_major_version: 22
+
+# OpenClaw
+openclaw_user: "openclaw"
+openclaw_home: "/home/openclaw"
+openclaw_ollama_host: "http://ollama:11434"
+openclaw_dashboard_port: 1455

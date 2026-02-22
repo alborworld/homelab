@@ -1,0 +1,163 @@
+---
+# OpenClaw AI Assistant for Ubuntu 24.04 LXC
+# Based on: https://merox.dev/blog/moltbot-proxmox-deployment/
+
+# --- Install Node.js 22.x ---
+
+- name: Install prerequisites
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+      - iptables
+    state: present
+    update_cache: true
+
+- name: Download NodeSource setup script
+  ansible.builtin.get_url:
+    url: "https://deb.nodesource.com/setup_{{ nodejs_major_version }}.x"
+    dest: /tmp/nodesource-setup.sh
+    mode: "0755"
+
+- name: Run NodeSource setup script
+  ansible.builtin.command: /tmp/nodesource-setup.sh
+  args:
+    creates: /etc/apt/sources.list.d/nodesource.list
+  changed_when: true
+
+- name: Install Node.js
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
+    update_cache: true
+
+- name: Verify Node.js version
+  ansible.builtin.command: node -v
+  register: node_version
+  changed_when: false
+
+- name: Assert Node.js 22+
+  ansible.builtin.assert:
+    that: "node_version.stdout is version('v22', '>=')"
+    fail_msg: "Node.js 22+ required, got {{ node_version.stdout }}"
+
+- name: Clean up setup script
+  ansible.builtin.file:
+    path: /tmp/nodesource-setup.sh
+    state: absent
+
+# --- Create service user ---
+
+- name: Create openclaw user
+  ansible.builtin.user:
+    name: "{{ openclaw_user }}"
+    system: true
+    shell: /bin/bash
+    home: "{{ openclaw_home }}"
+    create_home: true
+
+# --- Install OpenClaw ---
+
+- name: Check if openclaw is installed
+  ansible.builtin.command: which openclaw
+  register: openclaw_installed
+  changed_when: false
+  failed_when: false
+
+- name: Install openclaw via official CLI installer
+  when: openclaw_installed.rc != 0
+  become: true
+  become_user: "{{ openclaw_user }}"
+  ansible.builtin.shell: |
+    curl -fsSL https://openclaw.ai/install-cli.sh | bash
+  args:
+    creates: "{{ openclaw_home }}/.local/bin/openclaw"
+
+- name: Ensure openclaw bin is in PATH system-wide
+  ansible.builtin.copy:
+    dest: /etc/profile.d/openclaw.sh
+    content: |
+      export PATH="{{ openclaw_home }}/.local/bin:$PATH"
+    mode: "0644"
+
+# --- Configure systemd service ---
+
+- name: Install openclaw systemd service
+  ansible.builtin.template:
+    src: openclaw.service.j2
+    dest: /etc/systemd/system/openclaw.service
+    mode: "0644"
+  notify: Restart openclaw
+
+# --- Security hardening (iptables) ---
+
+- name: Install iptables-persistent
+  ansible.builtin.apt:
+    name: iptables-persistent
+    state: present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Configure firewall rules
+  ansible.builtin.template:
+    src: iptables-rules.j2
+    dest: /etc/iptables/rules.v4
+    mode: "0644"
+  notify: Restore iptables
+
+# --- Tailscale ---
+
+- name: Check if tailscale is installed
+  ansible.builtin.command: which tailscale
+  register: tailscale_installed
+  changed_when: false
+  failed_when: false
+
+- name: Install tailscale
+  when: tailscale_installed.rc != 0
+  block:
+    - name: Download tailscale install script
+      ansible.builtin.get_url:
+        url: https://tailscale.com/install.sh
+        dest: /tmp/tailscale-install.sh
+        mode: "0755"
+
+    - name: Run tailscale install script
+      ansible.builtin.command: /tmp/tailscale-install.sh
+      changed_when: true
+
+    - name: Clean up install script
+      ansible.builtin.file:
+        path: /tmp/tailscale-install.sh
+        state: absent
+
+- name: Check tailscale status
+  ansible.builtin.command: tailscale status --json
+  register: tailscale_status
+  changed_when: false
+  failed_when: false
+
+- name: Configure tailscale
+  ansible.builtin.command: >
+    tailscale up
+    --authkey={{ tailscale_authkey }}
+    --hostname={{ tailscale_hostname }}
+    {% if not tailscale_accept_dns %}--accept-dns=false{% endif %}
+  when: tailscale_status.rc != 0 or (tailscale_status.stdout | from_json).BackendState != "Running"
+  changed_when: true
+
+# --- Post-install notice ---
+# Onboarding is interactive and must be run manually:
+#   ssh openclaw
+#   sudo -u openclaw openclaw onboard
+#
+# The wizard will prompt for:
+#   1. Security acknowledgment
+#   2. Mode selection (QuickStart)
+#   3. Model provider → Ollama → http://ollama:11434
+#   4. Channel setup (Telegram, Slack, etc.)
+#   5. Skills configuration
+#
+# After onboarding, enable the service:
+#   systemctl enable --now openclaw
