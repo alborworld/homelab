@@ -80,3 +80,34 @@ volumes/
 
 # Ansible secrets (plaintext)
 ansible/secrets.yml
+
+# Beads issue tracking
+.beads/dolt/
+.beads/dolt-access.lock
+.beads/bd.sock
+.beads/bd.sock.startlock
+.beads/sync-state.json
+.beads/last-touched
+.beads/.local_version
+.beads/redirect
+.beads/.sync.lock
+.beads/.jsonl.lock
+.beads/sync_base.jsonl
+.beads/export-state/
+.beads/ephemeral.sqlite3*
+.beads/*.db
+.beads/*.db?*
+.beads/*.db-journal
+.beads/*.db-wal
+.beads/*.db-shm
+.beads/bd.db
+.beads/daemon.lock
+.beads/daemon.log
+.beads/daemon-*.log.gz
+.beads/daemon.pid
+.beads/beads.base.jsonl
+.beads/beads.base.meta.json
+.beads/beads.left.jsonl
+.beads/beads.left.meta.json
+.beads/beads.right.jsonl
+.beads/beads.right.meta.json

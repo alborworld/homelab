@@ -23,3 +23,29 @@ When committing:
 
 ## Security & Configuration Tips
 Never commit decrypted `.env` files; purge them with `make clean-<target>` before switching tasks. Keep `SOPS_AGE_KEY_FILE` outside the repo and load it through your shell profile. Prefer dedicated service accounts for Cloudflare, Proxmox, and GitHub runners, rotating tokens per `docs/SECURITY.md`. Redact hostnames (`raspberrypi5`, `diskstation`, `dockerhost`) from shared logs to preserve the homelab’s privacy model.
+
+## Landing the Plane (Session Completion)
+
+**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
+
+**MANDATORY WORKFLOW:**
+
+1. **File issues for remaining work** - Create issues for anything that needs follow-up
+2. **Run quality gates** (if code changed) - Tests, linters, builds
+3. **Update issue status** - Close finished work, update in-progress items
+4. **PUSH TO REMOTE** - This is MANDATORY:
+   ```bash
+   git pull --rebase
+   bd sync
+   git push
+   git status  # MUST show "up to date with origin"
+   ```
+5. **Clean up** - Clear stashes, prune remote branches
+6. **Verify** - All changes committed AND pushed
+7. **Hand off** - Provide context for next session
+
+**CRITICAL RULES:**
+- Work is NOT complete until `git push` succeeds
+- NEVER stop before pushing - that leaves work stranded locally
+- NEVER say "ready to push when you are" - YOU must push
+- If push fails, resolve and retry until it succeeds
