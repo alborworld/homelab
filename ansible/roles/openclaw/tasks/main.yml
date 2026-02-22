@@ -11,6 +11,9 @@
       - curl
       - gnupg
       - iptables
+      - git
+      - build-essential
+      - python3
     state: present
     update_cache: true
 
@@ -72,13 +75,13 @@
   ansible.builtin.shell: |
     curl -fsSL https://openclaw.ai/install-cli.sh | bash
   args:
-    creates: "{{ openclaw_home }}/.local/bin/openclaw"
+    creates: "{{ openclaw_home }}/.openclaw/bin/openclaw"
 
 - name: Ensure openclaw bin is in PATH system-wide
   ansible.builtin.copy:
     dest: /etc/profile.d/openclaw.sh
     content: |
-      export PATH="{{ openclaw_home }}/.local/bin:$PATH"
+      export PATH="{{ openclaw_home }}/.openclaw/bin:$PATH"
     mode: "0644"
 
 # --- Configure systemd service ---

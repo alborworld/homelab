@@ -39,7 +39,7 @@ resource "proxmox_virtual_environment_container" "ollama" {
   }
 
   cpu {
-    cores = 4
+    cores = 6
   }
 
   memory {
