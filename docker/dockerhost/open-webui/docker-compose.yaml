@@ -6,7 +6,7 @@ services:
       - OLLAMA_BASE_URL=https://ollama.home.alborworld.com
       - WEBUI_AUTH=true
     ports:
-      - "3000:8080"
+      - "8080:8080"
     volumes:
       - ${VOLUMEDIR}/open-webui:/app/backend/data
     labels:

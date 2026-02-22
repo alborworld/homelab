@@ -29,6 +29,5 @@ include:
   - tautulli/docker-compose.yaml
   - traefik-kop-dh/docker-compose.yaml
   - open-webui/docker-compose.yaml
-  - open-webui/docker-compose.yaml
   - unmanic/docker-compose.yaml
   - watchtower-dh/docker-compose.yaml
