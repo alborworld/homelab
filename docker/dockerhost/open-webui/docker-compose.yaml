@@ -3,7 +3,7 @@ services:
     image: ghcr.io/open-webui/open-webui:main
     container_name: OpenWebUI
     environment:
-      - OLLAMA_BASE_URL=https://ollama.home.alborworld.com
+      - OLLAMA_BASE_URL=https://ollama.${LOCAL_DOMAIN}
       - WEBUI_AUTH=true
     ports:
       - "8080:8080"
