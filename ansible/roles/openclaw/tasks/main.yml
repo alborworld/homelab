@@ -132,6 +132,17 @@
         path: /tmp/tailscale-install.sh
         state: absent
 
+- name: Enable and start tailscaled
+  ansible.builtin.systemd:
+    name: tailscaled
+    enabled: true
+    state: started
+
+- name: Wait for tailscaled socket
+  ansible.builtin.wait_for:
+    path: /run/tailscale/tailscaled.sock
+    timeout: 30
+
 - name: Check tailscale status
   ansible.builtin.command: tailscale status --json
   register: tailscale_status

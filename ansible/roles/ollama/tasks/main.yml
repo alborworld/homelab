@@ -1,6 +1,17 @@
 ---
 # Ollama LLM Inference Server for Ubuntu 24.04
 
+# --- Prerequisites ---
+
+- name: Install prerequisites
+  ansible.builtin.apt:
+    name:
+      - curl
+      - ca-certificates
+      - zstd
+    state: present
+    update_cache: true
+
 # --- Install Ollama ---
 
 - name: Check if ollama is installed
@@ -92,6 +103,17 @@
       ansible.builtin.file:
         path: /tmp/tailscale-install.sh
         state: absent
+
+- name: Enable and start tailscaled
+  ansible.builtin.systemd:
+    name: tailscaled
+    enabled: true
+    state: started
+
+- name: Wait for tailscaled socket
+  ansible.builtin.wait_for:
+    path: /run/tailscale/tailscaled.sock
+    timeout: 30
 
 - name: Check tailscale status
   ansible.builtin.command: tailscale status --json

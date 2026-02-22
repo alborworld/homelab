@@ -62,11 +62,38 @@ resource "proxmox_virtual_environment_container" "openclaw" {
 }
 
 # ------------------------------------------------------------------------------
+# TUN Device Configuration (required for Tailscale in LXC)
+# Cannot be done via API token - requires SSH to Proxmox host
+# ------------------------------------------------------------------------------
+
+resource "null_resource" "tun_config" {
+  depends_on = [proxmox_virtual_environment_container.openclaw]
+
+  connection {
+    type  = "ssh"
+    user  = "root"
+    host  = local.proxmox_ssh
+    agent = true
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "grep -q 'lxc.cgroup2.devices.allow: c 10:200' /etc/pve/lxc/${local.vmid}.conf || echo 'lxc.cgroup2.devices.allow: c 10:200 rwm' >> /etc/pve/lxc/${local.vmid}.conf",
+      "grep -q 'lxc.mount.entry: /dev/net/tun' /etc/pve/lxc/${local.vmid}.conf || echo 'lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file' >> /etc/pve/lxc/${local.vmid}.conf",
+      "pct reboot ${local.vmid} || true",
+      "sleep 10"
+    ]
+  }
+
+  triggers = { container_id = proxmox_virtual_environment_container.openclaw.id }
+}
+
+# ------------------------------------------------------------------------------
 # SSH Bootstrap (minimal setup for Ansible access)
 # ------------------------------------------------------------------------------
 
 resource "null_resource" "ssh_bootstrap" {
-  depends_on = [proxmox_virtual_environment_container.openclaw]
+  depends_on = [null_resource.tun_config]
 
   connection {
     type  = "ssh"

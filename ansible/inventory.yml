@@ -24,14 +24,14 @@ all:
     ollama_servers:
       hosts:
         ollama:
-          ansible_host: 10.0.4.201  # LAN IP (use Tailscale hostname after provisioning)
+          ansible_host: 10.0.4.123  # LAN IP (use Tailscale hostname after provisioning)
           ansible_user: root
           tailscale_hostname: ollama
 
     openclaw_servers:
       hosts:
         openclaw:
-          ansible_host: 10.0.4.202  # LAN IP (use Tailscale hostname after provisioning)
+          ansible_host: 10.0.4.66  # LAN IP (use Tailscale hostname after provisioning)
           ansible_user: root
           tailscale_hostname: openclaw
           openclaw_ollama_host: "http://ollama:11434"

@@ -1,0 +1,28 @@
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: OpenWebUI
+    environment:
+      - OLLAMA_BASE_URL=https://ollama.home.alborworld.com
+      - WEBUI_AUTH=true
+    ports:
+      - "3000:8080"
+    volumes:
+      - ${VOLUMEDIR}/open-webui:/app/backend/data
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.open-webui.loadbalancer.server.port=8080
+      - traefik.http.routers.open-webui.rule=Host(`chat.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.open-webui.entrypoints=websecure
+      - traefik.http.routers.open-webui.service=open-webui
+      - traefik.http.routers.open-webui.tls=true
+      - traefik.http.routers.open-webui.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=AI
+      - homepage.name=Open WebUI
+      - homepage.icon=open-webui.png
+      - homepage.href=https://chat.${LOCAL_DOMAIN}
+      - homepage.description=Chat with Ollama models
+      - homepage.siteMonitor=https://chat.${LOCAL_DOMAIN}
+    restart: unless-stopped
