@@ -1,39 +1,53 @@
 # Homelab Repository Guidelines
 
+## Issue Tracking: Use Beads
+This project uses **beads** (`bd`) for all issue tracking.
+
+### Required Workflow
+Before starting any work:
+1. Check for ready work:
+   `bd ready`
+2. Pick a task and claim it:
+   `bd update <issue-id> --status=in_progress`
+3. Work on the task (code, tests, docs)
+4. When done, close it:
+   `bd close <issue-id>`
+
+### Creating New Issues
+If you discover new work while implementing:
+`bd create --title="Issue title" --type=task|bug|feature --priority=2`
+
+### Rules
+- ALWAYS check `bd ready` before asking "what should I work on?"
+- ALWAYS update issue status to `in_progress` when you start working
+- ALWAYS close issues when you complete them
+- NEVER use markdown TODO lists for tracking work
+
+## Session Completion
+When ending a work session:
+1. Create beads issues for remaining work (`bd create`)
+2. Close finished tasks (`bd close`), update in-progress items
+3. Run `bd sync` and commit changes
+5. Push to remote if on a feature branch (confirm with user before pushing to main)
+6. Provide context for next session
+
 ## Committing
-
-- Check changes with `git diff` before committing
-- Use single-line commit messages with conventional commits format and gitmoji
-- Avoid Claude attributions
-- Single line mandatory, except for breaking changes (add second line)
-
-## Repository Structure
-
-```
-homelab/
-├── docker/                    # Docker Compose stacks per host
-│   ├── diskstation/          # Synology DS218+ services
-│   ├── dockerhost/           # Proxmox VM (main Docker host)
-│   └── raspberrypi5/         # Edge node (always-on, low-power)
-├── tofu/                      # OpenTofu infrastructure
-│   ├── cloudflare/           # DNS and security rules
-│   ├── garage/               # S3 storage cluster
-│   └── proxmox/              # LXC containers and VMs
-├── ansible/                   # Configuration management
-├── docs/                      # Documentation
-└── Makefile                   # SOPS encryption helpers
-```
+- Check changes with `git diff`
+- Commits must be GPG-signed (verified)
+- Single-line commit messages with conventional commits format
+- No Claude attributions
+- Breaking changes: use `!` after the type/scope, before the colon (e.g. `feat!:` or `feat(scope)!:`) and add a second line explaining what breaks
 
 ## SSH Host Access
 
 All hosts are configured in `~/.ssh/config`:
 
-| Host | User | Description |
-|------|------|-------------|
-| `raspberrypi5` | pi | Edge node - Homepage, AdGuard, Traefik, Home Assistant |
-| `dockerhost` | albor | Proxmox VM - Media stack (Plex, *arr, etc.) |
-| `diskstation` | Alessandro | Synology DS218+ - Storage, Garage S3, backups |
-| `nuc13` | root | Proxmox host - VMs and LXC containers |
+| Host           | User       | Description                                            |
+|----------------|------------|--------------------------------------------------------|
+| `raspberrypi5` | pi         | Edge node - Homepage, AdGuard, Traefik, Home Assistant |
+| `dockerhost`   | albor      | Proxmox VM - Media stack (Plex, *arr, etc.)            |
+| `diskstation`  | Alessandro | Synology DS218+ - Storage, Garage S3, backups          |
+| `nuc13`        | root       | Proxmox host - VMs and LXC containers                  |
 
 ### Accessing LXC Containers
 
@@ -50,11 +64,11 @@ ssh nuc13 "pct exec 200 -- wg show"
 
 Each Docker host has a symlink from `~/docker/compose` to the repo:
 
-| Host | Compose Dir | Volume Dir |
-|------|-------------|------------|
-| raspberrypi5 | `~/docker/compose` → `~/homelab/docker/raspberrypi5` | `~/docker/volumes` |
-| dockerhost | `~/docker/compose` → `~/homelab/docker/dockerhost` | `~/docker/volumes` |
-| diskstation | `/volume1/docker/compose` → `~/homelab/docker/diskstation` | `/volume1/docker` |
+| Host         | Compose Dir                                                | Volume Dir         |
+|--------------|------------------------------------------------------------|--------------------|
+| raspberrypi5 | `~/docker/compose` → `~/homelab/docker/raspberrypi5`       | `~/docker/volumes` |
+| dockerhost   | `~/docker/compose` → `~/homelab/docker/dockerhost`         | `~/docker/volumes` |
+| diskstation  | `/volume1/docker/compose` → `~/homelab/docker/diskstation` | `/volume1/docker`  |
 
 Docker Compose files use these environment variables:
 - `$COMPOSEDIR` - Path to compose files
