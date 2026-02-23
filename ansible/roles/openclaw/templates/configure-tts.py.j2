@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Configure ElevenLabs TTS in openclaw.json.
+"""Configure Edge TTS in openclaw.json.
 
 Idempotent: prints 'changed' only if config was modified.
 """
@@ -11,10 +11,8 @@ CONFIG_PATH = "{{ openclaw_home }}/.openclaw/openclaw.json"
 DESIRED_TTS_CONFIG = {
     "auto": "{{ tts_auto }}",
     "provider": "{{ tts_provider }}",
-    "elevenlabs": {
-        "apiKey": "{{ elevenlabs_api_key }}",
-        "voiceId": "{{ elevenlabs_voice_id }}",
-        "modelId": "{{ elevenlabs_model_id }}"
+    "edge": {
+        "voice": "{{ edge_tts_voice }}"
     }
 }
 

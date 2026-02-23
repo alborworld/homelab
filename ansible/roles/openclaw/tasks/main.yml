@@ -266,7 +266,7 @@
     group: "{{ openclaw_user }}"
     mode: "0755"
 
-- name: Configure ElevenLabs TTS in openclaw.json
+- name: Configure Edge TTS in openclaw.json
   become: true
   become_user: "{{ openclaw_user }}"
   ansible.builtin.command: python3 {{ openclaw_home }}/bin/configure-tts.py
