@@ -238,6 +238,24 @@
   changed_when: "'changed' in configure_whisper.stdout"
   notify: Restart openclaw
 
+# --- TTS (ElevenLabs) ---
+
+- name: Deploy TTS config script
+  ansible.builtin.template:
+    src: configure-tts.py.j2
+    dest: "{{ openclaw_home }}/bin/configure-tts.py"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0755"
+
+- name: Configure ElevenLabs TTS in openclaw.json
+  become: true
+  become_user: "{{ openclaw_user }}"
+  ansible.builtin.command: python3 {{ openclaw_home }}/bin/configure-tts.py
+  register: configure_tts
+  changed_when: "'changed' in configure_tts.stdout"
+  notify: Restart openclaw
+
 # --- Post-install notice ---
 # Onboarding is interactive and must be run manually:
 #   ssh openclaw

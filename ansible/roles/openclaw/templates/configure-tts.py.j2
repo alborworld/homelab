@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""Configure ElevenLabs TTS in openclaw.json.
+
+Idempotent: prints 'changed' only if config was modified.
+"""
+import json
+import sys
+
+CONFIG_PATH = "{{ openclaw_home }}/.openclaw/openclaw.json"
+
+DESIRED_TTS_CONFIG = {
+    "auto": "{{ tts_auto }}",
+    "provider": "{{ tts_provider }}",
+    "elevenlabs": {
+        "apiKey": "{{ elevenlabs_api_key }}",
+        "voiceId": "{{ elevenlabs_voice_id }}",
+        "modelId": "{{ elevenlabs_model_id }}"
+    }
+}
+
+try:
+    with open(CONFIG_PATH) as f:
+        cfg = json.load(f)
+except FileNotFoundError:
+    print("error: openclaw.json not found — run onboarding first", file=sys.stderr)
+    sys.exit(1)
+
+tools = cfg.setdefault("tools", {})
+current = tools.get("tts")
+
+if current == DESIRED_TTS_CONFIG:
+    print("ok")
+    sys.exit(0)
+
+tools["tts"] = DESIRED_TTS_CONFIG
+
+with open(CONFIG_PATH, "w") as f:
+    json.dump(cfg, f, indent=2)
+
+print("changed")

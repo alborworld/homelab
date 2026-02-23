@@ -92,6 +92,7 @@ The homelab runs a local AI stack for LLM inference and assistant capabilities:
 - **Open WebUI → Traefik → Ollama:** Web chat requests are proxied through Traefik to the Ollama API.
 - **OpenClaw → Ollama (Tailscale direct):** The assistant gateway communicates with Ollama directly over the Tailscale mesh.
 - **Voice messages → OpenClaw (Whisper):** Inbound audio messages (e.g., Telegram voice notes) are transcribed locally using faster-whisper before being processed by the assistant.
+- **OpenClaw → ElevenLabs (TTS):** Voice responses are synthesized via ElevenLabs API (multilingual v2), enabling a full voice loop with Telegram.
 
 ### Provisioning
 
