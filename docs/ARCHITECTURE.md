@@ -30,8 +30,8 @@ All hosts are connected via [Tailscale](https://tailscale.com) mesh VPN, enablin
 | diskstation | 100.68.31.112 | 10.0.4.111 | NAS, AdGuard replica |
 | nuc13 | - | 10.0.4.x | Proxmox host |
 | exit-nordvpn-nl | 100.90.91.69 | - | NordVPN Amsterdam exit node (LXC) |
-| ollama | - | 10.0.4.123 | LLM inference server (LXC on nuc13, VMID 201) |
-| openclaw | - | 10.0.4.66 | AI assistant gateway (LXC on nuc13, VMID 202) |
+| ollama | 100.80.30.52 | 10.0.4.123 | LLM inference server (LXC on nuc13, VMID 201) |
+| openclaw | 100.73.237.11 | 10.0.4.66 | AI assistant gateway (LXC on nuc13, VMID 202) |
 
 ### DNS Configuration
 
