@@ -119,6 +119,100 @@ resource "null_resource" "ssh_bootstrap" {
 }
 
 # ------------------------------------------------------------------------------
+# Proxmox Firewall (hypervisor-level, can't be bypassed from inside LXC)
+# ------------------------------------------------------------------------------
+
+resource "proxmox_virtual_environment_firewall_options" "openclaw" {
+  node_name    = var.proxmox_node
+  container_id = local.vmid
+
+  enabled       = true
+  dhcp          = true
+  input_policy  = "DROP"
+  output_policy = "DROP"
+  log_level_in  = "nolog"
+  log_level_out = "nolog"
+
+  depends_on = [proxmox_virtual_environment_container.openclaw]
+}
+
+resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
+  node_name    = var.proxmox_node
+  container_id = local.vmid
+
+  depends_on = [proxmox_virtual_environment_firewall_options.openclaw]
+
+  # --- Inbound ---
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    comment = "SSH from LAN (Ansible provisioning)"
+    source  = "10.0.4.0/24"
+    dport   = "22"
+    proto   = "tcp"
+  }
+
+  rule {
+    type    = "in"
+    action  = "ACCEPT"
+    comment = "Tailscale WireGuard"
+    dport   = "41641"
+    proto   = "udp"
+  }
+
+  # --- Outbound ---
+
+  rule {
+    type    = "out"
+    action  = "ACCEPT"
+    comment = "DNS (UDP)"
+    dport   = "53"
+    proto   = "udp"
+  }
+
+  rule {
+    type    = "out"
+    action  = "ACCEPT"
+    comment = "DNS (TCP)"
+    dport   = "53"
+    proto   = "tcp"
+  }
+
+  rule {
+    type    = "out"
+    action  = "ACCEPT"
+    comment = "Tailscale WireGuard"
+    dport   = "41641"
+    proto   = "udp"
+  }
+
+  rule {
+    type    = "out"
+    action  = "ACCEPT"
+    comment = "Tailscale STUN"
+    dport   = "3478"
+    proto   = "udp"
+  }
+
+  rule {
+    type    = "out"
+    action  = "ACCEPT"
+    comment = "HTTPS (external APIs)"
+    dport   = "443"
+    proto   = "tcp"
+  }
+
+  rule {
+    type    = "out"
+    action  = "ACCEPT"
+    comment = "HTTP (updates)"
+    dport   = "80"
+    proto   = "tcp"
+  }
+}
+
+# ------------------------------------------------------------------------------
 # Outputs (for Ansible inventory)
 # ------------------------------------------------------------------------------
 
