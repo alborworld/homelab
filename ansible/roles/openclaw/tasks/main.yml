@@ -98,6 +98,24 @@
       export PATH="{{ openclaw_home }}/.openclaw/bin:$PATH"
     mode: "0644"
 
+# --- Configure model priority ---
+
+- name: Deploy model config script
+  ansible.builtin.template:
+    src: configure-models.py.j2
+    dest: "{{ openclaw_home }}/bin/configure-models.py"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0755"
+
+- name: Configure model priority in openclaw.json
+  become: true
+  become_user: "{{ openclaw_user }}"
+  ansible.builtin.command: python3 {{ openclaw_home }}/bin/configure-models.py
+  register: configure_models
+  changed_when: "'changed' in configure_models.stdout"
+  notify: Restart openclaw
+
 # --- Configure systemd service ---
 
 - name: Install openclaw systemd service

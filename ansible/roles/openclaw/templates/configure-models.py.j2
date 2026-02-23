@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Configure ElevenLabs TTS in openclaw.json.
+"""Configure model priority in openclaw.json.
 
 Idempotent: prints 'changed' only if config was modified.
 """
@@ -8,14 +8,9 @@ import sys
 
 CONFIG_PATH = "{{ openclaw_home }}/.openclaw/openclaw.json"
 
-DESIRED_TTS_CONFIG = {
-    "auto": "{{ tts_auto }}",
-    "provider": "{{ tts_provider }}",
-    "elevenlabs": {
-        "apiKey": "{{ elevenlabs_api_key }}",
-        "voiceId": "{{ elevenlabs_voice_id }}",
-        "modelId": "{{ elevenlabs_model_id }}"
-    }
+DESIRED_MODEL_CONFIG = {
+    "primary": "{{ openclaw_primary_model }}",
+    "fallbacks": ["{{ openclaw_fallback_model }}"]
 }
 
 try:
@@ -25,13 +20,13 @@ except FileNotFoundError:
     print("error: openclaw.json not found — run onboarding first", file=sys.stderr)
     sys.exit(1)
 
-current = cfg.get("tts")
+current = cfg.get("agents", {}).get("defaults", {}).get("model")
 
-if current == DESIRED_TTS_CONFIG:
+if current == DESIRED_MODEL_CONFIG:
     print("ok")
     sys.exit(0)
 
-cfg["tts"] = DESIRED_TTS_CONFIG
+cfg.setdefault("agents", {}).setdefault("defaults", {})["model"] = DESIRED_MODEL_CONFIG
 
 with open(CONFIG_PATH, "w") as f:
     json.dump(cfg, f, indent=2)
