@@ -11,9 +11,6 @@ WorkingDirectory={{ openclaw_home }}
 Environment="HOME={{ openclaw_home }}"
 Environment="PATH={{ openclaw_home }}/.openclaw/bin:/usr/local/bin:/usr/bin:/bin"
 Environment="OLLAMA_HOST={{ openclaw_ollama_host }}"
-Environment="XDG_RUNTIME_DIR=/run/user/%(uid)"
-Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%(uid)/bus"
-ExecStartPre=/bin/bash -c 'mkdir -p /run/user/%(uid) && chown %U /run/user/%(uid)'
 ExecStart={{ openclaw_home }}/.openclaw/bin/openclaw gateway start
 Restart=on-failure
 RestartSec=10
