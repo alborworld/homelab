@@ -60,6 +60,20 @@
     home: "{{ openclaw_home }}"
     create_home: true
 
+- name: Get openclaw user UID
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ openclaw_user }}"
+
+- name: Set openclaw UID fact
+  ansible.builtin.set_fact:
+    openclaw_uid: "{{ getent_passwd[openclaw_user][1] }}"
+
+- name: Enable loginctl linger for openclaw user
+  ansible.builtin.command: loginctl enable-linger {{ openclaw_user }}
+  args:
+    creates: /var/lib/systemd/linger/{{ openclaw_user }}
+
 # --- Install OpenClaw ---
 
 - name: Check if openclaw is installed
