@@ -1,5 +1,5 @@
 ---
-# Beszel Agent installation for Alpine Linux
+# Beszel Agent installation (Alpine + Ubuntu)
 
 - name: Check if beszel-agent is installed
   ansible.builtin.stat:
@@ -18,11 +18,21 @@
     beszel_version: "{{ beszel_release.json.tag_name | regex_replace('^v', '') }}"
   when: beszel_release is not skipped
 
-- name: Install tar for extraction
+- name: Install tar (Alpine)
   community.general.apk:
     name: tar
     state: present
-  when: not beszel_binary.stat.exists
+  when:
+    - ansible_os_family == "Alpine"
+    - not beszel_binary.stat.exists
+
+- name: Install tar (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: tar
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+    - not beszel_binary.stat.exists
 
 - name: Download beszel-agent
   ansible.builtin.get_url:
@@ -55,7 +65,9 @@
     mode: "0600"
   notify: Restart beszel-agent
 
-- name: Create beszel-agent wrapper script
+# --- Alpine (OpenRC) ---
+
+- name: Create beszel-agent wrapper script (Alpine)
   ansible.builtin.copy:
     dest: /usr/local/bin/beszel-agent-wrapper
     content: |
@@ -66,8 +78,9 @@
       exec /usr/local/bin/beszel-agent
     mode: "0755"
   notify: Restart beszel-agent
+  when: ansible_os_family == "Alpine"
 
-- name: Create OpenRC init script
+- name: Create OpenRC init script (Alpine)
   ansible.builtin.copy:
     dest: /etc/init.d/beszel-agent
     content: |
@@ -87,12 +100,50 @@
       }
     mode: "0755"
   notify: Restart beszel-agent
+  when: ansible_os_family == "Alpine"
 
-- name: Enable beszel-agent at boot
+- name: Enable beszel-agent at boot (Alpine)
   ansible.builtin.service:
     name: beszel-agent
     enabled: true
     runlevel: default
+  when: ansible_os_family == "Alpine"
+
+# --- Debian/Ubuntu (systemd) ---
+
+- name: Create systemd unit file (Debian/Ubuntu)
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/beszel-agent.service
+    content: |
+      [Unit]
+      Description=Beszel Agent - Lightweight server monitoring
+      After=network-online.target
+      Wants=network-online.target
+
+      [Service]
+      EnvironmentFile=/etc/beszel/beszel-agent.env
+      ExecStart=/usr/local/bin/beszel-agent
+      Restart=on-failure
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
+    mode: "0644"
+  notify: Restart beszel-agent
+  when: ansible_os_family == "Debian"
+
+- name: Reload systemd daemon (Debian/Ubuntu)
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: ansible_os_family == "Debian"
+
+- name: Enable beszel-agent at boot (Debian/Ubuntu)
+  ansible.builtin.systemd:
+    name: beszel-agent
+    enabled: true
+  when: ansible_os_family == "Debian"
+
+# --- Common ---
 
 - name: Start beszel-agent
   ansible.builtin.service:
