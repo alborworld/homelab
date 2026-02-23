@@ -95,7 +95,7 @@ The homelab runs a local AI stack for LLM inference and assistant capabilities:
 
 ### Provisioning
 
-LXC containers (Ollama, OpenClaw) are provisioned using **OpenTofu** (container creation on Proxmox) and **Ansible** (software installation, Tailscale enrollment, firewall configuration). Infrastructure definitions live in `tofu/proxmox/` and playbooks in `ansible/`.
+LXC containers (Ollama, OpenClaw) are provisioned using **OpenTofu** (container creation on Proxmox) and **Ansible** (software installation, Tailscale enrollment, firewall configuration). Infrastructure definitions live in `tofu/proxmox/` and playbooks in `ansible/`. The OpenClaw Ansible role also installs faster-whisper in a Python venv and configures `openclaw.json` to use it as a CLI-based audio transcription provider.
 
 ## Storage & Backups
 

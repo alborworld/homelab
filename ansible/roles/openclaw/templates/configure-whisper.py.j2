@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+"""Configure Whisper audio transcription in openclaw.json.
+
+Idempotent: prints 'changed' only if config was modified.
+"""
+import json
+import sys
+
+CONFIG_PATH = "{{ openclaw_home }}/.openclaw/openclaw.json"
+
+DESIRED_AUDIO_CONFIG = {
+    "enabled": True,
+{% if whisper_language %}
+    "language": "{{ whisper_language }}",
+{% endif %}
+    "models": [
+        {
+            "command": "{{ openclaw_home }}/bin/transcribe",
+            "args": ["{% raw %}{{MediaPath}}{% endraw %}"]
+        }
+    ]
+}
+
+try:
+    with open(CONFIG_PATH) as f:
+        cfg = json.load(f)
+except FileNotFoundError:
+    print("error: openclaw.json not found — run onboarding first", file=sys.stderr)
+    sys.exit(1)
+
+tools = cfg.setdefault("tools", {})
+media = tools.setdefault("media", {})
+current = media.get("audio")
+
+if current == DESIRED_AUDIO_CONFIG:
+    print("ok")
+    sys.exit(0)
+
+media["audio"] = DESIRED_AUDIO_CONFIG
+
+with open(CONFIG_PATH, "w") as f:
+    json.dump(cfg, f, indent=2)
+
+print("changed")

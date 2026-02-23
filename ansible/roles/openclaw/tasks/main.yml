@@ -208,6 +208,22 @@
     group: "{{ openclaw_user }}"
     mode: "0755"
 
+- name: Deploy whisper config script
+  ansible.builtin.template:
+    src: configure-whisper.py.j2
+    dest: "{{ openclaw_home }}/bin/configure-whisper.py"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0755"
+
+- name: Configure audio transcription in openclaw.json
+  become: true
+  become_user: "{{ openclaw_user }}"
+  ansible.builtin.command: python3 {{ openclaw_home }}/bin/configure-whisper.py
+  register: configure_whisper
+  changed_when: "'changed' in configure_whisper.stdout"
+  notify: Restart openclaw
+
 # --- Post-install notice ---
 # Onboarding is interactive and must be run manually:
 #   ssh openclaw
@@ -226,5 +242,3 @@
 # Whisper transcription:
 #   Test with: sudo -u openclaw /home/openclaw/bin/transcribe /path/to/audio.ogg
 #   The transcribe wrapper uses the venv at {{ whisper_venv_path }}
-#   To hook into OpenClaw message flow, configure the inbound handler
-#   to call the transcribe script for audio/* messages.
