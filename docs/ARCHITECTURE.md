@@ -30,6 +30,8 @@ All hosts are connected via [Tailscale](https://tailscale.com) mesh VPN, enablin
 | diskstation | 100.68.31.112 | 10.0.4.111 | NAS, AdGuard replica |
 | nuc13 | - | 10.0.4.x | Proxmox host |
 | exit-nordvpn-nl | 100.90.91.69 | - | NordVPN Amsterdam exit node (LXC) |
+| ollama | - | 10.0.4.123 | LLM inference server (LXC on nuc13, VMID 201) |
+| openclaw | - | 10.0.4.66 | AI assistant gateway (LXC on nuc13, VMID 202) |
 
 ### DNS Configuration
 
@@ -71,11 +73,28 @@ Admin console: https://login.tailscale.com/admin
 ## Service Orchestration
 
 - **Docker Compose** is used for container orchestration on all nodes.
-- **Proxmox VE** manages VMs, including the main Dockerhost.
+- **Proxmox VE** manages VMs and LXC containers, including the Dockerhost VM and dedicated LXCs for AI services.
 - **Traefik** acts as a reverse proxy, providing SSL termination and service discovery across hosts.
 - **AdGuard Home** provides high-availability DNS, running on both the Raspberry Pi and DiskStation (DS218+) - using [AdGuard Home Sync]](https://github.com/bakito/adguardhome-sync).
 - **Watchtower** automates container updates.
 - **SOPS** is used for secrets management, with all sensitive environment variables encrypted and version-controlled.
+
+## AI Services
+
+The homelab runs a local AI stack for LLM inference and assistant capabilities:
+
+- **Ollama** — LXC container on nuc13 (VMID 201, 6 cores / 12 GB RAM). Serves LLM models via its API at `ollama.home.alborworld.com`. Acts as the shared inference backend for all AI services.
+- **OpenClaw** — LXC container on nuc13 (VMID 202, 2 cores / 4 GB RAM). AI assistant gateway with Telegram bot integration. Dashboard at `openclaw.home.alborworld.com`.
+- **Open WebUI** — Docker container on dockerhost. Provides a chat interface at `chat.home.alborworld.com`, connecting to Ollama through Traefik for model inference.
+
+### Communication Flow
+
+- **Open WebUI → Traefik → Ollama:** Web chat requests are proxied through Traefik to the Ollama API.
+- **OpenClaw → Ollama (Tailscale direct):** The assistant gateway communicates with Ollama directly over the Tailscale mesh.
+
+### Provisioning
+
+LXC containers (Ollama, OpenClaw) are provisioned using **OpenTofu** (container creation on Proxmox) and **Ansible** (software installation, Tailscale enrollment, firewall configuration). Infrastructure definitions live in `tofu/proxmox/` and playbooks in `ansible/`.
 
 ## Storage & Backups
 
@@ -83,7 +102,7 @@ Admin console: https://login.tailscale.com/admin
 - The DS214 is dedicated to backups and is located in a separate physical location for additional redundancy.
 - Persistent data for containers is stored in host-specific `volumes/` directories, which are excluded from version control.
 - **Backups follow the 3-2-1 approach:**
-  - **Proxmox Backup Server** backs up all VMs to the DS218+ NAS, ensuring virtual machine data is protected and efficiently stored through deduplication.
+  - **Proxmox Backup Server** backs up all VMs and LXC containers to the DS218+ NAS, ensuring data is protected and efficiently stored through deduplication.
   - For the Raspberry Pi 5, `raspiBackup` is used to create regular full-image backups of the 64 GB SD card, providing comprehensive recovery options.
   - **HyperBackup** is used to back up the DS218+ NAS to a 5 TB USB drive, providing an additional local copy.
   - **HyperBackup** also backs up the DS214 NAS, which is kept offsite, ensuring geographic redundancy and protection against local disasters.
@@ -95,12 +114,17 @@ Admin console: https://login.tailscale.com/admin
 - Access to the homelab is restricted via VPN and firewall rules.
 - Automated updates and monitoring are in place to ensure system health and minimize vulnerabilities.
 - **Single Sign-On (SSO):** PocketID is used to provide secure SSO (via OIDC and passkey) for several services, including Portainer, Proxmox VE, Proxmox Backup Server, Synology Diskstation, Home Assistant, Beszel, and others.
+- **LXC isolation:** Containers run unprivileged with strict iptables rules (default DROP input policy, allowlisted ports only).
+- **Tailscale mesh** provides encrypted inter-service communication without exposing ports to the LAN.
+- **AI service dashboards** (Open WebUI, OpenClaw) are accessible only via Tailscale VPN — not exposed to the public internet.
 
 ## Automation & CI/CD
 
 - Infrastructure as Code: All configuration is managed via Git.
 - CI/CD pipelines (via GitLab Runner) are used for testing and deploying configuration changes.
-- Ansible and Terraform/OpenTofu are planned for further automation of VM provisioning and configuration.
+- **OpenTofu** provisions Proxmox LXC containers and VMs, with state stored in Garage S3.
+- **Ansible** handles post-provisioning configuration (software install, Tailscale enrollment, firewall rules).
+- Together, OpenTofu + Ansible manage the full lifecycle of LXC containers (e.g., Ollama, OpenClaw) and VMs.
 
 ## Roadmap
 
