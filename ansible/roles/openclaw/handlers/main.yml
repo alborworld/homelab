@@ -3,6 +3,7 @@
   ansible.builtin.systemd:
     name: openclaw
     state: restarted
+    enabled: true
     daemon_reload: true
 
 - name: Restore iptables
