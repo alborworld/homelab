@@ -28,4 +28,4 @@
 
   roles:
     - openclaw
-    # TODO: beszel_agent role needs Ubuntu support (currently Alpine-only)
+    - beszel_agent
