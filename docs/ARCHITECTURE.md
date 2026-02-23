@@ -84,13 +84,14 @@ Admin console: https://login.tailscale.com/admin
 The homelab runs a local AI stack for LLM inference and assistant capabilities:
 
 - **Ollama** — LXC container on nuc13 (VMID 201, 6 cores / 12 GB RAM). Serves LLM models via its API at `ollama.home.alborworld.com`. Acts as the shared inference backend for all AI services.
-- **OpenClaw** — LXC container on nuc13 (VMID 202, 2 cores / 4 GB RAM). AI assistant gateway with Telegram bot integration. Dashboard at `openclaw.home.alborworld.com`.
+- **OpenClaw** — LXC container on nuc13 (VMID 202, 2 cores / 4 GB RAM). AI assistant gateway with Telegram bot integration. Includes Whisper-based audio transcription (faster-whisper, CPU) for voice message processing. Dashboard at `openclaw.home.alborworld.com`.
 - **Open WebUI** — Docker container on dockerhost. Provides a chat interface at `chat.home.alborworld.com`, connecting to Ollama through Traefik for model inference.
 
 ### Communication Flow
 
 - **Open WebUI → Traefik → Ollama:** Web chat requests are proxied through Traefik to the Ollama API.
 - **OpenClaw → Ollama (Tailscale direct):** The assistant gateway communicates with Ollama directly over the Tailscale mesh.
+- **Voice messages → OpenClaw (Whisper):** Inbound audio messages (e.g., Telegram voice notes) are transcribed locally using faster-whisper before being processed by the assistant.
 
 ### Provisioning
 

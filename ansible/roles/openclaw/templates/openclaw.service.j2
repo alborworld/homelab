@@ -9,7 +9,7 @@ User={{ openclaw_user }}
 Group={{ openclaw_user }}
 WorkingDirectory={{ openclaw_home }}
 Environment="HOME={{ openclaw_home }}"
-Environment="PATH={{ openclaw_home }}/.openclaw/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PATH={{ openclaw_home }}/bin:{{ openclaw_home }}/.openclaw/bin:/usr/local/bin:/usr/bin:/bin"
 Environment="OLLAMA_HOST={{ openclaw_ollama_host }}"
 ExecStart={{ openclaw_home }}/.openclaw/bin/openclaw gateway start
 Restart=on-failure

@@ -161,6 +161,53 @@
   when: tailscale_status.rc != 0 or (tailscale_status.stdout | from_json).BackendState != "Running"
   changed_when: true
 
+# --- Whisper audio transcription ---
+
+- name: Install ffmpeg for audio processing
+  ansible.builtin.apt:
+    name: ffmpeg
+    state: present
+
+- name: Install python3-venv
+  ansible.builtin.apt:
+    name: python3-venv
+    state: present
+
+- name: Create whisper virtualenv with faster-whisper
+  become: true
+  become_user: "{{ openclaw_user }}"
+  ansible.builtin.pip:
+    name: faster-whisper
+    virtualenv: "{{ whisper_venv_path }}"
+    virtualenv_command: python3 -m venv
+    state: present
+
+- name: Create bin directory for openclaw user
+  ansible.builtin.file:
+    path: "{{ openclaw_home }}/bin"
+    state: directory
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0755"
+
+- name: Deploy transcribe_ogg.py script
+  ansible.builtin.template:
+    src: transcribe_ogg.py.j2
+    dest: "{{ openclaw_home }}/bin/transcribe_ogg.py"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0755"
+
+- name: Create whisper wrapper script (uses venv python)
+  ansible.builtin.copy:
+    dest: "{{ openclaw_home }}/bin/transcribe"
+    content: |
+      #!/bin/bash
+      exec {{ whisper_venv_path }}/bin/python {{ openclaw_home }}/bin/transcribe_ogg.py "$@"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0755"
+
 # --- Post-install notice ---
 # Onboarding is interactive and must be run manually:
 #   ssh openclaw
@@ -175,3 +222,9 @@
 #
 # After onboarding, enable the service:
 #   systemctl enable --now openclaw
+#
+# Whisper transcription:
+#   Test with: sudo -u openclaw /home/openclaw/bin/transcribe /path/to/audio.ogg
+#   The transcribe wrapper uses the venv at {{ whisper_venv_path }}
+#   To hook into OpenClaw message flow, configure the inbound handler
+#   to call the transcribe script for audio/* messages.
