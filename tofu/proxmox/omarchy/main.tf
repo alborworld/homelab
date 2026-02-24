@@ -42,9 +42,9 @@ resource "proxmox_virtual_environment_vm" "omarchy" {
 
   boot_order = ["scsi0"]
 
-  # SPICE display with QXL
+  # VirtIO GPU for Wayland compatibility
   vga {
-    type   = "qxl"
+    type   = "virtio"
     memory = 128
   }
 

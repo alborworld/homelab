@@ -62,23 +62,22 @@
     enabled: true
     state: started
 
-# --- wayvnc (remote desktop) ---
+# --- Sunshine (remote desktop via Moonlight) ---
 
-- name: Install wayvnc
-  community.general.pacman:
-    name: wayvnc
-    state: present
+- name: Check if sunshine is installed
+  ansible.builtin.command: which sunshine
+  register: sunshine_installed
+  changed_when: false
+  failed_when: false
 
-- name: Create wayvnc start script
-  ansible.builtin.template:
-    src: wayvnc-start.sh.j2
-    dest: /usr/local/bin/wayvnc-start
-    mode: "0755"
+- name: Install sunshine from AUR
+  ansible.builtin.command: yay -S --noconfirm sunshine
+  become: false
+  when: sunshine_installed.rc != 0
 
-- name: Add wayvnc to Hyprland autostart
-  ansible.builtin.lineinfile:
-    path: /home/{{ ansible_user }}/.config/hypr/autostart.conf
-    line: "exec-once = uwsm-app -- /usr/local/bin/wayvnc-start"
-    regexp: "wayvnc-start"
-    create: false
+- name: Enable sunshine service
+  ansible.builtin.systemd:
+    name: sunshine
+    enabled: true
+    scope: user
   become: false
