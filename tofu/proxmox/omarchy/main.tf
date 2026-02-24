@@ -1,15 +1,9 @@
 # Omarchy Desktop VM
-# OpenTofu creates VM with Omarchy ISO attached; manual install via SPICE console
 # Post-install: Ansible handles Tailscale + SSH access
-#
-# Prerequisites:
-#   Download Omarchy ISO to diskstation before applying:
-#   ssh nuc13 "wget -O /mnt/pve/diskstation/template/iso/omarchy-3.3.2.iso https://iso.omarchy.org/omarchy-3.3.2.iso"
 
 locals {
   vmid     = 103
   hostname = "omarchy"
-  iso_id   = "diskstation:iso/omarchy-3.3.2.iso"
 }
 
 # ------------------------------------------------------------------------------
@@ -46,13 +40,7 @@ resource "proxmox_virtual_environment_vm" "omarchy" {
 
   scsi_hardware = "virtio-scsi-single"
 
-  # Install ISO
-  cdrom {
-    file_id   = local.iso_id
-    interface = "ide2"
-  }
-
-  boot_order = ["ide2", "scsi0"]
+  boot_order = ["scsi0"]
 
   # SPICE display with QXL
   vga {
@@ -75,7 +63,7 @@ resource "proxmox_virtual_environment_vm" "omarchy" {
   }
 
   lifecycle {
-    ignore_changes = [started]
+    ignore_changes = [started, cdrom]
   }
 }
 
