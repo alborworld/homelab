@@ -1,0 +1,3 @@
+---
+tailscale_hostname: omarchy
+tailscale_accept_dns: true

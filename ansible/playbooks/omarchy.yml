@@ -1,0 +1,22 @@
+---
+# Post-install provisioning for Omarchy Desktop VM
+#
+# Prerequisites:
+#   1. VM created via OpenTofu (tofu/proxmox/omarchy)
+#   2. Omarchy installed manually via SPICE console
+#   3. SSH access enabled (openssh installed and user created during Omarchy setup)
+#
+# Usage:
+#   cd ansible
+#   ansible-playbook playbooks/omarchy.yml -e @secrets.yml
+#
+# Required variables (in secrets.yml or via -e):
+#   - tailscale_authkey: Tailscale auth key
+
+- name: Provision Omarchy Desktop VM
+  hosts: omarchy_desktops
+  gather_facts: true
+
+  roles:
+    - omarchy
+    - beszel_agent
