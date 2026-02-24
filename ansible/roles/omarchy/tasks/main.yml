@@ -61,3 +61,24 @@
     name: sshd
     enabled: true
     state: started
+
+# --- wayvnc (remote desktop) ---
+
+- name: Install wayvnc
+  community.general.pacman:
+    name: wayvnc
+    state: present
+
+- name: Create wayvnc start script
+  ansible.builtin.template:
+    src: wayvnc-start.sh.j2
+    dest: /usr/local/bin/wayvnc-start
+    mode: "0755"
+
+- name: Add wayvnc to Hyprland autostart
+  ansible.builtin.lineinfile:
+    path: /home/{{ ansible_user }}/.config/hypr/autostart.conf
+    line: "exec-once = uwsm-app -- /usr/local/bin/wayvnc-start"
+    regexp: "wayvnc-start"
+    create: false
+  become: false

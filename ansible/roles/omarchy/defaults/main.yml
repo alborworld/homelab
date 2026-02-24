@@ -1,3 +1,7 @@
 ---
 tailscale_hostname: omarchy
 tailscale_accept_dns: true
+
+# wayvnc
+wayvnc_port: 5900
+wayvnc_max_fps: 30
