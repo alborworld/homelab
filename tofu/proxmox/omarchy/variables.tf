@@ -33,10 +33,3 @@ variable "ssh_public_key_path" {
   type        = string
   default     = "/root/.ssh/id_rsa.pub"
 }
-
-# Omarchy ISO
-variable "omarchy_iso_checksum" {
-  description = "SHA256 checksum of the Omarchy ISO (omit to skip verification)"
-  type        = string
-  default     = ""
-}
