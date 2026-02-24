@@ -17,8 +17,8 @@ resource "proxmox_virtual_environment_container" "ollama" {
   vm_id         = local.vmid
   description   = "Ollama LLM inference server"
   tags          = ["ollama", "ai", "tailscale"]
-  started       = true
-  start_on_boot = true
+  started       = false
+  start_on_boot = false
 
   initialization {
     hostname = local.hostname
@@ -57,7 +57,7 @@ resource "proxmox_virtual_environment_container" "ollama" {
   }
 
   lifecycle {
-    ignore_changes = [started]
+    ignore_changes = []
   }
 }
 
