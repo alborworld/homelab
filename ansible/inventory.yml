@@ -35,11 +35,3 @@ all:
           ansible_user: root
           tailscale_hostname: openclaw
           openclaw_ollama_host: "http://ollama:11434"
-
-    omarchy_desktops:
-      hosts:
-        omarchy:
-          ansible_host: 10.0.4.72
-          ansible_user: albor
-          ansible_become_password: ""
-          tailscale_hostname: omarchy
