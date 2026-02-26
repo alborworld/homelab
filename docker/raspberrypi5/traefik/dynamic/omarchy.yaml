@@ -1,0 +1,22 @@
+---
+http:
+  routers:
+    omarchy:
+      rule: "Host(`omarchy.home.alborworld.com`)"
+      service: omarchy
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+
+  services:
+    omarchy:
+      loadBalancer:
+        servers:
+          - url: "https://omarchy.home:47990"
+        passHostHeader: true
+        serversTransport: insecureTransport
+
+  serversTransports:
+    insecureTransport:
+      insecureSkipVerify: true
