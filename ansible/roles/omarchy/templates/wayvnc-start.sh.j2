@@ -1,0 +1,5 @@
+#!/bin/bash
+# Start wayvnc on all interfaces (accessible via LAN and Tailscale)
+# Managed by Ansible - do not edit manually
+
+exec wayvnc -f {{ wayvnc_max_fps }} 0.0.0.0 {{ wayvnc_port }}
