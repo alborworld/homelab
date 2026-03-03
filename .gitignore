@@ -111,3 +111,6 @@ ansible/secrets.yml
 .beads/beads.left.meta.json
 .beads/beads.right.jsonl
 .beads/beads.right.meta.json
+
+# Dolt database files (added by bd init)
+.dolt/
