@@ -1,0 +1,13 @@
+{
+  "last_dolt_commit": "t0kq7usssmha4v1083h4sclnj0toa07j",
+  "last_event_id": 0,
+  "timestamp": "2026-03-03T09:14:28.208393Z",
+  "counts": {
+    "issues": 30,
+    "events": 88,
+    "comments": 0,
+    "dependencies": 28,
+    "labels": 0,
+    "config": 13
+  }
+}
