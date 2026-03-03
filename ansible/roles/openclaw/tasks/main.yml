@@ -76,20 +76,38 @@
 
 # --- Install OpenClaw ---
 
-- name: Check if openclaw is installed
-  ansible.builtin.command: which openclaw
-  register: openclaw_installed
+- name: Get current openclaw version
+  ansible.builtin.command: "{{ openclaw_home }}/.openclaw/bin/openclaw --version"
+  register: openclaw_version_before
   changed_when: false
   failed_when: false
 
-- name: Install openclaw via official CLI installer
-  when: openclaw_installed.rc != 0
+- name: Install or update openclaw via official CLI installer
   become: true
   become_user: "{{ openclaw_user }}"
   ansible.builtin.shell: |
     curl -fsSL https://openclaw.ai/install-cli.sh | bash
-  args:
-    creates: "{{ openclaw_home }}/.openclaw/bin/openclaw"
+  register: openclaw_install
+
+- name: Get updated openclaw version
+  ansible.builtin.command: "{{ openclaw_home }}/.openclaw/bin/openclaw --version"
+  register: openclaw_version_after
+  changed_when: false
+
+- name: Set openclaw changed fact
+  ansible.builtin.set_fact:
+    openclaw_updated: "{{ openclaw_version_before.stdout | default('') != openclaw_version_after.stdout }}"
+
+- name: Report openclaw version
+  ansible.builtin.debug:
+    msg: "OpenClaw {{ openclaw_version_after.stdout }}{{ ' (updated from ' + openclaw_version_before.stdout + ')' if openclaw_updated else '' }}"
+
+- name: Restart openclaw if updated
+  ansible.builtin.debug:
+    msg: "OpenClaw was updated, triggering restart"
+  when: openclaw_updated
+  changed_when: true
+  notify: Restart openclaw
 
 - name: Ensure openclaw bin is in PATH system-wide
   ansible.builtin.copy:
