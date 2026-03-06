@@ -31,4 +31,11 @@ services:
     volumes:
       - ${VOLUMEDIR}/gluetun:/gluetun
       - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ["CMD-SHELL", "/gluetun-entrypoint healthcheck"]
+      interval: 10s
+      timeout: 5s
+      start_period: 120s
+      start_interval: 5s
+      retries: 3
     restart: always
