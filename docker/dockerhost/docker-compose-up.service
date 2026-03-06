@@ -1,0 +1,17 @@
+[Unit]
+Description=Recreate Docker Compose services on boot
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+User=albor
+ExecStart=/home/albor/docker/compose/scripts/compose-up.sh
+StandardOutput=journal
+StandardError=journal
+# 5 retries * (compose up + 5s check + 30s wait) ~ 5 min max
+TimeoutStartSec=600
+
+[Install]
+WantedBy=multi-user.target

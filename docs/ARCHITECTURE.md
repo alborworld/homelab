@@ -79,6 +79,26 @@ Admin console: https://login.tailscale.com/admin
 - **Watchtower** automates container updates.
 - **SOPS** is used for secrets management, with all sensitive environment variables encrypted and version-controlled.
 
+### Dockerhost Boot Sequence
+
+The NUC13 powers off nightly (midnight–6:15am) to save energy. The dockerhost VM (VMID 100) has `onboot: 1` in Proxmox, so it starts automatically when the host powers on. The boot sequence is:
+
+1. **Proxmox starts VM 100** (no explicit startup order)
+2. **Docker service starts** (with a 10s sleep pre-start override + ~13s startup)
+3. **`docker-compose-up.service`** runs `docker compose up -d` via `scripts/compose-up.sh`
+
+The systemd service is necessary because Docker's built-in `restart: always` policy cannot handle the Gluetun VPN dependency correctly on boot — see below.
+
+### VPN Dependency (Gluetun)
+
+The media automation stack (Sonarr, Radarr, Prowlarr, qBittorrent, NZBget, Readarr, Cleanuparr, Huntarr, Agregarr, Byparr) routes all traffic through a Gluetun VPN container using `network_mode: "service:gluetun"`. This creates a hard kernel-level network namespace binding to Gluetun's container ID.
+
+**Why `restart: always` fails on boot:** When the VM restarts, Docker restores containers but Gluetun gets a new container ID. Dependent containers still reference the old ID in their network namespace, failing with `exit 128: joining network namespace of container: No such container`. Docker's restart policy just re-starts the broken container — it cannot recreate the namespace link.
+
+**The fix:** `docker-compose-up.service` runs `docker compose up -d` after Docker starts. Unlike restart policies, `docker compose up` **recreates** containers with stale network references. The startup script (`scripts/compose-up.sh`) includes retry logic (5 attempts, 30s apart) to handle cases where Gluetun's VPN takes time to connect and become healthy.
+
+Gluetun's Docker healthcheck has a `start_period: 120s` to give the VPN enough time to cycle through NordVPN servers before being marked unhealthy.
+
 ## AI Services
 
 The homelab runs a local AI stack for LLM inference and assistant capabilities:
