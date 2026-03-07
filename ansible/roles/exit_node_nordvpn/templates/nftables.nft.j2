@@ -63,7 +63,13 @@ table inet filter {
         udp dport 53 accept
         tcp dport 53 accept
 
-        # Allow HTTPS/HTTP for Tailscale control plane and DERP
+        # Allow Tailscale control plane traffic (tailscaled marks its packets with fwmark 0x80000)
+        # This ensures Tailscale can always reach controlplane.tailscale.com and DERP servers
+        # regardless of boot ordering or WireGuard state
+        meta mark & 0xff0000 == 0x80000 accept
+
+        # Allow HTTP/HTTPS for health checks and API calls
+        # Routes via wg0 when VPN is up, falls back to eth0 when VPN is down
         tcp dport { 80, 443 } accept
 
         # Allow Tailscale UDP (DERP and direct)

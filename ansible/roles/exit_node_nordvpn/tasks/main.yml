@@ -18,7 +18,6 @@
       - jq
     state: present
     update_cache: true
-    upgrade: true
 
 # ------------------------------------------------------------------------------
 # IP Forwarding
@@ -67,10 +66,14 @@
     content: |
       #!/bin/sh
       wg-quick up wg0
-      # Fix: Tailscale IPs must use table 52, not wg-quick's table 51820
+      # Tailscale control plane bypass: route fwmark 0x80000 packets via eth0
+      # wg-quick auto-places its catch-all rule just below existing rules, so we
+      # must add ours AFTER wg-quick with a priority below its suppress_prefixlength rule
+      WG_PRIO=$(ip rule list | grep suppress_prefixlength | head -1 | awk -F: '{print $1}')
+      ip rule add fwmark 0x80000/0xff0000 lookup main priority $((WG_PRIO - 1)) 2>/dev/null || true
+      # Tailscale IPs (100.64.0.0/10) use table 52 instead of wg-quick's table 51820
       ip rule add to 100.64.0.0/10 lookup 52 priority 5200 2>/dev/null || true
-      # Route Tailscale control plane traffic via eth0, not through WireGuard tunnel
-      ip route add 192.200.0.0/24 via {{ ansible_default_ipv4.gateway }} dev eth0 2>/dev/null || true
+      # Do NOT add default route to table 52 - causes routing recursion with Tailscale rule 5270
     mode: "0755"
 
 - name: Enable local service at boot
@@ -187,9 +190,18 @@
 - name: Start WireGuard
   ansible.builtin.shell: |
     wg-quick up wg0
+    WG_PRIO=$(ip rule list | grep suppress_prefixlength | head -1 | awk -F: '{print $1}')
+    ip rule add fwmark 0x80000/0xff0000 lookup main priority $((WG_PRIO - 1)) 2>/dev/null || true
     ip rule add to 100.64.0.0/10 lookup 52 priority 5200 2>/dev/null || true
   when: wg_status.rc != 0
   changed_when: true
+
+- name: Ensure routing rules for Tailscale exit forwarding
+  ansible.builtin.shell: |
+    WG_PRIO=$(ip rule list | grep suppress_prefixlength | head -1 | awk -F: '{print $1}')
+    ip rule add fwmark 0x80000/0xff0000 lookup main priority $((WG_PRIO - 1)) 2>/dev/null || true
+    ip rule add to 100.64.0.0/10 lookup 52 priority 5200 2>/dev/null || true
+  changed_when: false
 
 - name: Wait for WireGuard handshake
   ansible.builtin.shell: |

@@ -9,8 +9,12 @@ logger -t "$LOG_TAG" "Starting weekly upgrade"
 
 apk update && apk upgrade
 
-wg-quick down wg0 && wg-quick up wg0
+wg-quick down wg0 2>/dev/null || true
+wg-quick up wg0
+WG_PRIO=$(ip rule list | grep suppress_prefixlength | head -1 | awk -F: '{print $1}')
+ip rule add fwmark 0x80000/0xff0000 lookup main priority $((WG_PRIO - 1)) 2>/dev/null || true
 ip rule add to 100.64.0.0/10 lookup 52 priority 5200 2>/dev/null || true
+# Table 52 default route intentionally omitted (routing recursion with Tailscale rule 5270)
 rc-service tailscale restart
 
 logger -t "$LOG_TAG" "Weekly upgrade complete"
