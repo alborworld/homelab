@@ -1,0 +1,34 @@
+services:
+  rreading-glasses:
+    image: blampe/rreading-glasses:latest
+    container_name: rreading-glasses
+    pull_policy: always
+    entrypoint: ["/main", "serve"]
+    command:
+      - --upstream=www.goodreads.com
+      - --verbose
+    environment:
+      - TZ=Europe/Amsterdam
+      - POSTGRES_HOST=rreading-glasses-db
+      - POSTGRES_DATABASE=rreading-glasses
+      - POSTGRES_USER=rreading-glasses
+      - POSTGRES_PASSWORD=${RREADING_GLASSES_DB_PASSWORD}
+    ports:
+      - "8788:8788"
+    mem_limit: 128m
+    depends_on:
+      rreading-glasses-db:
+        condition: service_started
+    restart: always
+
+  rreading-glasses-db:
+    image: postgres:17-alpine
+    container_name: rreading-glasses-db
+    environment:
+      - TZ=Europe/Amsterdam
+      - POSTGRES_USER=rreading-glasses
+      - POSTGRES_PASSWORD=${RREADING_GLASSES_DB_PASSWORD}
+      - POSTGRES_DB=rreading-glasses
+    volumes:
+      - ${VOLUMEDIR}/rreading-glasses-db:/var/lib/postgresql/data
+    restart: always
