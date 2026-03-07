@@ -4,6 +4,8 @@ services:
     container_name: Dozzle
     environment:
       - TZ=Europe/Amsterdam
+      - DOZZLE_HOSTNAME=dockerhost
+      - DOZZLE_REMOTE_AGENT=10.0.4.94:7007,10.0.4.111:7007
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:

@@ -7,6 +7,7 @@ include:
   - adguardhome-sync/docker-compose.yaml
   - beszel-agent-ds/docker-compose.yaml
   - dockerproxy-ds/docker-compose.yaml
+  - dozzle-agent-ds/docker-compose.yaml
   - garage/docker-compose.yaml
   - github-runner-ds/docker-compose.yaml
   - iperf-ds/docker-compose.yaml
