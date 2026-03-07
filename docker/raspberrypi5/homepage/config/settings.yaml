@@ -28,8 +28,8 @@ layout:
       style: row
       columns: 2
 
-background: 
-  image: https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=en-US
+background:
+  image: https://www.bing.com/th?id=OHR.FrostySquirrel_EN-US5169660143_1920x1080.jpg&w=1920
   blur: lg # sm, xs, md, xl... see https://tailwindcss.com/docs/backdrop-blur
   saturate: 75 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
   brightness: 60 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
