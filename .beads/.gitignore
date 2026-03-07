@@ -34,6 +34,9 @@ dolt-server.port
 dolt-server.activity
 dolt-monitor.pid.lock
 
+# Backup exports (managed by beads, not needed in git)
+backup/
+
 # Legacy files (from pre-Dolt versions)
 *.db
 *.db?*
