@@ -1,0 +1,27 @@
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: Dozzle
+    environment:
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "9999:8080"
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.dozzle.loadbalancer.server.port=8080
+      - traefik.http.routers.dozzle.rule=Host(`dozzle.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.dozzle.entrypoints=websecure
+      - traefik.http.routers.dozzle.service=dozzle
+      - traefik.http.routers.dozzle.tls=true
+      - traefik.http.routers.dozzle.tls.certresolver=cloudflare
+      # HOMEPAGE
+      - homepage.group=Infrastructure
+      - homepage.name=Dozzle
+      - homepage.icon=dozzle.png
+      - homepage.href=https://dozzle.${LOCAL_DOMAIN}
+      - homepage.description=Container Log Viewer
+      - homepage.siteMonitor=https://dozzle.${LOCAL_DOMAIN}
+    restart: always
