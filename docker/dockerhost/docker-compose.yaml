@@ -17,7 +17,7 @@ include:
   - iperf-dh/docker-compose.yaml
   - n8n/docker-compose.yaml
   - nzbget/docker-compose.yaml
-  - overseerr/docker-compose.yaml
+  - seerr/docker-compose.yaml
   - paperless-ngx/docker-compose.yaml
   - plex/docker-compose.yaml
   - portainer-agent-dh/docker-compose.yaml
