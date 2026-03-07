@@ -1,10 +1,15 @@
 ---
 - name: Restart openclaw
-  ansible.builtin.systemd:
-    name: openclaw
-    state: restarted
-    enabled: true
-    daemon_reload: true
+  become: true
+  become_user: "{{ openclaw_user }}"
+  ansible.builtin.shell: |
+    {{ openclaw_home }}/.openclaw/bin/openclaw gateway stop
+    {{ openclaw_home }}/.openclaw/bin/openclaw gateway install --force
+    {{ openclaw_home }}/.openclaw/bin/openclaw gateway start
+  environment:
+    HOME: "{{ openclaw_home }}"
+    XDG_RUNTIME_DIR: "/run/user/{{ openclaw_uid }}"
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ openclaw_uid }}/bus"
 
 - name: Restore iptables
   ansible.builtin.shell: iptables-restore < /etc/iptables/rules.v4
