@@ -16,7 +16,16 @@ sudo mkdir -p /opt/beszel
 
 ### 2. Download the Beszel Agent Binary and Environment File
 
-Place the `beszel-agent` binary and the `beszel-agent.env` file in `/opt/beszel/`.
+Download the `linux_arm` (ARMv7) build and place it in `/opt/beszel/`:
+
+```bash
+curl -sL https://github.com/henrygd/beszel/releases/download/v0.17.0/beszel-agent_linux_arm.tar.gz \
+  | sudo tar -xzf - -C /opt/beszel/ beszel-agent
+```
+
+> **Warning:** The DS214 uses a Marvell Armada XP (ARMv7) CPU. Beszel versions after
+> v0.17.0 are built with Go 1.26, which crashes on this processor. **Do not upgrade
+> past v0.17.0** until upstream fixes ARM32 compatibility.
 
 Example `beszel-agent.env`:
 ```env
@@ -94,11 +103,30 @@ sudo journalctl -u beszel-agent.service -f
 
 ### Updates
 
-To update the Beszel Agent, run:
+To update the Beszel Agent manually:
 
 ```bash
-sudo /opt/beszel/beszel-agent update
+sudo systemctl stop beszel-agent.service
+curl -sL https://github.com/henrygd/beszel/releases/download/<VERSION>/beszel-agent_linux_arm.tar.gz \
+  | sudo tar -xzf - -C /opt/beszel/ beszel-agent
+sudo systemctl start beszel-agent.service
 ```
 
-> Note:
-> This update command is automatically executed at boot via the DSM Task Scheduler.
+> **Warning:** Do **not** use `beszel-agent update` — it pulls the latest release which
+> may be incompatible with this CPU (see note in step 2). Always download a specific
+> tested version manually.
+
+The DSM Task Scheduler previously had an "Upgrade Beszel Agent" bootup task that ran
+`/opt/beszel/beszel-agent update`. This task has been **disabled** (March 2026) because
+it upgraded to a Go 1.26 build that crashes on the Marvell Armada XP. The task can be
+managed via **DSM → Control Panel → Task Scheduler** or directly in the SQLite database:
+
+```bash
+# Check status
+sudo sqlite3 /usr/syno/etc/esynoscheduler/esynoscheduler.db \
+  "SELECT task_name, enable FROM task WHERE task_name = 'Upgrade Beszel Agent';"
+
+# Disable (enable=0) or re-enable (enable=1)
+sudo sqlite3 /usr/syno/etc/esynoscheduler/esynoscheduler.db \
+  "UPDATE task SET enable = 0 WHERE task_name = 'Upgrade Beszel Agent';"
+```
