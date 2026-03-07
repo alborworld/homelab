@@ -1,6 +1,8 @@
 {
   "gitCommitSignoff": false,
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "beads@beads-marketplace": true
+  },
   "hooks": {
     "PreCompact": [
       {
