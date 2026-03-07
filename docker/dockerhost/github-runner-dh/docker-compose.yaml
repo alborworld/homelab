@@ -13,6 +13,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # if you want docker-in-docker
       - ${VOLUMEDIR}/github-runner-dh:/runner/_work
+    labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS -H \"Authorization: token ${GITHUB_RUNNER_ACCESS_TOKEN}\" -H \"User-Agent: homelab-runner-healthcheck\" https://api.github.com/rate_limit || exit 1"]

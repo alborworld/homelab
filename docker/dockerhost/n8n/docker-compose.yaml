@@ -39,6 +39,8 @@ services:
       - ${VOLUMEDIR}/n8n:/home/node/.n8n
       - ./oidc/hooks.js:/opt/n8n/hooks.js:ro
     labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.n8n.loadbalancer.server.port=5678

@@ -14,6 +14,8 @@ services:
     volumes:
       - ${VOLUMEDIR}/tautulli:/config
     labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.tautulli.loadbalancer.server.port=8181

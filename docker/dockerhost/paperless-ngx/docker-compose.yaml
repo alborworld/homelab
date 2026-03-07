@@ -33,6 +33,8 @@ services:
       - ${PAPERLESS_NGX_DIR}/consume:/usr/src/paperless/consume
       - ${PAPERLESS_NGX_DIR}/export:/usr/src/paperless/export
     labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.paperless-ngx-dh.loadbalancer.server.port=8000
