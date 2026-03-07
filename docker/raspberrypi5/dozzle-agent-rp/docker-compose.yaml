@@ -1,0 +1,12 @@
+services:
+  dozzle-agent-rp:
+    image: amir20/dozzle:latest
+    container_name: DozzleAgent-RP
+    command: agent
+    environment:
+      - DOZZLE_HOSTNAME=raspberrypi5
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "7007:7007"
+    restart: always
