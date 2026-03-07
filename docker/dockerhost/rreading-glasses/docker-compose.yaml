@@ -19,6 +19,9 @@ services:
     depends_on:
       rreading-glasses-db:
         condition: service_started
+    labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
     restart: always
 
   rreading-glasses-db:

@@ -15,6 +15,8 @@ services:
     devices:
       - /dev/dri:/dev/dri # VAAPI hardware transcoding
     labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.unmanic.loadbalancer.server.port=8888

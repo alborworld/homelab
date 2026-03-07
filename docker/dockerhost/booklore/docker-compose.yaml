@@ -26,6 +26,8 @@ services:
       start_period: 60s
       timeout: 10s
     labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.booklore.loadbalancer.server.port=6060

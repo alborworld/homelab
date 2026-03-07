@@ -13,6 +13,8 @@ services:
     volumes:
       - ${VOLUMEDIR}/seerr:/app/config
     labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.seerr.loadbalancer.server.port=5055

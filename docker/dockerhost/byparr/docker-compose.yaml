@@ -11,4 +11,7 @@ services:
       - LOG_LEVEL=${LOG_LEVEL:-info}
     volumes:
       - ${VOLUMEDIR}/byparr/screenshots:/app/screenshots
+    labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
     restart: always

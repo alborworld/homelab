@@ -12,6 +12,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro # Mounted as read-only
     labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.dockerproxy-dockerhost.loadbalancer.server.port=2375

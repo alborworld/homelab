@@ -11,6 +11,8 @@ services:
     ports:
       - "9999:8080"
     labels:
+      # WATCHTOWER
+      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.dozzle.loadbalancer.server.port=9999
