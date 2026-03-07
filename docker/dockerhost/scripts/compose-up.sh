@@ -15,6 +15,11 @@
 # Additionally, Gluetun's VPN may take time to connect (cycling through
 # servers), so dependent services can fail on the first attempt. This
 # script retries until all services are running.
+#
+# We use --force-recreate on the first attempt because Docker's restart
+# policy may have already started containers with stale network namespace
+# references. Those containers appear "running" to Docker but have broken
+# networking internally. Only a full recreate fixes this.
 
 set -uo pipefail
 
@@ -26,16 +31,32 @@ log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 
 cd "$COMPOSE_DIR"
 
-for attempt in $(seq 1 "$MAX_RETRIES"); do
-    log "Attempt $attempt/$MAX_RETRIES: docker compose up -d"
+# First attempt: force-recreate to clear any stale network namespaces
+log "Attempt 1/$MAX_RETRIES: docker compose up -d --force-recreate"
+docker compose up -d --force-recreate 2>&1 || true
 
-    # docker compose up -d exits non-zero if a dependency isn't healthy yet,
-    # but it still starts everything it can. We check actual state afterwards.
+sleep 10
+
+NOT_RUNNING=$(docker compose ps -a --format '{{.State}}' 2>/dev/null \
+    | grep -cv running || true)
+
+if [ "$NOT_RUNNING" -eq 0 ]; then
+    log "All services running."
+    exit 0
+fi
+
+log "$NOT_RUNNING service(s) not running yet."
+
+# Subsequent attempts: normal up (containers are already recreated)
+for attempt in $(seq 2 "$MAX_RETRIES"); do
+    log "Waiting ${RETRY_DELAY}s before retry..."
+    sleep "$RETRY_DELAY"
+
+    log "Attempt $attempt/$MAX_RETRIES: docker compose up -d"
     docker compose up -d 2>&1 || true
 
     sleep 5
 
-    # Count containers that aren't running
     NOT_RUNNING=$(docker compose ps -a --format '{{.State}}' 2>/dev/null \
         | grep -cv running || true)
 
@@ -45,11 +66,6 @@ for attempt in $(seq 1 "$MAX_RETRIES"); do
     fi
 
     log "$NOT_RUNNING service(s) not running yet."
-
-    if [ "$attempt" -lt "$MAX_RETRIES" ]; then
-        log "Waiting ${RETRY_DELAY}s before retry..."
-        sleep "$RETRY_DELAY"
-    fi
 done
 
 # Log which services are still not running
