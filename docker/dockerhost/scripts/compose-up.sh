@@ -31,9 +31,12 @@ RETRY_DELAY=30
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 
 check_all_running() {
-    local not_running
-    not_running=$(docker compose ps -a --format '{{.State}}' 2>/dev/null \
-        | grep -cv running || true)
+    local expected actual running not_running
+    expected=$(docker compose config --services 2>/dev/null | wc -l)
+    running=$(docker compose ps --format '{{.State}}' 2>/dev/null \
+        | grep -c running || true)
+    not_running=$((expected - running))
+    if [ "$not_running" -lt 0 ]; then not_running=0; fi
     echo "$not_running"
 }
 
