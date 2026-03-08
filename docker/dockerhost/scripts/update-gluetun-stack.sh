@@ -28,6 +28,9 @@ for svc in "${SERVICES[@]}"; do
 done
 
 log "Recreating Gluetun and dependents if images changed..."
-docker compose up -d --always-recreate-deps gluetun 2>&1
-
-log "Done."
+if docker compose up -d --always-recreate-deps gluetun 2>&1; then
+    log "Done."
+else
+    log "ERROR: Failed to recreate Gluetun stack (exit $?)"
+    exit 1
+fi

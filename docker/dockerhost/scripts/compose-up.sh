@@ -31,12 +31,17 @@ RETRY_DELAY=30
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 
 check_all_running() {
-    local expected actual running not_running
-    expected=$(docker compose config --services 2>/dev/null | wc -l)
-    running=$(docker compose ps --format '{{.State}}' 2>/dev/null \
-        | grep -c running || true)
+    local expected running not_running
+    expected=$(docker compose config --services 2>&1 | grep -cv "^time=\|^WARN" || true)
+    if [ "$expected" -eq 0 ]; then
+        log "ERROR: docker compose config returned no services"
+        echo "999"
+        return
+    fi
+    running=$(docker compose ps --status running --format '{{.Name}}' 2>/dev/null | wc -l || true)
     not_running=$((expected - running))
     if [ "$not_running" -lt 0 ]; then not_running=0; fi
+    log "Services: $running/$expected running"
     echo "$not_running"
 }
 
