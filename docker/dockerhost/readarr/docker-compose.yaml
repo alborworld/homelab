@@ -20,8 +20,6 @@ services:
       nzbget:
         condition: service_started
     labels:
-      # WATCHTOWER
-      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.node=dockerhost

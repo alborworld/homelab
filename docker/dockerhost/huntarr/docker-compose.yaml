@@ -12,8 +12,6 @@ services:
       gluetun:
         condition: service_healthy
     labels:
-      # WATCHTOWER
-      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.huntarr.loadbalancer.server.port=9705

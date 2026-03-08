@@ -99,6 +99,16 @@ The media automation stack (Sonarr, Radarr, Prowlarr, qBittorrent, NZBget, Reada
 
 Gluetun's Docker healthcheck has a `start_period: 120s` to give the VPN enough time to cycle through NordVPN servers before being marked unhealthy.
 
+### Container Auto-Updates (Watchtower)
+
+Watchtower runs daily at 6:30 AM and auto-updates containers labeled with `com.centurylinklabs.watchtower=true`. However, **Gluetun and its 10 dependents are excluded** from Watchtower because it is not dependency-aware for `network_mode: service:<name>` relationships.
+
+**The problem:** When Watchtower recreates Gluetun with a new image, dependent containers keep a stale reference to the old container ID. traefik-kop cannot resolve their IPs, so routes are never published to Redis — causing 404s on Traefik and Homepage widget failures.
+
+**The fix:** A separate cron job (`scripts/update-gluetun-stack.sh`) runs at 6:45 AM — 15 minutes after Watchtower — and uses `docker compose up -d --always-recreate-deps gluetun` to pull new images and recreate the entire Gluetun stack with correct container references. This is a no-op if no images changed.
+
+**Excluded from Watchtower:** gluetun, sonarr, radarr, prowlarr, readarr, qbittorrent, nzbget, agregarr, cleanuparr, huntarr, byparr.
+
 ## AI Services
 
 The homelab runs a local AI stack for LLM inference and assistant capabilities:
