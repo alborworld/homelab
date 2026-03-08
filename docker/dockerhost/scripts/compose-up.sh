@@ -24,7 +24,7 @@
 set -uo pipefail
 
 COMPOSE_DIR=/home/albor/docker/compose
-GLUETUN_DEPS=(qbittorrent nzbget prowlarr radarr sonarr readarr agregarr cleanuparr huntarr byparr)
+GLUETUN_DEPS=(qbittorrent nzbget prowlarr radarr sonarr readarr listenarr agregarr cleanuparr huntarr byparr)
 MAX_RETRIES=5
 RETRY_DELAY=30
 

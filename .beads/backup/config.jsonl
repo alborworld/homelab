@@ -9,5 +9,6 @@
 {"key":"compact_tier2_dep_levels","value":"5"}
 {"key":"compaction_enabled","value":"false"}
 {"key":"issue_prefix","value":"homelab"}
+{"key":"kv.memory.traefik-v3-tested-up-to-v3-6-5","value":"Traefik v3 (tested up to v3.6.5) only supports a SINGLE Docker provider endpoint. Cannot point at multiple Docker daemons (e.g. dockerhost + diskstation) simultaneously. For multi-host setups, traefik-kop + Redis remains the best approach. The stale container ID problem with network_mode: service:gluetun is mitigated by the existing cron workaround (update-gluetun-stack.sh) and boot script (compose-up.sh). Moving labels to Gluetun would fix it permanently but is unnecessary complexity."}
 {"key":"schema_version","value":"6"}
 {"key":"types.custom","value":"molecule,gate,convoy,merge-request,slot,agent,role,rig,message"}

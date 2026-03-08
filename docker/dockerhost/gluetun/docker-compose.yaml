@@ -15,6 +15,7 @@ services:
       - 8787:8787     # Readarr
       - 11011:11011   # Cleanuparr
       - 9705:9705     # Huntarr
+      - 4545:4545     # Listenarr
       - 7171:7171     # Agregarr
     environment:
       - VPN_SERVICE_PROVIDER=nordvpn

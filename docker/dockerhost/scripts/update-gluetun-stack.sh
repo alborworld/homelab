@@ -16,7 +16,7 @@
 set -uo pipefail
 
 COMPOSE_DIR=/home/albor/docker/compose
-SERVICES=(gluetun qbittorrent nzbget prowlarr radarr sonarr readarr agregarr cleanuparr huntarr byparr)
+SERVICES=(gluetun qbittorrent nzbget prowlarr radarr sonarr readarr listenarr agregarr cleanuparr huntarr byparr)
 
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 
