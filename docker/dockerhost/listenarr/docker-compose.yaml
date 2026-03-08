@@ -1,0 +1,37 @@
+services:
+  listenarr:
+    image: ghcr.io/listenarrs/listenarr:canary
+    container_name: Listenarr
+    user: "${UID}:${GID}"
+    environment:
+      - TZ=Europe/Amsterdam
+    volumes:
+      - ${VOLUMEDIR}/listenarr:/app/config
+      - ${MEDIADIR}/audiobooks:/audiobooks
+      - ${MEDIADIR}/downloads:/downloads
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+      qbittorrent:
+        condition: service_started
+      nzbget:
+        condition: service_started
+    labels:
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.node=dockerhost
+      - traefik.http.routers.listenarr.rule=Host(`listenarr.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.listenarr.entrypoints=websecure
+      - traefik.http.routers.listenarr.service=listenarr
+      - traefik.http.routers.listenarr.tls=true
+      - traefik.http.routers.listenarr.tls.certresolver=cloudflare
+      - traefik.http.services.listenarr.loadbalancer.server.port=4545
+      # HOMEPAGE
+      - homepage.group=Media Automation
+      - homepage.name=Listenarr
+      - homepage.icon=https://raw.githubusercontent.com/Listenarrs/Listenarr/main/fe/public/icon.png
+      - homepage.href=https://listenarr.${LOCAL_DOMAIN}
+      - homepage.description=Audiobooks Automation
+      - homepage.siteMonitor=https://listenarr.${LOCAL_DOMAIN}
+    restart: always
