@@ -16,13 +16,16 @@
 set -uo pipefail
 
 COMPOSE_DIR=/home/albor/docker/compose
+SERVICES=(gluetun qbittorrent nzbget prowlarr radarr sonarr readarr agregarr cleanuparr huntarr byparr)
 
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 
 cd "$COMPOSE_DIR"
 
 log "Pulling Gluetun stack images..."
-docker compose pull gluetun qbittorrent nzbget prowlarr radarr sonarr readarr agregarr cleanuparr huntarr byparr 2>&1
+for svc in "${SERVICES[@]}"; do
+    docker compose pull "$svc" 2>&1 || log "WARNING: Failed to pull $svc (continuing)"
+done
 
 log "Recreating Gluetun and dependents if images changed..."
 docker compose up -d --always-recreate-deps gluetun 2>&1
