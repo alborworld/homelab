@@ -17,8 +17,6 @@ services:
       nzbget:
         condition: service_started
     labels:
-      # WATCHTOWER
-      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
