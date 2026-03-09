@@ -81,4 +81,12 @@ ansible-edit:
 ansible-clean:
 	rm -f ansible/secrets.yml
 
-.PHONY: tofu-encrypt tofu-decrypt tofu-clean tofu-show ansible-encrypt ansible-decrypt ansible-show ansible-edit ansible-clean
+# Run an Ansible playbook with decrypted secrets
+# Usage: make ansible-deploy PLAYBOOK=openclaw
+#        make ansible-deploy PLAYBOOK=openclaw ARGS="--diff --check"
+ansible-deploy:
+	@test -n "$(PLAYBOOK)" || (echo "Usage: make ansible-deploy PLAYBOOK=<name> [ARGS=...]"; exit 1)
+	@test -f ansible/secrets.yml || (echo "Run 'make ansible-decrypt' first"; exit 1)
+	cd ansible && ansible-playbook playbooks/$(PLAYBOOK).yml -e @secrets.yml $(ARGS)
+
+.PHONY: tofu-encrypt tofu-decrypt tofu-clean tofu-show ansible-encrypt ansible-decrypt ansible-show ansible-edit ansible-clean ansible-deploy

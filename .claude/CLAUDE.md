@@ -98,6 +98,11 @@ make deploy-raspberrypi5     # Deploy .env to remote host
 make tofu-decrypt STACK=cloudflare
 make tofu-decrypt STACK=proxmox/tailscale-exit-nordvpn-nl
 make tofu-encrypt STACK=garage
+
+# Ansible secrets
+make ansible-decrypt                              # Decrypt secrets.yml
+make ansible-deploy PLAYBOOK=openclaw             # Run playbook with secrets
+make ansible-clean                                # Remove decrypted secrets
 ```
 
 ### Manual SOPS Commands
@@ -112,6 +117,26 @@ sops --input-type dotenv --output-type dotenv --encrypt .env > .env.sops.enc
 # Edit in-place
 sops .env.sops.enc
 ```
+
+## Ansible Playbooks
+
+Located in `ansible/`. Playbooks require secrets from `ansible/secrets.yml`.
+
+```bash
+# Decrypt secrets first
+make ansible-decrypt
+
+# Deploy a playbook
+make ansible-deploy PLAYBOOK=openclaw
+make ansible-deploy PLAYBOOK=openclaw ARGS="--diff --check"  # Dry run
+
+# Cleanup secrets when done
+make ansible-clean
+```
+
+| Playbook   | Target           | Description                           |
+|------------|------------------|---------------------------------------|
+| `openclaw` | openclaw (LXC 202) | AI assistant gateway, Telegram bot |
 
 ## OpenTofu Stacks
 
