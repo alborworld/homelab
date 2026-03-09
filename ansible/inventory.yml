@@ -35,3 +35,4 @@ all:
           ansible_user: root
           tailscale_hostname: openclaw
           openclaw_ollama_host: "http://ollama:11434"
+          beszel_agent_listen_tailscale: true

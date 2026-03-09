@@ -143,6 +143,42 @@
     mode: "0644"
   notify: Restart openclaw
 
+# --- Harden openclaw-gateway user service ---
+
+- name: Create user service drop-in directory
+  ansible.builtin.file:
+    path: "{{ openclaw_home }}/.config/systemd/user/openclaw-gateway.service.d"
+    state: directory
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0755"
+
+- name: Deploy gateway hardening drop-in
+  ansible.builtin.template:
+    src: gateway-hardening.conf.j2
+    dest: "{{ openclaw_home }}/.config/systemd/user/openclaw-gateway.service.d/hardening.conf"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0644"
+  notify: Restart openclaw
+
+- name: Restrict permissions on openclaw config directory
+  ansible.builtin.file:
+    path: "{{ openclaw_home }}/.openclaw"
+    state: directory
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0700"
+
+- name: Restrict permissions on user systemd service files
+  ansible.builtin.file:
+    path: "{{ openclaw_home }}/.config/systemd/user"
+    state: directory
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0700"
+    recurse: true
+
 # --- Security hardening (iptables) ---
 
 - name: Install iptables-persistent
@@ -291,6 +327,79 @@
   register: configure_tts
   changed_when: "'changed' in configure_tts.stdout"
   notify: Restart openclaw
+
+# --- File integrity monitoring (AIDE) ---
+# auditd cannot run in unprivileged LXC containers (no kernel audit subsystem)
+# AIDE provides file integrity checking as an alternative
+
+- name: Install AIDE (without recommends to avoid pulling postfix)
+  ansible.builtin.apt:
+    name: aide
+    state: present
+    install_recommends: false
+
+- name: Configure AIDE rules for OpenClaw
+  ansible.builtin.copy:
+    dest: /etc/aide/aide.conf.d/90_openclaw
+    content: |
+      # OpenClaw file integrity monitoring
+      /etc/systemd/system/openclaw.service Full
+      {{ openclaw_home }}/.config/systemd/user/openclaw-gateway.service.d Full
+      {{ openclaw_home }}/.openclaw/openclaw.json Full
+      /etc/iptables/rules.v4 Full
+    mode: "0644"
+
+- name: Initialize AIDE database (first run only)
+  ansible.builtin.command: aideinit
+  args:
+    creates: /var/lib/aide/aide.db
+  register: aide_init
+
+- name: Deploy AIDE daily check cron
+  ansible.builtin.copy:
+    dest: /etc/cron.daily/aide-check
+    content: |
+      #!/bin/bash
+      /usr/bin/aide --check --config=/etc/aide/aide.conf 2>&1 | logger -t aide-check
+    mode: "0755"
+
+# --- Remove unnecessary services ---
+
+- name: Remove postfix and bsd-mailx (not needed, pulled by AIDE)
+  ansible.builtin.apt:
+    name:
+      - postfix
+      - bsd-mailx
+    state: absent
+    purge: true
+    autoremove: true
+
+# --- Unattended upgrades ---
+
+- name: Install unattended-upgrades
+  ansible.builtin.apt:
+    name: unattended-upgrades
+    state: present
+
+- name: Enable automatic security updates
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+      APT::Periodic::AutocleanInterval "7";
+    mode: "0644"
+
+- name: Configure unattended-upgrades for security only
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    content: |
+      Unattended-Upgrade::Allowed-Origins {
+          "${distro_id}:${distro_codename}-security";
+      };
+      Unattended-Upgrade::Automatic-Reboot "false";
+      Unattended-Upgrade::Remove-Unused-Dependencies "true";
+    mode: "0644"
 
 # --- Post-install notice ---
 # Onboarding is interactive and must be run manually:

@@ -5,6 +5,7 @@
   ansible.builtin.shell: |
     {{ openclaw_home }}/.openclaw/bin/openclaw gateway stop
     {{ openclaw_home }}/.openclaw/bin/openclaw gateway install --force
+    systemctl --user daemon-reload
     {{ openclaw_home }}/.openclaw/bin/openclaw gateway start
   environment:
     HOME: "{{ openclaw_home }}"
@@ -13,4 +14,8 @@
 
 - name: Restore iptables
   ansible.builtin.shell: iptables-restore < /etc/iptables/rules.v4
+  changed_when: true
+
+- name: Update AIDE database
+  ansible.builtin.command: aide --update --config=/etc/aide/aide.conf
   changed_when: true

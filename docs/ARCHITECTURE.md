@@ -23,30 +23,32 @@ All hosts are connected via [Tailscale](https://tailscale.com) mesh VPN, enablin
 
 ### Nodes
 
-| Host | Tailscale IP | LAN IP | Role |
-|------|--------------|--------|------|
-| raspberrypi5 | 100.77.35.97 | 10.0.4.94 | Edge node, AdGuard Home, exit node |
-| dockerhost | - | 10.0.4.x | Media stack (Plex, *arr) |
-| diskstation | 100.68.31.112 | 10.0.4.111 | NAS, AdGuard replica |
-| nuc13 | - | 10.0.4.x | Proxmox host |
-| exit-nordvpn-nl | 100.90.91.69 | - | NordVPN Amsterdam exit node (LXC) |
-| ollama | 100.80.30.52 | 10.0.4.123 | LLM inference server (LXC on nuc13, VMID 201) |
-| openclaw | 100.73.237.11 | 10.0.4.66 | AI assistant gateway (LXC on nuc13, VMID 202) |
+| Host | Role |
+|------|------|
+| raspberrypi5 | Edge node, AdGuard Home, exit node |
+| dockerhost | Media stack (Plex, *arr) |
+| diskstation | NAS, AdGuard replica |
+| nuc13 | Proxmox host |
+| exit-nordvpn-nl | NordVPN Amsterdam exit node (LXC) |
+| ollama | LLM inference server (LXC on nuc13, VMID 201) |
+| openclaw | AI assistant gateway (LXC on nuc13, VMID 202) |
+
+> **Note:** Tailscale and LAN IPs are not committed to the repo. Use `tailscale status` to look up IPs, or MagicDNS hostnames for connectivity.
 
 ### DNS Configuration
 
 DNS is handled by AdGuard Home with high-availability setup. Tailscale DNS must use **Tailscale IPs** (not LAN IPs) to work with exit nodes.
 
 **Global Nameservers:**
-- `100.77.35.97` - raspberrypi5 (AdGuard Home primary)
-- `100.68.31.112` - diskstation (AdGuard Home replica)
+- `raspberrypi5` (AdGuard Home primary)
+- `diskstation` (AdGuard Home replica)
 
 **Split DNS Routes** (required for local domain resolution via exit nodes):
-- `home.alborworld.com` → `100.77.35.97`, `100.68.31.112`
+- `home.alborworld.com` → raspberrypi5, diskstation (via Tailscale IPs)
 - `ts.net` → Tailscale's resolvers
 
-> **Important:** Always use Tailscale IPs (100.x.x.x) for DNS servers, not LAN IPs (10.0.4.x).
-> LAN IPs are not routable when using exit nodes.
+> **Important:** Always configure DNS servers using Tailscale IPs (100.x.x.x), not LAN IPs (10.0.4.x).
+> LAN IPs are not routable when using exit nodes. Look up IPs via `tailscale status`.
 
 ### Exit Nodes
 

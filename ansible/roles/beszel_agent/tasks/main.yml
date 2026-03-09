@@ -52,6 +52,17 @@
     path: /tmp/beszel-agent.tar.gz
     state: absent
 
+- name: Get Tailscale IPv4 address
+  ansible.builtin.command: tailscale ip -4
+  register: tailscale_ip
+  changed_when: false
+  when: beszel_agent_listen_tailscale | default(false)
+
+- name: Set beszel listen address
+  ansible.builtin.set_fact:
+    beszel_agent_listen: "{{ tailscale_ip.stdout | trim }}"
+  when: beszel_agent_listen_tailscale | default(false)
+
 - name: Create beszel config directory
   ansible.builtin.file:
     path: /etc/beszel

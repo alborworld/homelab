@@ -3,6 +3,7 @@
 
 beszel_agent_port: 45876
 beszel_agent_version: "latest"
+beszel_agent_listen_tailscale: false  # set true to bind beszel to Tailscale interface only
 
 # Required variables (should be in secrets.yml or inventory):
 # beszel_agent_key: "ssh-ed25519 ..."

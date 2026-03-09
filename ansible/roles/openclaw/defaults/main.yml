@@ -15,6 +15,9 @@ openclaw_ollama_host: "http://ollama:11434"
 openclaw_dashboard_port: 1455
 openclaw_primary_model: "openai-codex/gpt-5.3-codex"
 
+# Network
+dns_resolver: "10.0.4.94"
+
 # Whisper (audio transcription)
 whisper_venv_path: "{{ openclaw_home }}/.venvs/whisper"
 whisper_model_size: "small"
