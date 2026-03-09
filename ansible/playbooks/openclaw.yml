@@ -7,8 +7,7 @@
 #   3. Ollama server provisioned and running
 #
 # Usage:
-#   cd ansible
-#   ansible-playbook playbooks/openclaw.yml -e @secrets.yml
+#   make ansible-decrypt && make ansible-deploy PLAYBOOK=openclaw
 #
 # Required variables (in secrets.yml or via -e):
 #   - tailscale_authkey: Tailscale auth key

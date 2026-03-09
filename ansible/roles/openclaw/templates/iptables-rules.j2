@@ -1,5 +1,16 @@
 # OpenClaw network hardening
 # Default DROP on all chains; explicit allowlist only
+#
+# Egress dependency inventory:
+#   - Tailscale control plane (controlplane.tailscale.com:443, DERP relays :3478/:41641)
+#   - Telegram Bot API (api.telegram.org:443)
+#   - OpenAI / model provider APIs (:443)
+#   - APT repos (deb.nodesource.com, archive.ubuntu.com :80/:443)
+#   - DNS via local resolver ({{ dns_resolver }}:53)
+#   - NTP (:123)
+#
+# If egress breaks: check `iptables -L -v -n` counters on DROP chains.
+# Temporary debug: `iptables -I OUTPUT -j LOG --log-prefix "iptables-drop: "` then `dmesg`.
 
 *filter
 :INPUT DROP [0:0]

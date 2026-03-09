@@ -12,7 +12,6 @@ nodejs_major_version: 22
 openclaw_user: "openclaw"
 openclaw_home: "/home/openclaw"
 openclaw_ollama_host: "http://ollama:11434"
-openclaw_dashboard_port: 1455
 openclaw_primary_model: "openai-codex/gpt-5.3-codex"
 
 # Network

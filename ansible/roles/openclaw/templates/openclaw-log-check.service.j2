@@ -3,4 +3,5 @@ Description=Hourly OpenClaw log check
 
 [Service]
 Type=oneshot
+EnvironmentFile={{ openclaw_home }}/.config/openclaw/telegram.env
 ExecStart={{ openclaw_home }}/bin/openclaw-log-check.sh

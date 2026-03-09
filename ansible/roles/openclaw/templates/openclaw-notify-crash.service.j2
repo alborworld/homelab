@@ -3,4 +3,5 @@ Description=Notify on OpenClaw gateway crash
 
 [Service]
 Type=oneshot
+EnvironmentFile={{ openclaw_home }}/.config/openclaw/telegram.env
 ExecStart={{ openclaw_home }}/bin/openclaw-notify.sh crash
