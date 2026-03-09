@@ -5,6 +5,8 @@
 OnFailure=openclaw-notify-crash.service
 
 [Service]
+# Clean stale lock files before starting to prevent crash loops
+ExecStartPre=/bin/sh -c 'rm -f /tmp/openclaw-$(id -u)/gateway.*.lock'
 NoNewPrivileges=yes
 RestrictSUIDSGID=yes
 RestrictNamespaces=yes

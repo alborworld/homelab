@@ -170,14 +170,19 @@
     group: "{{ openclaw_user }}"
     mode: "0700"
 
-- name: Restrict permissions on user systemd service files
+- name: Restrict permissions on user systemd directory
   ansible.builtin.file:
     path: "{{ openclaw_home }}/.config/systemd/user"
     state: directory
     owner: "{{ openclaw_user }}"
     group: "{{ openclaw_user }}"
     mode: "0700"
-    recurse: true
+
+- name: Fix permissions on user systemd service files (no executable bit)
+  ansible.builtin.shell: |
+    find {{ openclaw_home }}/.config/systemd/user -type f -exec chmod 0644 {} +
+    find {{ openclaw_home }}/.config/systemd/user -type d -exec chmod 0700 {} +
+  changed_when: false
 
 # --- Security hardening (iptables) ---
 
