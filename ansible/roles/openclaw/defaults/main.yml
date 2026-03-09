@@ -28,3 +28,9 @@ whisper_language: ""  # empty = auto-detect, set to "en" for English-only
 tts_provider: "edge"
 tts_auto: "inbound"  # auto-TTS on inbound voice messages
 edge_tts_voice: "it-IT-GiuseppeMultilingualNeural"
+
+# Alerting (Telegram)
+# Required variables (should be in secrets.yml):
+# telegram_bot_token: "..."
+# telegram_chat_id: "..."
+alert_error_threshold: 5  # errors per hour before alerting

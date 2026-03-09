@@ -1,0 +1,32 @@
+#!/bin/bash
+# Send alert to Telegram when OpenClaw gateway fails or errors spike
+# Deployed by Ansible — do not edit manually
+
+BOT_TOKEN="{{ telegram_bot_token }}"
+CHAT_ID="{{ telegram_chat_id }}"
+HOSTNAME=$(hostname)
+EVENT="${1:-unknown}"
+
+case "$EVENT" in
+  crash)
+    LOGS=$(journalctl --user -u openclaw-gateway --no-pager -n 20 --output=short-iso 2>/dev/null | tail -15)
+    MSG="🔴 *OpenClaw gateway crashed* on \`${HOSTNAME}\`
+
+\`\`\`
+${LOGS}
+\`\`\`"
+    ;;
+  errors)
+    COUNT="${2:-?}"
+    MSG="⚠️ *OpenClaw error spike* on \`${HOSTNAME}\`: ${COUNT} errors in the last hour"
+    ;;
+  *)
+    MSG="ℹ️ *OpenClaw alert* on \`${HOSTNAME}\`: ${EVENT}"
+    ;;
+esac
+
+curl -sf --max-time 10 \
+  -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+  -d chat_id="${CHAT_ID}" \
+  -d parse_mode="Markdown" \
+  -d text="${MSG}" >/dev/null 2>&1

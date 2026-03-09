@@ -328,6 +328,79 @@
   changed_when: "'changed' in configure_tts.stdout"
   notify: Restart openclaw
 
+# --- Log monitoring and alerting ---
+
+- name: Deploy Telegram notify script
+  ansible.builtin.template:
+    src: openclaw-notify.sh.j2
+    dest: "{{ openclaw_home }}/bin/openclaw-notify.sh"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0750"
+
+- name: Deploy hourly log check script
+  ansible.builtin.template:
+    src: openclaw-log-check.sh.j2
+    dest: "{{ openclaw_home }}/bin/openclaw-log-check.sh"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0750"
+
+- name: Deploy crash notification user service
+  ansible.builtin.template:
+    src: openclaw-notify-crash.service.j2
+    dest: "{{ openclaw_home }}/.config/systemd/user/openclaw-notify-crash.service"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0644"
+
+- name: Deploy log check user service
+  ansible.builtin.template:
+    src: openclaw-log-check.service.j2
+    dest: "{{ openclaw_home }}/.config/systemd/user/openclaw-log-check.service"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0644"
+
+- name: Deploy log check timer
+  ansible.builtin.template:
+    src: openclaw-log-check.timer.j2
+    dest: "{{ openclaw_home }}/.config/systemd/user/openclaw-log-check.timer"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0644"
+
+- name: Add OnFailure to gateway hardening drop-in
+  ansible.builtin.template:
+    src: gateway-hardening.conf.j2
+    dest: "{{ openclaw_home }}/.config/systemd/user/openclaw-gateway.service.d/hardening.conf"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0644"
+  notify: Restart openclaw
+
+- name: Reload user systemd daemon
+  become: true
+  become_user: "{{ openclaw_user }}"
+  ansible.builtin.systemd:
+    daemon_reload: true
+    scope: user
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ openclaw_uid }}"
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ openclaw_uid }}/bus"
+
+- name: Enable log check timer
+  become: true
+  become_user: "{{ openclaw_user }}"
+  ansible.builtin.systemd:
+    name: openclaw-log-check.timer
+    enabled: true
+    state: started
+    scope: user
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ openclaw_uid }}"
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ openclaw_uid }}/bus"
+
 # --- File integrity monitoring (AIDE) ---
 # auditd cannot run in unprivileged LXC containers (no kernel audit subsystem)
 # AIDE provides file integrity checking as an alternative

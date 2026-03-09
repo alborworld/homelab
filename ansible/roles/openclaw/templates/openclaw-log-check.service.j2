@@ -1,0 +1,6 @@
+[Unit]
+Description=Hourly OpenClaw log check
+
+[Service]
+Type=oneshot
+ExecStart={{ openclaw_home }}/bin/openclaw-log-check.sh

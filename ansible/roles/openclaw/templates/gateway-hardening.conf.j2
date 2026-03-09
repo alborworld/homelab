@@ -1,6 +1,9 @@
 # Systemd hardening for openclaw-gateway user service
 # Deployed by Ansible, survives `openclaw gateway install --force`
 
+[Unit]
+OnFailure=openclaw-notify-crash.service
+
 [Service]
 NoNewPrivileges=yes
 RestrictSUIDSGID=yes

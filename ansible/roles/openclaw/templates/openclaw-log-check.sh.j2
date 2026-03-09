@@ -1,0 +1,13 @@
+#!/bin/bash
+# Hourly log check for OpenClaw gateway errors
+# Deployed by Ansible — do not edit manually
+
+THRESHOLD={{ alert_error_threshold }}
+NOTIFY="{{ openclaw_home }}/bin/openclaw-notify.sh"
+
+# Count errors in the last hour
+COUNT=$(journalctl --user -u openclaw-gateway --since=-1h --priority=err --no-pager -q 2>/dev/null | wc -l)
+
+if [ "$COUNT" -ge "$THRESHOLD" ]; then
+  "$NOTIFY" errors "$COUNT"
+fi
