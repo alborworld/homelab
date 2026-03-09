@@ -41,7 +41,7 @@ check_all_running() {
     running=$(docker compose ps --status running --format '{{.Name}}' 2>/dev/null | wc -l || true)
     not_running=$((expected - running))
     if [ "$not_running" -lt 0 ]; then not_running=0; fi
-    log "Services: $running/$expected running"
+    log "Services: $running/$expected running" >&2
     echo "$not_running"
 }
 
