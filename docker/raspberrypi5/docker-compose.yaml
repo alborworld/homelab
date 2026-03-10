@@ -20,3 +20,4 @@ include:
   - upsnap/docker-compose.yaml
   - uptime-kuma/docker-compose.yaml
   - watchtower-rp/docker-compose.yaml
+  - wud/docker-compose.yaml

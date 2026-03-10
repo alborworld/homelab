@@ -43,4 +43,6 @@ services:
       - homepage.siteMonitor=https://traefik.${LOCAL_DOMAIN}
       - homepage.widget.type=traefik
       - homepage.widget.url=https://traefik.${LOCAL_DOMAIN}
+      # WUD
+      - wud.watch=false
     restart: unless-stopped

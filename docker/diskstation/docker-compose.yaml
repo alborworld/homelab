@@ -16,4 +16,5 @@ include:
   - traefik-kop-ds/docker-compose.yaml
   - unbound-replica/docker-compose.yaml
   - watchtower-ds/docker-compose.yaml
+  - wud-proxy-ds/docker-compose.yaml
   - zoom-recording-downloader/docker-compose.yaml

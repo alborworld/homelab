@@ -11,4 +11,6 @@ services:
       - 127.0.0.1:2375:2375
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro # Mounted as read-only
+    labels:
+      - wud.watch=false
     restart: unless-stopped

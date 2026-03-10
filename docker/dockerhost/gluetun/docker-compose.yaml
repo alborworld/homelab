@@ -41,4 +41,5 @@ services:
       retries: 3
     labels:
       - com.centurylinklabs.watchtower.enable=false
+      - wud.watch=false
     restart: always

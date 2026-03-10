@@ -16,6 +16,7 @@ services:
     labels:
       # WATCHTOWER: excluded — updated by update-gluetun-stack.sh
       - com.centurylinklabs.watchtower.enable=false
+      - wud.watch=false
       - traefik.enable=true
       - traefik.http.services.nzbget.loadbalancer.server.port=6789
       - traefik.http.routers.nzbget.rule=Host(`nzbget.${LOCAL_DOMAIN}`)

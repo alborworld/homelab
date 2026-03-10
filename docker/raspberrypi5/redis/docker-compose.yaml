@@ -6,4 +6,6 @@ services:
       - "6379:6379"
     volumes:
       - ${VOLUMEDIR}/redis:/data
+    labels:
+      - wud.watch=false
     restart: always

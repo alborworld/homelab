@@ -1,0 +1,46 @@
+services:
+  wud:
+    image: getwud/wud
+    container_name: WUD
+    environment:
+      - TZ=Europe/Amsterdam
+      # Local watcher (raspberrypi5)
+      - WUD_WATCHER_LOCAL_CRON=0 0 6 * * *
+      - WUD_WATCHER_LOCAL_WATCHBYDEFAULT=true
+      # Remote watcher (dockerhost via writable proxy)
+      - WUD_WATCHER_DOCKERHOST_HOST=dockerhost
+      - WUD_WATCHER_DOCKERHOST_PORT=2376
+      - WUD_WATCHER_DOCKERHOST_CRON=0 30 6 * * *
+      - WUD_WATCHER_DOCKERHOST_WATCHBYDEFAULT=true
+      # Remote watcher (diskstation via writable proxy)
+      - WUD_WATCHER_DISKSTATION_HOST=diskstation
+      - WUD_WATCHER_DISKSTATION_PORT=2376
+      - WUD_WATCHER_DISKSTATION_CRON=0 15 6 * * *
+      - WUD_WATCHER_DISKSTATION_WATCHBYDEFAULT=true
+      # Docker trigger (auto-update containers)
+      - WUD_TRIGGER_DOCKER_LOCAL_PRUNE=true
+      # Telegram notifications
+      - WUD_TRIGGER_TELEGRAM_1_BOTTOKEN=${WUD_TELEGRAM_BOTTOKEN}
+      - WUD_TRIGGER_TELEGRAM_1_CHATID=${WUD_TELEGRAM_CHATID}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${VOLUMEDIR}/wud:/store
+    ports:
+      - 3000:3000
+    labels:
+      - wud.watch=false
+      # TRAEFIK
+      - traefik.enable=true
+      - traefik.http.services.wud.loadbalancer.server.port=3000
+      - traefik.http.routers.wud.rule=Host(`wud.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.wud.entrypoints=websecure
+      - traefik.http.routers.wud.service=wud
+      - traefik.http.routers.wud.tls=true
+      - traefik.http.routers.wud.tls.certresolver=cloudflare
+    healthcheck:
+      test: curl --fail http://localhost:3000/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped

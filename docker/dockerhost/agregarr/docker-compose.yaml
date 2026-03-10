@@ -17,6 +17,7 @@ services:
     labels:
       # WATCHTOWER: excluded — updated by update-gluetun-stack.sh
       - com.centurylinklabs.watchtower.enable=false
+      - wud.watch=false
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.agregarr.loadbalancer.server.port=7171

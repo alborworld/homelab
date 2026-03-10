@@ -24,4 +24,6 @@ services:
       - homepage.href=https://portainer.${LOCAL_DOMAIN}
       - homepage.siteMonitor=https://portainer.${LOCAL_DOMAIN}
       - homepage.description=Container Management
+      # WUD
+      - wud.watch=false
     restart: always

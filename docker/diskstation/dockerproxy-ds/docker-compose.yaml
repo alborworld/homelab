@@ -20,4 +20,6 @@ services:
       - traefik.http.routers.dockerproxy-diskstation.service=dockerproxy-diskstation
       - traefik.http.routers.dockerproxy-diskstation.tls=true
       - traefik.http.routers.dockerproxy-diskstation.tls.certresolver=cloudflare
+      # WUD
+      - wud.watch=false
     restart: unless-stopped

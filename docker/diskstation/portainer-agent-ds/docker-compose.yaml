@@ -9,4 +9,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /volume1/@docker/volumes:/var/lib/docker/volumes
+    labels:
+      # WUD
+      - wud.watch=false
     restart: always

@@ -11,4 +11,5 @@ services:
       - KOP_HOSTNAME=dockerhost
     labels:
       - com.centurylinklabs.watchtower.scope=dockerhost
+      - wud.watch=false
     restart: always

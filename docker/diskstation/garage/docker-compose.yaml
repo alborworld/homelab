@@ -32,6 +32,8 @@ services:
       - traefik.http.routers.garage-admin.service=garage-admin
       - traefik.http.routers.garage-admin.tls=true
       - traefik.http.routers.garage-admin.tls.certresolver=cloudflare
+      # WUD
+      - wud.watch=false
     restart: always
 
   garage-webui:

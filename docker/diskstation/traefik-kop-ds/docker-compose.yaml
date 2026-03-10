@@ -9,4 +9,7 @@ services:
       - REDIS_ADDR=10.0.4.94:6379
       - BIND_IP=10.0.4.111
       - KOP_HOSTNAME=diskstation
+    labels:
+      # WUD
+      - wud.watch=false
     restart: always
