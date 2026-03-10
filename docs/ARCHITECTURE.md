@@ -30,7 +30,6 @@ All hosts are connected via [Tailscale](https://tailscale.com) mesh VPN, enablin
 | diskstation | NAS, AdGuard replica |
 | nuc13 | Proxmox host |
 | exit-nordvpn-nl | NordVPN Amsterdam exit node (LXC) |
-| ollama | LLM inference server (LXC on nuc13, VMID 201) |
 | openclaw | AI assistant gateway (LXC on nuc13, VMID 202) |
 
 > **Note:** Tailscale and LAN IPs are not committed to the repo. Use `tailscale status` to look up IPs, or MagicDNS hostnames for connectivity.
@@ -115,20 +114,17 @@ Watchtower runs daily at 6:30 AM and auto-updates containers labeled with `com.c
 
 The homelab runs a local AI stack for LLM inference and assistant capabilities:
 
-- **Ollama** — LXC container on nuc13 (VMID 201, 6 cores / 12 GB RAM). Serves LLM models via its API at `ollama.home.alborworld.com`. Acts as the shared inference backend for all AI services.
-- **OpenClaw** — LXC container on nuc13 (VMID 202, 2 cores / 4 GB RAM). AI assistant gateway with Telegram bot integration. Primary model: OpenAI Codex (gpt-5.3-codex), fallback: Ollama llama3.1:8b. Includes Whisper-based audio transcription (faster-whisper, CPU) and ElevenLabs TTS for voice responses. Dashboard at `openclaw.home.alborworld.com`.
-- **Open WebUI** — Docker container on dockerhost. Provides a chat interface at `chat.home.alborworld.com`, connecting to Ollama through Traefik for model inference.
+- **OpenClaw** — LXC container on nuc13 (VMID 202, 2 cores / 4 GB RAM). AI assistant gateway with Telegram bot integration. Primary model: OpenAI Codex (gpt-5.3-codex). Includes Whisper-based audio transcription (faster-whisper, CPU) and Edge TTS for voice responses. Dashboard at `openclaw.home.alborworld.com`.
+- **Open WebUI** — Docker container on dockerhost. Provides a chat interface at `chat.home.alborworld.com`.
 
 ### Communication Flow
 
-- **Open WebUI → Traefik → Ollama:** Web chat requests are proxied through Traefik to the Ollama API.
-- **OpenClaw → Ollama (Tailscale direct):** The assistant gateway communicates with Ollama directly over the Tailscale mesh.
 - **Voice messages → OpenClaw (Whisper):** Inbound audio messages (e.g., Telegram voice notes) are transcribed locally using faster-whisper before being processed by the assistant.
-- **OpenClaw → ElevenLabs (TTS):** Voice responses are synthesized via ElevenLabs API (multilingual v2), enabling a full voice loop with Telegram.
+- **OpenClaw → External APIs (HTTPS):** Model inference via OpenAI API, TTS via Edge TTS. All outbound over HTTPS.
 
 ### Provisioning
 
-LXC containers (Ollama, OpenClaw) are provisioned using **OpenTofu** (container creation on Proxmox) and **Ansible** (software installation, Tailscale enrollment, firewall configuration). Infrastructure definitions live in `tofu/proxmox/` and playbooks in `ansible/`. The OpenClaw Ansible role also installs faster-whisper in a Python venv and configures `openclaw.json` to use it as a CLI-based audio transcription provider.
+The OpenClaw LXC container is provisioned using **OpenTofu** (container creation on Proxmox) and **Ansible** (software installation, Tailscale enrollment, firewall configuration). Infrastructure definitions live in `tofu/proxmox/` and playbooks in `ansible/`. The OpenClaw Ansible role also installs faster-whisper in a Python venv and configures `openclaw.json` to use it as a CLI-based audio transcription provider.
 
 ## Storage & Backups
 
@@ -158,7 +154,7 @@ LXC containers (Ollama, OpenClaw) are provisioned using **OpenTofu** (container 
 - CI/CD pipelines (via GitLab Runner) are used for testing and deploying configuration changes.
 - **OpenTofu** provisions Proxmox LXC containers and VMs, with state stored in Garage S3.
 - **Ansible** handles post-provisioning configuration (software install, Tailscale enrollment, firewall rules).
-- Together, OpenTofu + Ansible manage the full lifecycle of LXC containers (e.g., Ollama, OpenClaw) and VMs.
+- Together, OpenTofu + Ansible manage the full lifecycle of LXC containers (e.g., OpenClaw) and VMs.
 
 ## Roadmap
 

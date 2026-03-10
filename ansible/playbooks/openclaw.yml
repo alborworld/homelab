@@ -4,7 +4,6 @@
 # Prerequisites:
 #   1. LXC container created via OpenTofu (tofu/proxmox/openclaw)
 #   2. SSH access bootstrapped by OpenTofu
-#   3. Ollama server provisioned and running
 #
 # Usage:
 #   make ansible-decrypt && make ansible-deploy PLAYBOOK=openclaw
@@ -15,7 +14,7 @@
 # Post-provisioning (manual, interactive):
 #   ssh openclaw
 #   sudo -u openclaw openclaw onboard
-#   # Select: QuickStart → Ollama → http://ollama:11434 → configure channels
+#   # Select: QuickStart → configure model provider → configure channels
 #   systemctl enable --now openclaw
 #
 # Dashboard accessible at: http://openclaw:1455 (Tailscale only)

@@ -536,7 +536,7 @@
 # The wizard will prompt for:
 #   1. Security acknowledgment
 #   2. Mode selection (QuickStart)
-#   3. Model provider → Ollama → http://ollama:11434
+#   3. Model provider configuration
 #   4. Channel setup (Telegram, Slack, etc.)
 #   5. Skills configuration
 #

@@ -21,18 +21,10 @@ all:
           nordvpn_public_key: "5p4RkybdRU5uaDi90eu4KZPTFif0lKCg4Qp6t1c4F30="
           expected_vpn_country: "NL"
 
-    ollama_servers:
-      hosts:
-        ollama:
-          ansible_host: 10.0.4.123  # LAN IP (use Tailscale hostname after provisioning)
-          ansible_user: root
-          tailscale_hostname: ollama
-
     openclaw_servers:
       hosts:
         openclaw:
           ansible_host: 10.0.4.66  # LAN IP (use Tailscale hostname after provisioning)
           ansible_user: root
           tailscale_hostname: openclaw
-          openclaw_ollama_host: "http://ollama:11434"
           beszel_agent_listen_tailscale: true

@@ -3,7 +3,6 @@ services:
     image: ghcr.io/open-webui/open-webui:main
     container_name: OpenWebUI
     environment:
-      - OLLAMA_BASE_URL=https://ollama.${LOCAL_DOMAIN}
       - WEBUI_AUTH=true
     ports:
       - "8080:8080"
@@ -23,6 +22,6 @@ services:
       - homepage.name=Open WebUI
       - homepage.icon=open-webui.png
       - homepage.href=https://chat.${LOCAL_DOMAIN}
-      - homepage.description=Chat with Ollama models
+      - homepage.description=AI chat interface
       - homepage.siteMonitor=https://chat.${LOCAL_DOMAIN}
     restart: unless-stopped
