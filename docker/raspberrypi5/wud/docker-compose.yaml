@@ -23,8 +23,8 @@ services:
       - WUD_WATCHER_DISKSTATION_CRON=0 20 6 * * *
       - WUD_WATCHER_DISKSTATION_WATCHBYDEFAULT=true
       - WUD_WATCHER_DISKSTATION_WATCHDIGEST=true
-      # Docker trigger (auto-update containers)
-      - WUD_TRIGGER_DOCKER_LOCAL_PRUNE=true
+      # Docker trigger disabled — WUD monitors only, no auto-updates
+      # - WUD_TRIGGER_DOCKER_LOCAL_PRUNE=true
       # Telegram notifications
       - WUD_TRIGGER_TELEGRAM_1_BOTTOKEN=${WUD_TELEGRAM_BOTTOKEN}
       - WUD_TRIGGER_TELEGRAM_1_CHATID=${WUD_TELEGRAM_CHATID}

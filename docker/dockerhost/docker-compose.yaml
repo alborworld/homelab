@@ -33,5 +33,4 @@ include:
   - traefik-kop-dh/docker-compose.yaml
   - open-webui/docker-compose.yaml
   - unmanic/docker-compose.yaml
-  - watchtower-dh/docker-compose.yaml
   - wud-proxy-dh/docker-compose.yaml
