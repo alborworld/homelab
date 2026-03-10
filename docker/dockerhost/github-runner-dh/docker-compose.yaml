@@ -14,6 +14,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock  # if you want docker-in-docker
       - ${VOLUMEDIR}/github-runner-dh:/runner/_work
     labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
       # WATCHTOWER
       - com.centurylinklabs.watchtower=true
     restart: unless-stopped

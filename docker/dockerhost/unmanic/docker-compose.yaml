@@ -15,6 +15,7 @@ services:
     devices:
       - /dev/dri:/dev/dri # VAAPI hardware transcoding
     labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
       # WATCHTOWER
       - com.centurylinklabs.watchtower=true
       # TRAEFIK

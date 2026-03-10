@@ -23,6 +23,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.plex.loadbalancer.server.port=32400

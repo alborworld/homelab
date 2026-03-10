@@ -9,4 +9,6 @@ services:
       - REDIS_ADDR=10.0.4.94:6379
       - BIND_IP=10.0.4.53
       - KOP_HOSTNAME=dockerhost
+    labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
     restart: always

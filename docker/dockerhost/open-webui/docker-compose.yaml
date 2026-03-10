@@ -9,6 +9,7 @@ services:
     volumes:
       - ${VOLUMEDIR}/open-webui:/app/backend/data
     labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.open-webui.loadbalancer.server.port=8080

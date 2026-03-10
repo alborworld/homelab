@@ -14,6 +14,7 @@ services:
     volumes:
       - ${VOLUMEDIR}/tautulli:/config
     labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
       # WATCHTOWER
       - com.centurylinklabs.watchtower=true
       # TRAEFIK

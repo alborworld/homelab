@@ -11,6 +11,7 @@ services:
     ports:
       - "9999:8080"
     labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
       # WATCHTOWER
       - com.centurylinklabs.watchtower=true
       # TRAEFIK

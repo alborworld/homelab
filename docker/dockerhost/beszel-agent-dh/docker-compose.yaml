@@ -8,4 +8,6 @@ services:
     environment:
       LISTEN: 45876
       KEY: ${BESZEL_AGENT_DOCKERHOST_PUBLIC_KEY}
+    labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
     restart: always

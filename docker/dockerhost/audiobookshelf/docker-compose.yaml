@@ -14,6 +14,7 @@ services:
       - ${MEDIADIR}/audiobooks:/audiobooks
       - ${MEDIADIR}/podcasts:/podcasts
     labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
       # WATCHTOWER
       - com.centurylinklabs.watchtower=true
       # TRAEFIK

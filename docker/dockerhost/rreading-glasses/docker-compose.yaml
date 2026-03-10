@@ -20,6 +20,7 @@ services:
       rreading-glasses-db:
         condition: service_started
     labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
       # WATCHTOWER
       - com.centurylinklabs.watchtower=true
     restart: always
@@ -34,4 +35,6 @@ services:
       - POSTGRES_DB=rreading-glasses
     volumes:
       - ${VOLUMEDIR}/rreading-glasses-db:/var/lib/postgresql/data
+    labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
     restart: always

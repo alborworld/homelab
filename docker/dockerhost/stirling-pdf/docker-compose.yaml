@@ -15,6 +15,7 @@ services:
       - LANGS=en_GB
       - DOCKER_ENABLE_SECURITY=false
     labels:
+      - com.centurylinklabs.watchtower.scope=dockerhost
       # WATCHTOWER
       - com.centurylinklabs.watchtower=true
       # TRAEFIK
