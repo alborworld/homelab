@@ -2,37 +2,15 @@
 - name: Restart openclaw
   become: true
   become_user: "{{ openclaw_user }}"
-  block:
-    - name: Stop openclaw gateway
-      ansible.builtin.command: "{{ openclaw_home }}/.openclaw/bin/openclaw gateway stop"
-      register: gateway_stop
-      failed_when: gateway_stop.rc != 0 and 'not running' not in (gateway_stop.stderr | default(''))
-      environment: &openclaw_env
-        HOME: "{{ openclaw_home }}"
-        XDG_RUNTIME_DIR: "/run/user/{{ openclaw_uid }}"
-        DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ openclaw_uid }}/bus"
-
-    - name: Reinstall openclaw gateway service
-      ansible.builtin.command: "{{ openclaw_home }}/.openclaw/bin/openclaw gateway install --force"
-      environment: *openclaw_env
-
-    - name: Reload user systemd daemon
-      ansible.builtin.systemd:
-        daemon_reload: true
-        scope: user
-      environment: *openclaw_env
-
-    - name: Start openclaw gateway
-      ansible.builtin.command: "{{ openclaw_home }}/.openclaw/bin/openclaw gateway start"
-      environment: *openclaw_env
-
-    - name: Verify openclaw gateway is running
-      ansible.builtin.command: systemctl --user is-active openclaw-gateway.service
-      register: gateway_status
-      retries: 3
-      delay: 5
-      until: gateway_status.rc == 0
-      environment: *openclaw_env
+  ansible.builtin.shell: |
+    {{ openclaw_home }}/.openclaw/bin/openclaw gateway stop || true
+    {{ openclaw_home }}/.openclaw/bin/openclaw gateway install --force
+    systemctl --user daemon-reload
+    {{ openclaw_home }}/.openclaw/bin/openclaw gateway start
+  environment:
+    HOME: "{{ openclaw_home }}"
+    XDG_RUNTIME_DIR: "/run/user/{{ openclaw_uid }}"
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ openclaw_uid }}/bus"
 
 - name: Restart sshd
   ansible.builtin.systemd:
