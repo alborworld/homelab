@@ -1,0 +1,3 @@
+# OpenClaw SSH hardening — deployed by Ansible
+# Bind SSH to LAN interface only (no Tailscale, no wildcard)
+ListenAddress {{ openclaw_lan_ip }}

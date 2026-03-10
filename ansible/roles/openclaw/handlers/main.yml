@@ -34,8 +34,17 @@
       until: gateway_status.rc == 0
       environment: *openclaw_env
 
+- name: Restart sshd
+  ansible.builtin.systemd:
+    name: ssh
+    state: restarted
+
 - name: Restore iptables
   ansible.builtin.shell: iptables-restore < /etc/iptables/rules.v4
+  changed_when: true
+
+- name: Restore ip6tables
+  ansible.builtin.shell: ip6tables-restore < /etc/iptables/rules.v6
   changed_when: true
 
 - name: Update AIDE database

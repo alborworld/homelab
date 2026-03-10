@@ -210,6 +210,15 @@
     find {{ openclaw_home }}/.config/systemd/user -type d -exec chmod 0700 {} +
   changed_when: false
 
+# --- SSH hardening ---
+
+- name: Harden SSH (bind to LAN IP only)
+  ansible.builtin.template:
+    src: sshd-hardening.conf.j2
+    dest: /etc/ssh/sshd_config.d/50-openclaw.conf
+    mode: "0644"
+  notify: Restart sshd
+
 # --- Security hardening (iptables) ---
 
 - name: Install iptables-persistent
@@ -219,12 +228,19 @@
   environment:
     DEBIAN_FRONTEND: noninteractive
 
-- name: Configure firewall rules
+- name: Configure firewall rules (IPv4)
   ansible.builtin.template:
     src: iptables-rules.j2
     dest: /etc/iptables/rules.v4
     mode: "0644"
   notify: Restore iptables
+
+- name: Configure firewall rules (IPv6)
+  ansible.builtin.template:
+    src: ip6tables-rules.j2
+    dest: /etc/iptables/rules.v6
+    mode: "0644"
+  notify: Restore ip6tables
 
 # --- Tailscale ---
 

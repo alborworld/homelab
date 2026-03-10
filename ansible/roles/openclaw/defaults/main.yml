@@ -19,6 +19,7 @@ dns_resolvers:
   - "10.0.4.94"    # AdGuard Home (raspberrypi5)
   - "10.0.4.111"   # AdGuard Home replica (diskstation)
 lan_subnet: "10.0.4.0/24"
+openclaw_lan_ip: "10.0.4.66"
 
 # Whisper (audio transcription)
 whisper_venv_path: "{{ openclaw_home }}/.venvs/whisper"

@@ -1,0 +1,22 @@
+# OpenClaw IPv6 hardening — deployed by Ansible
+# Default DROP on all chains; only allow loopback and established
+# IPv6 is not used for any openclaw services
+
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT DROP [0:0]
+
+# Loopback
+-A INPUT -i lo -j ACCEPT
+-A OUTPUT -o lo -j ACCEPT
+
+# Established/related connections
+-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+-A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# ICMPv6 (required for NDP — neighbor discovery, router solicitation)
+-A INPUT -p ipv6-icmp -j ACCEPT
+-A OUTPUT -p ipv6-icmp -j ACCEPT
+
+COMMIT
