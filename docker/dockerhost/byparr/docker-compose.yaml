@@ -7,6 +7,9 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
+    labels:
+      # WATCHTOWER: excluded — updated by update-gluetun-stack.sh
+      - com.centurylinklabs.watchtower.enable=false
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-info}
     volumes:

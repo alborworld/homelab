@@ -32,9 +32,9 @@ log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 
 check_all_running() {
     local expected running not_running
-    expected=$(docker compose config --services 2>&1 | grep -cv "^time=\|^WARN" || true)
+    expected=$(docker compose config --services 2>/dev/null | wc -l || true)
     if [ "$expected" -eq 0 ]; then
-        log "ERROR: docker compose config returned no services"
+        log "ERROR: docker compose config returned no services" >&2
         echo "999"
         return
     fi
