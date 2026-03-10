@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+"""Harden gateway security settings in openclaw.json.
+
+Idempotent: prints 'changed' only if config was modified.
+"""
+import json
+import sys
+
+CONFIG_PATH = "{{ openclaw_home }}/.openclaw/openclaw.json"
+
+# Exact command IDs to deny on a headless LXC (no display, no browser, no camera)
+# These are the valid command names suggested by `openclaw security audit`
+DESIRED_DENY_COMMANDS = [
+    "canvas.present",
+    "canvas.hide",
+    "canvas.navigate",
+    "canvas.eval",
+    "canvas.snapshot",
+    "canvas.a2ui.push",
+    "canvas.a2ui.pushJSONL",
+    "canvas.a2ui.reset",
+    "camera.list",
+]
+
+try:
+    with open(CONFIG_PATH) as f:
+        cfg = json.load(f)
+except FileNotFoundError:
+    print("error: openclaw.json not found — run onboarding first", file=sys.stderr)
+    sys.exit(1)
+
+changed = False
+
+# Fix denyCommands
+current_deny = cfg.get("gateway", {}).get("nodes", {}).get("denyCommands", [])
+if sorted(current_deny) != sorted(DESIRED_DENY_COMMANDS):
+    cfg.setdefault("gateway", {}).setdefault("nodes", {})["denyCommands"] = DESIRED_DENY_COMMANDS
+    changed = True
+
+if changed:
+    with open(CONFIG_PATH, "w") as f:
+        json.dump(cfg, f, indent=2)
+    print("changed")
+else:
+    print("ok")

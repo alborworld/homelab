@@ -528,6 +528,32 @@
       Unattended-Upgrade::Remove-Unused-Dependencies "true";
     mode: "0644"
 
+# --- Gateway security hardening ---
+
+- name: Tighten gateway log permissions
+  ansible.builtin.file:
+    path: "{{ openclaw_home }}/.openclaw/logs/gateway.log"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0600"
+  failed_when: false  # file may not exist on first run
+
+- name: Deploy security config script
+  ansible.builtin.template:
+    src: configure-security.py.j2
+    dest: "{{ openclaw_home }}/bin/configure-security.py"
+    owner: "{{ openclaw_user }}"
+    group: "{{ openclaw_user }}"
+    mode: "0755"
+
+- name: Harden gateway denyCommands in openclaw.json
+  become: true
+  become_user: "{{ openclaw_user }}"
+  ansible.builtin.command: python3 {{ openclaw_home }}/bin/configure-security.py
+  register: configure_security
+  changed_when: "'changed' in configure_security.stdout"
+  notify: Restart openclaw
+
 # --- Post-install notice ---
 # Onboarding is interactive and must be run manually:
 #   ssh openclaw
