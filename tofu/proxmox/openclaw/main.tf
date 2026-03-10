@@ -163,6 +163,25 @@ resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
 
   # --- Outbound ---
 
+  # Block HTTP/HTTPS to LAN (prevent access to gateway admin UI, local devices)
+  rule {
+    type    = "out"
+    action  = "DROP"
+    comment = "Block HTTPS to LAN"
+    dest    = "10.0.4.0/24"
+    dport   = "443"
+    proto   = "tcp"
+  }
+
+  rule {
+    type    = "out"
+    action  = "DROP"
+    comment = "Block HTTP to LAN"
+    dest    = "10.0.4.0/24"
+    dport   = "80"
+    proto   = "tcp"
+  }
+
   rule {
     type    = "out"
     action  = "ACCEPT"

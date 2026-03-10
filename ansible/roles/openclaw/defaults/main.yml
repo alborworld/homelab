@@ -16,6 +16,7 @@ openclaw_primary_model: "openai-codex/gpt-5.3-codex"
 
 # Network
 dns_resolver: "10.0.4.94"
+lan_subnet: "10.0.4.0/24"
 
 # Whisper (audio transcription)
 whisper_venv_path: "{{ openclaw_home }}/.venvs/whisper"

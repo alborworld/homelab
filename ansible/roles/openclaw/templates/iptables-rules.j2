@@ -44,6 +44,10 @@
 # NTP
 -A OUTPUT -p udp --dport 123 -j ACCEPT
 
+# Block HTTP/HTTPS to LAN (prevent access to gateway admin UI, local devices)
+-A OUTPUT -d {{ lan_subnet }} -p tcp --dport 443 -j DROP
+-A OUTPUT -d {{ lan_subnet }} -p tcp --dport 80 -j DROP
+
 # Outbound HTTPS (Telegram API, OpenAI API, Tailscale control, apt repos)
 -A OUTPUT -p tcp --dport 443 -j ACCEPT
 
