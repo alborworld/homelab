@@ -14,7 +14,7 @@ services:
       # Remote watcher (dockerhost via writable proxy)
       - WUD_WATCHER_DOCKERHOST_HOST=dockerhost
       - WUD_WATCHER_DOCKERHOST_PORT=2376
-      - WUD_WATCHER_DOCKERHOST_CRON=0 30 6 * * *
+      - WUD_WATCHER_DOCKERHOST_CRON=0 45 6 * * *
       - WUD_WATCHER_DOCKERHOST_WATCHBYDEFAULT=true
       - WUD_WATCHER_DOCKERHOST_WATCHDIGEST=true
       # Remote watcher (diskstation via writable proxy)
