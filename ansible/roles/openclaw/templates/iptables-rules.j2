@@ -6,7 +6,7 @@
 #   - Telegram Bot API (api.telegram.org:443)
 #   - OpenAI / model provider APIs (:443)
 #   - APT repos (deb.nodesource.com, archive.ubuntu.com :80/:443)
-#   - DNS via local resolver ({{ dns_resolver }}:53)
+#   - DNS via local resolvers ({{ dns_resolvers | join(', ') }}:53)
 #   - NTP (:123)
 #
 # If egress breaks: check `iptables -L -v -n` counters on DROP chains.
@@ -37,9 +37,11 @@
 -A OUTPUT -p udp --dport 41641 -j ACCEPT
 -A OUTPUT -p udp --dport 3478 -j ACCEPT
 
-# DNS (pinned to local resolver)
--A OUTPUT -p udp -d {{ dns_resolver }}/32 --dport 53 -j ACCEPT
--A OUTPUT -p tcp -d {{ dns_resolver }}/32 --dport 53 -j ACCEPT
+# DNS (pinned to local resolvers)
+{% for resolver in dns_resolvers %}
+-A OUTPUT -p udp -d {{ resolver }}/32 --dport 53 -j ACCEPT
+-A OUTPUT -p tcp -d {{ resolver }}/32 --dport 53 -j ACCEPT
+{% endfor %}
 
 # NTP
 -A OUTPUT -p udp --dport 123 -j ACCEPT

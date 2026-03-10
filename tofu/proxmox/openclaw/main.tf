@@ -22,6 +22,9 @@ resource "proxmox_virtual_environment_container" "openclaw" {
 
   initialization {
     hostname = local.hostname
+    dns {
+      servers = ["10.0.4.94", "10.0.4.111"]
+    }
     ip_config {
       ipv4 { address = "dhcp" }
     }
@@ -185,7 +188,8 @@ resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
   rule {
     type    = "out"
     action  = "ACCEPT"
-    comment = "DNS (UDP)"
+    comment = "DNS to AdGuard primary (UDP)"
+    dest    = "10.0.4.94"
     dport   = "53"
     proto   = "udp"
   }
@@ -193,7 +197,26 @@ resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
   rule {
     type    = "out"
     action  = "ACCEPT"
-    comment = "DNS (TCP)"
+    comment = "DNS to AdGuard primary (TCP)"
+    dest    = "10.0.4.94"
+    dport   = "53"
+    proto   = "tcp"
+  }
+
+  rule {
+    type    = "out"
+    action  = "ACCEPT"
+    comment = "DNS to AdGuard replica (UDP)"
+    dest    = "10.0.4.111"
+    dport   = "53"
+    proto   = "udp"
+  }
+
+  rule {
+    type    = "out"
+    action  = "ACCEPT"
+    comment = "DNS to AdGuard replica (TCP)"
+    dest    = "10.0.4.111"
     dport   = "53"
     proto   = "tcp"
   }
