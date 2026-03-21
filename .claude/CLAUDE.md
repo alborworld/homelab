@@ -46,8 +46,9 @@ All hosts are configured in `~/.ssh/config`:
 |----------------|------------|--------------------------------------------------------|
 | `raspberrypi5` | pi         | Edge node - Homepage, AdGuard, Traefik, Home Assistant |
 | `dockerhost`   | albor      | Proxmox VM - Media stack (Plex, *arr, etc.)            |
-| `diskstation`  | Alessandro | Synology DS218+ - Storage, Garage S3, backups          |
-| `nuc13`        | root       | Proxmox host - VMs and LXC containers                  |
+| `diskstation`        | Alessandro | Synology DS218+ - Storage, Garage S3, backups          |
+| `diskstation-backup` | Alessandro | Synology DS214 - HyperBackup target (offsite)          |
+| `nuc13`              | root       | Proxmox host - VMs and LXC containers                  |
 
 ### Accessing LXC Containers
 
