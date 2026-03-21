@@ -11,5 +11,5 @@
 {"key":"issue_prefix","value":"homelab"}
 {"key":"kv.memory.nickfedor-watchtower-scope-required","value":"nickfedor/watchtower fork has excess instance cleanup bug that destroys regular containers on startup. Fix: WATCHTOWER_SCOPE=dockerhost env + scope labels on all managed containers. Gluetun stack excluded via watchtower.enable=false. Also: --always-recreate-deps only recreates UPSTREAM deps, use --force-recreate with explicit service list instead."}
 {"key":"kv.memory.traefik-v3-tested-up-to-v3-6-5","value":"Traefik v3 (tested up to v3.6.5) only supports a SINGLE Docker provider endpoint. Cannot point at multiple Docker daemons (e.g. dockerhost + diskstation) simultaneously. For multi-host setups, traefik-kop + Redis remains the best approach. The stale container ID problem with network_mode: service:gluetun is mitigated by the existing cron workaround (update-gluetun-stack.sh) and boot script (compose-up.sh). Moving labels to Gluetun would fix it permanently but is unnecessary complexity."}
-{"key":"schema_version","value":"6"}
+{"key":"schema_version","value":"7"}
 {"key":"types.custom","value":"molecule,gate,convoy,merge-request,slot,agent,role,rig,message"}

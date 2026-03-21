@@ -1,0 +1,6 @@
+[allowlist]
+description = "Known false positives"
+commits = ["d1f6f6df3bad48d00f248f70db147a82ad50aa11"]
+paths = [
+  '''(?i)authelia.*configuration\.yml\.default$''',
+]
