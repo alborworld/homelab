@@ -33,7 +33,6 @@ When ending a work session:
 
 ## Committing
 - Check changes with `git diff`
-- Commits must be GPG-signed (verified)
 - Single-line commit messages with conventional commits format
 - No Claude attributions
 - Breaking changes: use `!` after the type/scope, before the colon (e.g. `feat!:` or `feat(scope)!:`) and add a second line explaining what breaks
