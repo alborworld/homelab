@@ -1,6 +1,7 @@
 {
   "database": "dolt",
   "backend": "dolt",
-  "dolt_mode": "server",
-  "dolt_database": "beads_homelab"
+  "dolt_mode": "embedded",
+  "dolt_database": "beads_homelab",
+  "project_id": "136afc78-c748-43ed-b44a-752fa028d0ea"
 }
