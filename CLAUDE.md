@@ -1,41 +1,8 @@
-# Homelab Repository Guidelines
+# Homelab — Operations Reference
 
-## Issue Tracking: Use Beads
-This project uses **beads** (`bd`) for all issue tracking.
-
-### Required Workflow
-Before starting any work:
-1. Check for ready work:
-   `bd ready`
-2. Pick a task and claim it:
-   `bd update <issue-id> --status=in_progress`
-3. Work on the task (code, tests, docs)
-4. When done, close it:
-   `bd close <issue-id>`
-
-### Creating New Issues
-If you discover new work while implementing:
-`bd create --title="Issue title" --type=task|bug|feature --priority=2`
-
-### Rules
-- ALWAYS check `bd ready` before asking "what should I work on?"
-- ALWAYS update issue status to `in_progress` when you start working
-- ALWAYS close issues when you complete them
-- NEVER use markdown TODO lists for tracking work
-
-## Session Completion
-When ending a work session:
-1. Create beads issues for remaining work (`bd create`)
-2. Close finished tasks (`bd close`), update in-progress items
-3. Run `bd sync` and commit changes
-5. Push to remote if on a feature branch (confirm with user before pushing to main)
-6. Provide context for next session
-
-## Committing
-- Check changes with `git diff`
-- Single-line commit messages with conventional commits format
-- No Claude attributions
-- Breaking changes: use `!` after the type/scope, before the colon (e.g. `feat!:` or `feat(scope)!:`) and add a second line explaining what breaks
+Homelab-specific operational knowledge. General workflow, issue tracking (beads),
+and commit conventions are inherited from the workspace-root `CLAUDE.md`; this file
+holds only what is specific to running the homelab.
 
 ## SSH Host Access
 

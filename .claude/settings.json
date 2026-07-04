@@ -1,7 +1,0 @@
-{
-  "enabledPlugins": {
-    "beads@beads-marketplace": true
-  },
-  "gitCommitSignoff": false,
-  "hooks": {}
-}
