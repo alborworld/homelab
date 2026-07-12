@@ -52,21 +52,39 @@ For detailed architecture and service information, see [docs/ARCHITECTURE.md](do
 
 ### Core Infrastructure
 - **Containerization**: Docker & Docker Compose v2.21.0+
+- **Infrastructure as Code**: OpenTofu (Proxmox, Cloudflare, Garage) and Ansible
 - **Secrets Management**: SOPS with age encryption
 - **Reverse Proxy**: Traefik v3.4 with automatic SSL
 - **DNS**: AdGuard Home / Unbound (HA setup)
-- **Monitoring**: Uptime Kuma, Speedtest Tracker, UpSnap
+- **VPN Mesh**: Tailscale (with NordVPN exit node)
+- **Identity/SSO**: Pocket ID
+- **Object Storage**: Garage (S3-compatible)
+- **Monitoring**: Beszel, Uptime Kuma, Dozzle, Speedtest Tracker, UpSnap
+- **Image Updates**: WUD (What's Up Docker)
 
 ### Media Stack
-- **Media Management**: Plex, Sonarr, Radarr, Readarr
-- **Download Clients**: NZBGet, qBittorrent
-- **Media Processing**: Tdarr, Tautulli
+- **Media**: Plex, Sonarr, Radarr, Readarr, Prowlarr, Seerr
+- **Download Clients**: NZBGet, qBittorrent (via gluetun VPN)
+- **Media Processing**: Unmanic, Tautulli
+
+### Documents & Knowledge
+- **Documents**: Paperless-ngx, Stirling-PDF
+- **Reading**: Booklore, Audiobookshelf
+
+### AI & Automation
+- **AI**: openclaw (assistant gateway), Open WebUI
+- **Automation**: n8n
+
+### Home & Files
+- **Home Automation**: Home Assistant
+- **File Sync**: Syncthing
 
 ## 📁 Repository Structure
 
 ```
 homelab/
-├── ansible/          # Infrastructure as Code
+├── ansible/          # Ansible playbooks (VMs, LXC, Tailscale)
+├── tofu/             # OpenTofu stacks (Proxmox, Cloudflare, Garage)
 ├── docker/           # Docker configurations (see docker/README.md)
 ├── k8s/              # Kubernetes configurations (future)
 ├── docs/             # Documentation
@@ -97,10 +115,10 @@ With the number of services now approaching 50, it's time to upgrade the homelab
 
 Here are some of the planned improvements and features for the homelab:
 
+- [x] Use Terraform/OpenTofu to provision VMs in Proxmox and deploy Cloudflare distributions
+- [x] Use Ansible playbooks for automated setup and orchestration of VMs, Diskstation, and Raspberry Pi
 - [ ] Set up K3s cluster on pve
 - [ ] Set up GitOps with ArgoCD
-- [ ] Use Terraform/OpenTofu to provision VMs in Proxmox and deploy Cloudflare distributions
-- [ ] Use Ansible playbooks for automated setup and orchestration of VMs, Diskstation, and Raspberry Pi
 - [ ] Deploy HashiCorp Vault / OpenBao for centralized and seamless secrets management
 - [ ] Deploy Prometheus and Grafana for infrastructure monitoring
 - [ ] Set up CI/CD pipelines for automated deployments
