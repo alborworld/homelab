@@ -1,6 +1,6 @@
 services:
   gluetun:
-    image: qmcgaw/gluetun
+    image: qmcgaw/gluetun:v3
     container_name: Gluetun
     cap_add:
       - NET_ADMIN
@@ -29,6 +29,7 @@ services:
       - TZ=Europe/Amsterdam
       - HEALTH_VPN_DURATION_INITIAL=60s
       - HEALTH_TARGET_ADDRESS=1.1.1.1
+      - UPDATER_PERIOD=24h
     volumes:
       - ${VOLUMEDIR}/gluetun:/gluetun
       - /etc/localtime:/etc/localtime:ro
