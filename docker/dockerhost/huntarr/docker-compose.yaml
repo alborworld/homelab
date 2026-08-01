@@ -1,12 +1,13 @@
 services:
   huntarr:
-    image: ghcr.io/plexguide/huntarr:latest
+    # Newtarr: maintained fork of Huntarr v6.6.3 (upstream abandoned after
+    # unfixed auth-bypass/credential-exposure CVEs, Feb 2026)
+    image: ghcr.io/elfhosted/newtarr:rolling
     container_name: Huntarr
     volumes:
-      - ${VOLUMEDIR}/huntarr:/config
+      - ${VOLUMEDIR}/newtarr:/config
     environment:
       - TZ=Europe/Amsterdam
-      - BASE_URL=
     network_mode: "service:gluetun"
     depends_on:
       gluetun:
@@ -25,9 +26,9 @@ services:
       - traefik.http.routers.huntarr.tls.certresolver=cloudflare
       # HOMEPAGE
       - homepage.group=Media Automation
-      - homepage.name=Huntarr
+      - homepage.name=Newtarr
       - homepage.icon=huntarr.png
       - homepage.href=https://huntarr.${LOCAL_DOMAIN}
-      - homepage.description=Missing and Upgrade Media Hunter
+      - homepage.description=Missing and Upgrade Media Hunter (Huntarr fork)
       - homepage.siteMonitor=https://huntarr.${LOCAL_DOMAIN}
     restart: unless-stopped
