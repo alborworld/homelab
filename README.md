@@ -2,7 +2,7 @@
 
 A modular, GitOps-driven homelab infrastructure designed to provide security, privacy, and data ownership while automating and maintaining services across multiple devices.
 
-> ⚠️ **Work in Progress**: This repository is under active development. Expect changes and improvements over time.
+> 🧪 Continuously evolving platform used to evaluate infrastructure technologies and operational practices.
 
 ## 📚 Documentation
 
@@ -51,16 +51,16 @@ For detailed architecture and service information, see [docs/ARCHITECTURE.md](do
 ## 🛠️ Technology Stack
 
 ### Core Infrastructure
-- **Containerization**: Docker & Docker Compose v2.21.0+
-- **Infrastructure as Code**: OpenTofu (Proxmox, Cloudflare, Garage) and Ansible
-- **Secrets Management**: SOPS with age encryption
-- **Reverse Proxy**: Traefik v3.4 with automatic SSL
-- **DNS**: AdGuard Home / Unbound (HA setup)
-- **VPN Mesh**: Tailscale (with NordVPN exit node)
+- **Containerization**: Docker & Docker Compose v2.21.0+ — selected over Kubernetes because the fleet is a handful of heterogeneous, mostly single-node hosts (a Synology NAS, a Raspberry Pi, one VM) where Kubernetes adds operational overhead without delivering its scheduling and self-healing benefits. Compose `include` files per service keep the setup declarative and Git-driven; a K3s migration is on the roadmap for when the service count justifies it.
+- **Infrastructure as Code**: OpenTofu (Proxmox, Cloudflare, Garage) and Ansible — OpenTofu owns *what exists* (VMs, LXC containers, DNS records), Ansible owns *how it's configured* (software, Tailscale enrollment, firewall rules). Keeping the two concerns separate makes either side reproducible on its own.
+- **Secrets Management**: SOPS with age encryption — chosen because encrypted secrets can live in the repo itself, so the entire configuration stays version-controlled without depending on an always-on secrets server.
+- **Reverse Proxy**: Traefik v3.4 with automatic SSL — chosen because it discovers services from Docker labels, so routing config lives next to each service's compose file instead of in a central config, and certificates renew automatically via DNS-01. `traefik-kop` extends the same single entry point to the satellite Docker hosts.
+- **DNS**: AdGuard Home / Unbound (HA setup) — primary on the always-on Pi with a synced replica on the NAS, because DNS is the one service whose failure takes the whole household offline.
+- **VPN Mesh**: Tailscale (with NordVPN exit node) — chosen because it provides encrypted host-to-host connectivity and remote access with zero port forwarding, so nothing needs to be exposed to the public internet.
 - **Identity/SSO**: Pocket ID
-- **Object Storage**: Garage (S3-compatible)
+- **Object Storage**: Garage (S3-compatible) — chosen because it runs comfortably on modest NAS hardware and doubles as the S3 state backend for OpenTofu.
 - **Monitoring**: Beszel, Uptime Kuma, Dozzle, Speedtest Tracker, UpSnap
-- **Image Updates**: WUD (What's Up Docker)
+- **Image Updates**: WUD (What's Up Docker) — chosen over auto-updaters like Watchtower because it notifies about new images rather than blindly replacing running containers, keeping updates deliberate.
 
 ### Media Stack
 - **Media**: Plex, Sonarr, Radarr, Readarr, Prowlarr, Seerr
@@ -71,13 +71,20 @@ For detailed architecture and service information, see [docs/ARCHITECTURE.md](do
 - **Documents**: Paperless-ngx, Stirling-PDF
 - **Reading**: Booklore, Audiobookshelf
 
-### AI & Automation
-- **AI**: openclaw (assistant gateway), Open WebUI
-- **Automation**: n8n
-
 ### Home & Files
 - **Home Automation**: Home Assistant
 - **File Sync**: Syncthing
+
+## 🤖 AI Platform
+
+The homelab doubles as a self-hosted AI platform — a place to run assistants and experiment with LLM tooling on infrastructure I control:
+
+- **Local AI gateway — OpenClaw**: an AI assistant gateway running in a dedicated LXC container on Proxmox, reachable via a Telegram bot. Voice notes are transcribed locally with Whisper (faster-whisper on CPU) and responses can be spoken back via Edge TTS, while model inference goes out over HTTPS to external APIs. The container's full lifecycle is managed as code: OpenTofu provisions it, Ansible configures it.
+- **LLM experimentation — Open WebUI**: a chat interface for trying out models, prompts, and tools without committing to any single vendor's UI.
+- **Automation — n8n**: workflow engine that wires services together and provides the glue for AI-triggered automations.
+- **AI-assisted workflows**: the combination of the gateway, n8n, and the rest of the stack turns everyday operations (notifications, document handling with Paperless-ngx, media requests) into workflows an assistant can participate in.
+
+AI dashboards are reachable only over the Tailscale mesh — nothing is exposed to the public internet.
 
 ## 📁 Repository Structure
 
