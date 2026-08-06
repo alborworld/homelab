@@ -1,21 +1,21 @@
 #!/bin/bash
 # Scheduled update for Gluetun and its network_mode dependents.
-# Runs after Watchtower to pull new images and force-recreate the entire
-# Gluetun stack together, preserving correct network namespace references.
+# Pulls new images and force-recreates the entire Gluetun stack together,
+# preserving correct network namespace references.
 #
-# Why not Watchtower:
-# Watchtower is not dependency-aware for network_mode: service:<name>.
-# All Gluetun stack containers have watchtower.enable=false to prevent
-# Watchtower from recreating Gluetun independently (which breaks dependents).
-# This script handles updates for the entire group atomically.
+# Why a dedicated script:
+# Per-container updaters are not dependency-aware for network_mode:
+# service:<name> — recreating Gluetun alone leaves dependents bound to a
+# stale container ID. WUD therefore only notifies about new images; this
+# script handles updates for the entire group atomically.
 #
-# Crontab entry (runs 15 min after Watchtower at 6:30 CET):
+# Crontab entry:
 #   45 6 * * * /home/albor/docker/compose/scripts/update-gluetun-stack.sh >> /home/albor/docker/logs/gluetun-update.log 2>&1
 
 set -uo pipefail
 
 COMPOSE_DIR=/home/albor/docker/compose
-GLUETUN_DEPS=(qbittorrent nzbget prowlarr radarr sonarr readarr listenarr agregarr cleanuparr huntarr byparr)
+GLUETUN_DEPS=(qbittorrent nzbget prowlarr radarr sonarr listenarr agregarr cleanuparr huntarr byparr)
 
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 

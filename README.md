@@ -63,7 +63,7 @@ For detailed architecture and service information, see [docs/ARCHITECTURE.md](do
 - **Image Updates**: WUD (What's Up Docker) — chosen over auto-updaters like Watchtower because it notifies about new images rather than blindly replacing running containers, keeping updates deliberate.
 
 ### Media Stack
-- **Media**: Plex, Sonarr, Radarr, Readarr, Prowlarr, Seerr
+- **Media**: Plex, Sonarr, Radarr, Prowlarr, Seerr
 - **Download Clients**: NZBGet, qBittorrent (via gluetun VPN)
 - **Media Processing**: Unmanic, Tautulli
 

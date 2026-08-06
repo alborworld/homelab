@@ -25,8 +25,6 @@ include:
   - prowlarr/docker-compose.yaml
   - qbittorrent/docker-compose.yaml
   - radarr/docker-compose.yaml
-  - readarr/docker-compose.yaml
-  - rreading-glasses/docker-compose.yaml
   - sonarr/docker-compose.yaml
   - stirling-pdf/docker-compose.yaml
   - tautulli/docker-compose.yaml

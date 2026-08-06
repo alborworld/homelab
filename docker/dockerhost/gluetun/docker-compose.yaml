@@ -12,7 +12,6 @@ services:
       - 9696:9696     # Prowlarr
       - 7878:7878     # Radarr
       - 8989:8989     # Sonarr
-      - 8787:8787     # Readarr
       - 11011:11011   # Cleanuparr
       - 9705:9705     # Huntarr
       - 4545:4545     # Listenarr
@@ -41,6 +40,5 @@ services:
       start_interval: 5s
       retries: 3
     labels:
-      - com.centurylinklabs.watchtower.enable=false
       - wud.watch=false
     restart: always
