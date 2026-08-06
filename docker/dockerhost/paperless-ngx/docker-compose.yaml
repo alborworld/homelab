@@ -33,9 +33,6 @@ services:
       - ${PAPERLESS_NGX_DIR}/consume:/usr/src/paperless/consume
       - ${PAPERLESS_NGX_DIR}/export:/usr/src/paperless/export
     labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
-      # WATCHTOWER
-      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.paperless-ngx-dh.loadbalancer.server.port=8000
@@ -63,8 +60,6 @@ services:
       - TZ=Europe/Amsterdam
     volumes:
       - ${VOLUMEDIR}/paperless-ngx/postgres:/var/lib/postgresql/data
-    labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
     restart: unless-stopped
 
   paperless-ngx-redis:
@@ -72,6 +67,4 @@ services:
     container_name: Paperless-NGX-Redis
     volumes:
       - ${VOLUMEDIR}/paperless-ngx/redis:/data
-    labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
     restart: unless-stopped

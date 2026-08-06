@@ -26,9 +26,6 @@ services:
       start_period: 60s
       timeout: 10s
     labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
-      # WATCHTOWER
-      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.booklore.loadbalancer.server.port=6060
@@ -64,6 +61,4 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-    labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
     restart: unless-stopped

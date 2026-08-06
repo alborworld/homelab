@@ -10,6 +10,5 @@ services:
       - BIND_IP=10.0.4.53
       - KOP_HOSTNAME=dockerhost
     labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
       - wud.watch=false
     restart: always

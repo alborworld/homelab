@@ -8,6 +8,5 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/snap/docker/common/var-lib-docker/volumes:/var/lib/docker/volumes
     labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
       - wud.watch=false
     restart: always

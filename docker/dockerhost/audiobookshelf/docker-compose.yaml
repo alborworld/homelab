@@ -14,9 +14,6 @@ services:
       - ${MEDIADIR}/audiobooks:/audiobooks
       - ${MEDIADIR}/podcasts:/podcasts
     labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
-      # WATCHTOWER
-      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.audiobookshelf.loadbalancer.server.port=13378

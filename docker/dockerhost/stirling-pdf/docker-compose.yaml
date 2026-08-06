@@ -15,9 +15,6 @@ services:
       - LANGS=en_GB
       - DOCKER_ENABLE_SECURITY=false
     labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
-      # WATCHTOWER
-      - com.centurylinklabs.watchtower=true
       # TRAEFIK
       - traefik.enable=true
       - traefik.http.services.stirling-pdf.loadbalancer.server.port=8082

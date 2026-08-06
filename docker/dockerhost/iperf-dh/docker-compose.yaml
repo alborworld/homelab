@@ -3,8 +3,4 @@ services:
     image: frauhottelmann/docker-iperf3:latest
     container_name: iPerf3-DH
     network_mode: host
-    labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
-      # WATCHTOWER
-      - com.centurylinklabs.watchtower=true
     restart: always
