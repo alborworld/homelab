@@ -118,7 +118,7 @@ homelab/
 
 ## 🚧 Roadmap
 
-With the number of services now approaching 50, it's time to upgrade the homelab's orchestration to Kubernetes for improved scalability, reliability, and management.
+With more than 60 containers now running across the three Docker hosts, it's time to upgrade the homelab's orchestration to Kubernetes for improved scalability, reliability, and management.
 
 Here are some of the planned improvements and features for the homelab:
 
