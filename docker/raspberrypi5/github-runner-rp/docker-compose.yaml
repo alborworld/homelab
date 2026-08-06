@@ -7,6 +7,8 @@ services:
       ACCESS_TOKEN: ${GITHUB_RUNNER_ACCESS_TOKEN}
       RUNNER_NAME: "homelab-raspberrypi5-runner"
       LABELS: "docker,homelab,raspberrypi5"
+      EPHEMERAL: "true"  # Deregister after each job to prevent stale config crash loops
+      DISABLE_AUTO_UPDATE: "true"
       RUNNER_WAIT_FOR_DOCKER_SECONDS: "60"  # Wait for Docker/network at startup
       # Uncomment below for Org-wide runner
       # ORG_RUNNER: "true"

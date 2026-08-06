@@ -7,16 +7,14 @@ services:
       ACCESS_TOKEN: ${GITHUB_RUNNER_ACCESS_TOKEN}
       RUNNER_NAME: "homelab-dockerhost-runner"
       LABELS: "docker,homelab,dockerhost"
+      EPHEMERAL: "true"  # Deregister after each job to prevent stale config crash loops
+      DISABLE_AUTO_UPDATE: "true"
       RUNNER_WAIT_FOR_DOCKER_SECONDS: "60"  # Wait for Docker/network at startup
       # Uncomment below for Org-wide runner
       # ORG_RUNNER: "true"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # if you want docker-in-docker
       - ${VOLUMEDIR}/github-runner-dh:/runner/_work
-    labels:
-      - com.centurylinklabs.watchtower.scope=dockerhost
-      # WATCHTOWER
-      - com.centurylinklabs.watchtower=true
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS -H \"Authorization: token ${GITHUB_RUNNER_ACCESS_TOKEN}\" -H \"User-Agent: homelab-runner-healthcheck\" https://api.github.com/rate_limit || exit 1"]
