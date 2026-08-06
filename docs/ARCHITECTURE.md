@@ -151,7 +151,7 @@ The OpenClaw LXC container is provisioned using **OpenTofu** (container creation
 ## Automation & CI/CD
 
 - Infrastructure as Code: All configuration is managed via Git.
-- Self-hosted GitHub Actions runners (one per Docker host, ephemeral) are used for testing and deploying configuration changes.
+- Self-hosted GitHub Actions runners (one per Docker host, ephemeral) are provisioned but currently disabled — they'll be re-enabled when the CI/CD deployment pipelines on the roadmap are implemented.
 - **OpenTofu** provisions Proxmox LXC containers and VMs, with state stored in Garage S3.
 - **Ansible** handles post-provisioning configuration (software install, Tailscale enrollment, firewall rules).
 - Together, OpenTofu + Ansible manage the full lifecycle of LXC containers (e.g., OpenClaw) and VMs.

@@ -11,7 +11,8 @@ include:
   - cleanuparr/docker-compose.yaml
   - dockerproxy-dh/docker-compose.yaml
   - dozzle/docker-compose.yaml
-  - github-runner-dh/docker-compose.yaml
+  # Disabled until CI/CD pipelines exist (see README roadmap) — no workflows dispatch jobs yet
+  # - github-runner-dh/docker-compose.yaml
   - gluetun/docker-compose.yaml
   - huntarr/docker-compose.yaml
   - listenarr/docker-compose.yaml

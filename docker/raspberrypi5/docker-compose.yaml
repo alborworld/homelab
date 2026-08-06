@@ -8,7 +8,8 @@ include:
   - beszel-agent-rp/docker-compose.yaml
   - dockerproxy-rp/docker-compose.yaml
   - dozzle-agent-rp/docker-compose.yaml
-  - github-runner-rp/docker-compose.yaml
+  # Disabled until CI/CD pipelines exist (see README roadmap) — no workflows dispatch jobs yet
+  # - github-runner-rp/docker-compose.yaml
   - homeassistant/docker-compose.yaml
   - homepage/docker-compose.yaml
   - pocket-id/docker-compose.yaml

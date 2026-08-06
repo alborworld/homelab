@@ -9,7 +9,8 @@ include:
   - dockerproxy-ds/docker-compose.yaml
   - dozzle-agent-ds/docker-compose.yaml
   - garage/docker-compose.yaml
-  - github-runner-ds/docker-compose.yaml
+  # Disabled until CI/CD pipelines exist (see README roadmap) — no workflows dispatch jobs yet
+  # - github-runner-ds/docker-compose.yaml
   - iperf-ds/docker-compose.yaml
   - portainer-agent-ds/docker-compose.yaml
   - syncthing/docker-compose.yaml
