@@ -76,8 +76,8 @@ Admin console: https://login.tailscale.com/admin
 - **Docker Compose** is used for container orchestration on all nodes.
 - **Proxmox VE** manages VMs and LXC containers, including the Dockerhost VM and dedicated LXCs for AI services.
 - **Traefik** acts as a reverse proxy, providing SSL termination and service discovery across hosts.
-- **AdGuard Home** provides high-availability DNS, running on both the Raspberry Pi and DiskStation (DS218+) - using [AdGuard Home Sync]](https://github.com/bakito/adguardhome-sync).
-- **Watchtower** automates container updates.
+- **AdGuard Home** provides high-availability DNS, running on both the Raspberry Pi and DiskStation (DS218+) - using [AdGuard Home Sync](https://github.com/bakito/adguardhome-sync).
+- **WUD (What's Up Docker)** monitors all three Docker hosts for new container images and sends Telegram notifications — updates are applied deliberately, not automatically.
 - **SOPS** is used for secrets management, with all sensitive environment variables encrypted and version-controlled.
 
 ### Dockerhost Boot Sequence
@@ -92,7 +92,7 @@ The systemd service is necessary because Docker's built-in `restart: always` pol
 
 ### VPN Dependency (Gluetun)
 
-The media automation stack (Sonarr, Radarr, Prowlarr, qBittorrent, NZBget, Readarr, Cleanuparr, Huntarr, Agregarr, Byparr) routes all traffic through a Gluetun VPN container using `network_mode: "service:gluetun"`. This creates a hard kernel-level network namespace binding to Gluetun's container ID.
+The media automation stack (Sonarr, Radarr, Prowlarr, qBittorrent, NZBget, Listenarr, Cleanuparr, Huntarr — running the maintained [newtarr](https://github.com/elfhosted/newtarr) fork — Agregarr, Byparr) routes all traffic through a Gluetun VPN container using `network_mode: "service:gluetun"`. This creates a hard kernel-level network namespace binding to Gluetun's container ID.
 
 **Why `restart: always` fails on boot:** When the VM restarts, Docker restores containers but Gluetun gets a new container ID. Dependent containers still reference the old ID in their network namespace, failing with `exit 128: joining network namespace of container: No such container`. Docker's restart policy just re-starts the broken container — it cannot recreate the namespace link.
 
@@ -100,15 +100,15 @@ The media automation stack (Sonarr, Radarr, Prowlarr, qBittorrent, NZBget, Reada
 
 Gluetun's Docker healthcheck has a `start_period: 120s` to give the VPN enough time to cycle through NordVPN servers before being marked unhealthy.
 
-### Container Auto-Updates (Watchtower)
+### Container Image Updates (WUD)
 
-Watchtower runs daily at 6:30 AM and auto-updates containers labeled with `com.centurylinklabs.watchtower=true`. However, **Gluetun and its 10 dependents are excluded** from Watchtower because it is not dependency-aware for `network_mode: service:<name>` relationships.
+**WUD (What's Up Docker)** runs on raspberrypi5 and watches all three Docker hosts (locally via the Docker socket, remotely via writable Docker socket proxies on dockerhost and diskstation). It only **monitors and notifies** (Telegram) — it does not auto-update containers, keeping image updates a deliberate action. Watchtower, which previously auto-updated containers, was retired in favor of this monitor-only approach.
 
-**The problem:** When Watchtower recreates Gluetun with a new image, dependent containers keep a stale reference to the old container ID. traefik-kop cannot resolve their IPs, so routes are never published to Redis — causing 404s on Traefik and Homepage widget failures.
+**The exception — the Gluetun stack:** the VPN-bound media stack cannot be updated container-by-container. When Gluetun is recreated with a new image, dependent containers (using `network_mode: service:gluetun`) keep a stale reference to the old container ID. traefik-kop cannot resolve their IPs, so routes are never published to Redis — causing 404s on Traefik and Homepage widget failures.
 
-**The fix:** A separate cron job (`scripts/update-gluetun-stack.sh`) runs at 6:45 AM — 15 minutes after Watchtower — and uses `docker compose up -d --always-recreate-deps gluetun` to pull new images and recreate the entire Gluetun stack with correct container references. This is a no-op if no images changed.
+**The fix:** A cron job (`scripts/update-gluetun-stack.sh`) runs daily at 6:45 AM and uses `docker compose up -d --always-recreate-deps gluetun` to pull new images and recreate the entire Gluetun stack together, with correct container references. This is a no-op if no images changed.
 
-**Excluded from Watchtower:** gluetun, sonarr, radarr, prowlarr, readarr, qbittorrent, nzbget, agregarr, cleanuparr, huntarr, byparr.
+**Gluetun stack (updated only via the cron job):** gluetun, sonarr, radarr, prowlarr, listenarr, qbittorrent, nzbget, agregarr, cleanuparr, huntarr, byparr.
 
 ## AI Services
 
