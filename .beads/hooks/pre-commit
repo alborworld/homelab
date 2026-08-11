@@ -31,3 +31,17 @@ if command -v bd >/dev/null 2>&1; then
   if [ $_bd_exit -ne 0 ]; then exit $_bd_exit; fi
 fi
 # --- END BEADS INTEGRATION v1.0.5 ---
+
+# --- local: secret scanning (intentionally OUTSIDE the beads-managed markers) ---
+# beads sets core.hooksPath=.beads/hooks, which shadows .git/hooks entirely, so the
+# gitleaks hook sitting in .git/hooks/pre-commit never executes. Invoke it here so
+# it actually runs. Uses `gitleaks git --staged`; `gitleaks protect` is deprecated.
+if command -v gitleaks >/dev/null 2>&1; then
+  if ! gitleaks git --staged --no-banner; then
+    echo >&2 "gitleaks: staged changes contain a potential secret — commit blocked."
+    echo >&2 "         review above; if it is a false positive, add it to .gitleaks.toml"
+    exit 1
+  fi
+else
+  echo >&2 "gitleaks not installed — skipping secret scan"
+fi

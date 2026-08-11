@@ -1,3 +1,12 @@
+# Inherit gitleaks' built-in ruleset, then narrow it with the allowlist below.
+# This [extend] block is load-bearing: without it a custom config REPLACES the
+# default rules, leaving zero rules defined -- so every scan trivially reports
+# "no leaks found" while detecting nothing. Verified 2026-08-11: a planted
+# high-entropy GitHub PAT / AWS key / Slack token was caught with defaults and
+# silently passed without this block.
+[extend]
+useDefault = true
+
 [allowlist]
 description = "Known false positives"
 commits = ["d1f6f6df3bad48d00f248f70db147a82ad50aa11"]
