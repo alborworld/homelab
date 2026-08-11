@@ -3,13 +3,15 @@ services:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
     container_name: WudProxy-DS
     environment:
-      - CONTAINERS=1
-      - IMAGES=1
-      - POST=1
+      - CONTAINERS=1 # WUD reads container list
+      - IMAGES=1 # WUD inspects local images for digest comparison
+      - POST=0 # Read-only: WUD is monitor-only (no Docker trigger configured),
+               # so it never needs write access. POST=1 here granted any host that
+               # could reach this port full Docker API control = root on this host.
     ports:
       - 2376:2375
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Mounted read-only
     labels:
       - wud.watch=false
     restart: unless-stopped
