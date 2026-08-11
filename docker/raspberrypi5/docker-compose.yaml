@@ -10,7 +10,8 @@ include:
   - dozzle-agent-rp/docker-compose.yaml
   # Disabled until CI/CD pipelines exist (see README roadmap) — no workflows dispatch jobs yet
   # - github-runner-rp/docker-compose.yaml
-  - homeassistant/docker-compose.yaml
+  # Disabled, as not in use and consuming too much memory
+  # - homeassistant/docker-compose.yaml
   - homepage/docker-compose.yaml
   - pocket-id/docker-compose.yaml
   - portainer/docker-compose.yaml
