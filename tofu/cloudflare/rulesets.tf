@@ -1,4 +1,4 @@
-resource "cloudflare_ruleset" "terraform_managed_resource_f0c330719edd47928b3f23baaa4e22c7_0" {
+resource "cloudflare_ruleset" "mail_gmail_redirect" {
   kind    = "zone"
   name    = "default"
   phase   = "http_request_dynamic_redirect"
