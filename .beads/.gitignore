@@ -79,3 +79,6 @@ bd.db
 # carry network topology, host power schedules and open, unremediated security
 # findings -- i.e. a current map of weaknesses. Keep them local.
 issues.jsonl
+
+# Auto-import staging marker (bd runtime, local-only)
+.auto-import-issues.jsonl
