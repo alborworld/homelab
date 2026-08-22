@@ -158,6 +158,21 @@ documented in [ARCHITECTURE.md](ARCHITECTURE.md#dockerhost-boot-sequence).
 Deploying during the overnight window is not possible on `dockerhost` or `diskstation` —
 the hosts are off.
 
+### NFS mount recovery on dockerhost
+
+`diskstation` going down overnight drops the NFS mount that Plex serves its libraries
+from, and the mount does not always recover on its own when the NAS returns — Plex keeps
+running with an empty library rather than failing visibly. A cron job on dockerhost
+remounts `/media` and restarts Plex when the mount is missing:
+
+```
+*/5 * * * * /home/albor/docker/compose/scripts/plex-nfs-healthcheck.sh >> /home/albor/docker/logs/nfs-healthcheck.log 2>&1
+```
+
+The `mount /media` it calls depends on an fstab entry on the host, which is not yet
+version-controlled; it will be captured when dockerhost's configuration moves into
+Ansible — GitHub [#45](https://github.com/alborworld/homelab/issues/45).
+
 ## Rollback
 
 There is no release or image-pinning mechanism to roll back to. Rollback means reverting
