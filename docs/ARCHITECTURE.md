@@ -32,7 +32,10 @@ All hosts are connected via [Tailscale](https://tailscale.com) mesh VPN, enablin
 | exit-nordvpn-nl | NordVPN Amsterdam exit node (LXC) |
 | openclaw | AI assistant gateway (LXC on nuc13, VMID 202) |
 
-> **Note:** Tailscale and LAN IPs are not committed to the repo. Use `tailscale status` to look up IPs, or MagicDNS hostnames for connectivity.
+> **Note:** Tailscale IPs (`100.x.x.x`) are deliberately not committed to the repo — look them
+> up with `tailscale status`, or use MagicDNS hostnames. LAN addressing for the `10.0.4.0/24`
+> segment *is* committed, and appears in the Ansible inventory and roles, several compose
+> files, and the OpenTofu stacks. Parameterising it out is tracked as beads `homelab-lmk`.
 
 ### DNS Configuration
 
