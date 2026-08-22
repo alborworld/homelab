@@ -26,7 +26,7 @@
 -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # LAN SSH (Ansible provisioning from Proxmox host)
--A INPUT -s 10.0.4.0/24 -p tcp --dport 22 -j ACCEPT
+-A INPUT -s {{ lan_subnet }} -p tcp --dport 22 -j ACCEPT
 
 # Tailscale interface (inter-node: beszel, admin SSH)
 -A INPUT -i tailscale0 -j ACCEPT

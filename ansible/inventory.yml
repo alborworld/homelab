@@ -9,12 +9,12 @@ all:
     tailscale_subnet_routers:
       hosts:
         raspberrypi5:
-          tailscale_routes: "10.0.4.0/24"
+          tailscale_routes: "{{ lan_subnet }}"
 
     exit_nodes:
       hosts:
         exit-nordvpn-nl:
-          ansible_host: 10.0.4.100  # LAN IP (use Tailscale hostname after provisioning)
+          ansible_host: "{{ lan_ips.exit_nordvpn_nl }}"  # use the Tailscale hostname after provisioning
           ansible_user: root
           tailscale_hostname: exit-nordvpn-nl
           nordvpn_endpoint: "nl1060.nordvpn.com:51820"
@@ -24,7 +24,7 @@ all:
     openclaw_servers:
       hosts:
         openclaw:
-          ansible_host: 10.0.4.66  # LAN IP (use Tailscale hostname after provisioning)
+          ansible_host: "{{ lan_ips.openclaw }}"  # use the Tailscale hostname after provisioning
           ansible_user: root
           tailscale_hostname: openclaw
           beszel_agent_listen_tailscale: true

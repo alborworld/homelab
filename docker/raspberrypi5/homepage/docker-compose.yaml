@@ -7,6 +7,8 @@ services:
       PUID: ${UID}
       PGID: ${GID}
       HOMEPAGE_VAR_LOCAL_DOMAIN: ${LOCAL_DOMAIN}
+      HOMEPAGE_VAR_DOCKERHOST_IP: ${DOCKERHOST_IP}
+      HOMEPAGE_VAR_DISKSTATION_IP: ${DISKSTATION_IP}
     volumes:
       - ./config:/app/config
       - ${VOLUMEDIR}/homepage/logs:/app/logs:rw

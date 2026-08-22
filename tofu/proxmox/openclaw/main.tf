@@ -23,7 +23,7 @@ resource "proxmox_virtual_environment_container" "openclaw" {
   initialization {
     hostname = local.hostname
     dns {
-      servers = ["10.0.4.94", "10.0.4.111"]
+      servers = [var.dns_primary, var.dns_replica]
     }
     ip_config {
       ipv4 { address = "dhcp" }
@@ -151,7 +151,7 @@ resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
     type    = "in"
     action  = "ACCEPT"
     comment = "SSH from LAN (Ansible provisioning)"
-    source  = "10.0.4.0/24"
+    source  = var.lan_subnet
     dport   = "22"
     proto   = "tcp"
   }
@@ -171,7 +171,7 @@ resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
     type    = "out"
     action  = "DROP"
     comment = "Block HTTPS to LAN"
-    dest    = "10.0.4.0/24"
+    dest    = var.lan_subnet
     dport   = "443"
     proto   = "tcp"
   }
@@ -180,7 +180,7 @@ resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
     type    = "out"
     action  = "DROP"
     comment = "Block HTTP to LAN"
-    dest    = "10.0.4.0/24"
+    dest    = var.lan_subnet
     dport   = "80"
     proto   = "tcp"
   }
@@ -189,7 +189,7 @@ resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
     type    = "out"
     action  = "ACCEPT"
     comment = "DNS to AdGuard primary (UDP)"
-    dest    = "10.0.4.94"
+    dest    = var.dns_primary
     dport   = "53"
     proto   = "udp"
   }
@@ -198,7 +198,7 @@ resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
     type    = "out"
     action  = "ACCEPT"
     comment = "DNS to AdGuard primary (TCP)"
-    dest    = "10.0.4.94"
+    dest    = var.dns_primary
     dport   = "53"
     proto   = "tcp"
   }
@@ -207,7 +207,7 @@ resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
     type    = "out"
     action  = "ACCEPT"
     comment = "DNS to AdGuard replica (UDP)"
-    dest    = "10.0.4.111"
+    dest    = var.dns_replica
     dport   = "53"
     proto   = "udp"
   }
@@ -216,7 +216,7 @@ resource "proxmox_virtual_environment_firewall_rules" "openclaw" {
     type    = "out"
     action  = "ACCEPT"
     comment = "DNS to AdGuard replica (TCP)"
-    dest    = "10.0.4.111"
+    dest    = var.dns_replica
     dport   = "53"
     proto   = "tcp"
   }

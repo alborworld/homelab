@@ -33,3 +33,25 @@ variable "ssh_public_key_path" {
   type        = string
   default     = "/root/.ssh/id_rsa.pub"
 }
+
+# Network
+# LAN addressing. Tailscale IPs are deliberately not declared here: they are
+# looked up at runtime or reached by MagicDNS hostname, never committed.
+# See docs/ARCHITECTURE.md.
+variable "lan_subnet" {
+  description = "Home LAN subnet in CIDR form"
+  type        = string
+  default     = "10.0.4.0/24"
+}
+
+variable "dns_primary" {
+  description = "AdGuard Home primary resolver (raspberrypi5)"
+  type        = string
+  default     = "10.0.4.94"
+}
+
+variable "dns_replica" {
+  description = "AdGuard Home replica resolver (diskstation)"
+  type        = string
+  default     = "10.0.4.111"
+}

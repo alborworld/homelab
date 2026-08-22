@@ -7,14 +7,14 @@ my-docker:
   port: 2375
 
 dockerhost:
-  host: 10.0.4.53
+  host: {{HOMEPAGE_VAR_DOCKERHOST_IP}}
   port: 2375
 #  host: https://dockerproxy.dockerhost.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
 #  port: 443
 #  protocol: https
 
 diskstation:
-  host: 10.0.4.111
+  host: {{HOMEPAGE_VAR_DISKSTATION_IP}}
   port: 2375
 #  host: https://dockerproxy.diskstation.{{HOMEPAGE_VAR_LOCAL_DOMAIN}}
 #  port: 443

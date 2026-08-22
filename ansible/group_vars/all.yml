@@ -1,0 +1,23 @@
+---
+# Canonical LAN addressing for the homelab — the single source of truth for Ansible.
+#
+# Tailscale IPs are deliberately absent: they are looked up at runtime with
+# `tailscale status` or reached by MagicDNS hostname, never committed.
+# See docs/ARCHITECTURE.md.
+
+lan_subnet: "10.0.4.0/24"
+
+lan_ips:
+  raspberrypi5: "10.0.4.94"
+  diskstation: "10.0.4.111"
+  dockerhost: "10.0.4.53"
+  openclaw: "10.0.4.66"
+  exit_nordvpn_nl: "10.0.4.100"
+
+# AdGuard Home HA pair: primary on the always-on edge node, replica on the NAS.
+dns_resolvers:
+  - "{{ lan_ips.raspberrypi5 }}"
+  - "{{ lan_ips.diskstation }}"
+
+# Consumed by roles/openclaw (sshd ListenAddress).
+openclaw_lan_ip: "{{ lan_ips.openclaw }}"

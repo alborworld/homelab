@@ -13,12 +13,8 @@ openclaw_user: "openclaw"
 openclaw_home: "/home/openclaw"
 openclaw_primary_model: "openai-codex/gpt-5.3-codex"
 
-# Network
-dns_resolvers:
-  - "10.0.4.94"    # AdGuard Home (raspberrypi5)
-  - "10.0.4.111"   # AdGuard Home replica (diskstation)
-lan_subnet: "10.0.4.0/24"
-openclaw_lan_ip: "10.0.4.66"
+# Network — dns_resolvers, lan_subnet and openclaw_lan_ip come from
+# ansible/group_vars/all.yml so the addressing has one source of truth.
 
 # Whisper (audio transcription)
 whisper_venv_path: "{{ openclaw_home }}/.venvs/whisper"
