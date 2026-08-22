@@ -32,9 +32,11 @@ dockerhost/
 
 2. **Set up the directory structure**:
    ```bash
-   mkdir -p ~/docker/compose
+   mkdir -p ~/docker
    ln -s ~/homelab/docker/dockerhost ~/docker/compose
    ```
+   Create the parent directory only — `mkdir -p ~/docker/compose` would make the symlink
+   land *inside* it instead of creating it.
 
 3. **Decrypt secrets**:
    ```bash

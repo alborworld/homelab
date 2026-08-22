@@ -44,41 +44,34 @@ docker/
    git clone git@github.com:alborworld/homelab.git ~/homelab
    ```
 
-2. **Set up environment and symlinks** (run the appropriate section for your host):
+2. **Create the compose symlink** (run the line for your host):
 
-   **Raspberry Pi 5**:
    ```bash
-   # Add to ~/.zprofile_local or your shell's login profile
-   echo 'export COMPOSEDIR=~/docker/compose' >> ~/.zprofile_local
-   
-   # Create symlink
-   ln -s ~/homelab/docker/raspberrypi5 $COMPOSEDIR
+   # raspberrypi5 / dockerhost — create the PARENT dir, not the link itself
+   mkdir -p ~/docker
+   ln -s ~/homelab/docker/raspberrypi5 ~/docker/compose   # or .../dockerhost
+
+   # diskstation
+   ln -s ~/homelab/docker/diskstation /volume1/docker/compose
    ```
 
-   **Dockerhost (Proxmox VM)**:
+   No shell variables need exporting. The paths the compose files actually use
+   (`VOLUMEDIR`, `LOCAL_DOMAIN`, `UID`/`GID`, and `MEDIADIR` on dockerhost) come from the
+   host's `.env`, not from your login profile.
+
+3. **Ship the secrets**, from the repo root on your workstation:
+
    ```bash
-   # Add to ~/.zprofile_local or your shell's login profile
-   echo 'export COMPOSEDIR=~/docker/compose' >> ~/.zprofile_local
-   
-   # Create symlink
-   ln -s ~/homelab/docker/dockerhost $COMPOSEDIR
+   make deploy-raspberrypi5    # decrypt .env.sops.enc and pipe it to the host over ssh
    ```
 
-   **Diskstation (DS218+)**:
-   ```bash
-   # Add to ~/.profile or your shell's login profile
-   echo 'export COMPOSEDIR=/volume1/docker/compose' >> ~/.profile
-   
-   # Create symlink
-   ln -s ~/homelab/docker/diskstation $COMPOSEDIR
-   ```
+   See [SETUP.md](../docs/SETUP.md#2-ship-the-secrets) for the other Makefile targets and
+   the diskstation caveat.
 
-   After adding the export, either log out and back in or run `source ~/.zprofile_local` (or the appropriate profile file) to apply the changes.
+4. **Start the services**, on the host:
 
-3. **Deploy services**:
    ```bash
-   cd $COMPOSEDIR
-   make decrypt  # Decrypt environment variables
+   cd ~/docker/compose         # /volume1/docker/compose on diskstation
    docker compose up -d
    ```
 
