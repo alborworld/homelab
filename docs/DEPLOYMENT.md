@@ -158,20 +158,24 @@ documented in [ARCHITECTURE.md](ARCHITECTURE.md#dockerhost-boot-sequence).
 Deploying during the overnight window is not possible on `dockerhost` or `diskstation` —
 the hosts are off.
 
-### NFS mount recovery on dockerhost
+### NFS mounts on dockerhost
 
-`diskstation` going down overnight drops the NFS mount that Plex serves its libraries
-from, and the mount does not always recover on its own when the NAS returns — Plex keeps
-running with an empty library rather than failing visibly. A cron job on dockerhost
-remounts `/media` and restarts Plex when the mount is missing:
+`diskstation` going down overnight takes with it the NFS shares that Plex and the media
+stack read from. Recovery needs no scripting: both shares are `x-systemd.automount`
+entries in the host's `/etc/fstab`, so systemd mounts them on first access and remounts
+them after the NAS returns.
 
-```
-*/5 * * * * /home/albor/docker/compose/scripts/plex-nfs-healthcheck.sh >> /home/albor/docker/logs/nfs-healthcheck.log 2>&1
-```
+| Mount            | Source                                  |
+|------------------|-----------------------------------------|
+| `/mnt/media`     | `diskstation:/volume1/media`             |
+| `/mnt/Alessandro`| `diskstation:/volume1/homes/Alessandro`  |
 
-The `mount /media` it calls depends on an fstab entry on the host, which is not yet
-version-controlled; it will be captured when dockerhost's configuration moves into
-Ansible — GitHub [#45](https://github.com/alborworld/homelab/issues/45).
+Compose reaches the media share through `$MEDIADIR` (`/mnt/media`), so a container's
+bind mount follows the fstab entry rather than hardcoding a path.
+
+That fstab is not version-controlled — it is part of the host state that has yet to move
+into Ansible, tracked as beads `homelab-4v6` / GitHub
+[#45](https://github.com/alborworld/homelab/issues/45).
 
 ## Rollback
 
