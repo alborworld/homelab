@@ -34,8 +34,8 @@ All hosts are connected via [Tailscale](https://tailscale.com) mesh VPN, enablin
 
 > **Note:** Tailscale IPs (`100.x.x.x`) are deliberately not committed to the repo — look them
 > up with `tailscale status`, or use MagicDNS hostnames. LAN addressing for the `10.0.4.0/24`
-> segment *is* committed, and appears in the Ansible inventory and roles, several compose
-> files, and the OpenTofu stacks. Parameterising it out is tracked as beads `homelab-lmk`.
+> segment *is* committed. It is parameterised per layer in Ansible group variables, OpenTofu
+> variables, and each Docker host's encrypted environment file.
 
 ### DNS Configuration
 
