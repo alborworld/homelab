@@ -32,4 +32,6 @@ services:
       - homepage.href=https://id.${LOCAL_DOMAIN}
       - homepage.siteMonitor=https://id.${LOCAL_DOMAIN}
       - homepage.description=Authentication Gateway
+      # WUD
+      - wud.trigger.include=telegram.1
     restart: unless-stopped

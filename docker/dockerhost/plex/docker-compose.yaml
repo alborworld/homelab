@@ -41,4 +41,6 @@ services:
       - homepage.widget.type=plex
       - homepage.widget.url=https://plex.${LOCAL_DOMAIN}
       - homepage.widget.key=${PLEX_TOKEN}
+      # WUD
+      - wud.trigger.include=telegram.1
     restart: always

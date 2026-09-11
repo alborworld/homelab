@@ -34,6 +34,8 @@ services:
       - traefik.http.routers.adguardhome-sync.service=adguardhome-sync
       - traefik.http.routers.adguardhome-sync.tls=true
       - traefik.http.routers.adguardhome-sync.tls.certresolver=cloudflare
+      # WUD
+      - wud.trigger.include=telegram.1
     depends_on:
       - adguardhome-replica
     restart: always

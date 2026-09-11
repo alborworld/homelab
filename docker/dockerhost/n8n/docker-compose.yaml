@@ -54,4 +54,6 @@ services:
       - homepage.href=https://n8n.${LOCAL_DOMAIN}
       - homepage.description=Workflow Automation
       - homepage.siteMonitor=https://n8n.${LOCAL_DOMAIN}
+      # WUD
+      - wud.trigger.include=telegram.1
     restart: unless-stopped

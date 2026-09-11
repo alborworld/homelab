@@ -5,4 +5,7 @@ services:
     network_mode: host
     volumes:
       - ${VOLUMEDIR}/unbound:/opt/unbound/etc/unbound
+    labels:
+      # WUD
+      - wud.trigger.include=telegram.1
     restart: always

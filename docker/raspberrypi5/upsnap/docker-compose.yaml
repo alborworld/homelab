@@ -24,4 +24,6 @@ services:
       - homepage.href=https://upsnap.${LOCAL_DOMAIN}
       - homepage.description=Wake-on-LAN Automation
       - homepage.siteMonitor=https://upsnap.${LOCAL_DOMAIN}
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: unless-stopped

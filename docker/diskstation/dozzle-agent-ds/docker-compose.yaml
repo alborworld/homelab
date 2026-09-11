@@ -9,4 +9,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - "7007:7007"
+    labels:
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: always

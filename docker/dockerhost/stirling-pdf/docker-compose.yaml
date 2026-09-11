@@ -30,4 +30,6 @@ services:
       - homepage.href=https://stirlingpdf.${LOCAL_DOMAIN}
       - homepage.description=Advanced PDF Management
       - homepage.siteMonitor=https://stirlingpdf.${LOCAL_DOMAIN}
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: always

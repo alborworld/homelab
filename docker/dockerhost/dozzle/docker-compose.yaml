@@ -26,4 +26,6 @@ services:
       - homepage.href=https://dozzle.${LOCAL_DOMAIN}
       - homepage.description=Container Log Viewer
       - homepage.siteMonitor=https://dozzle.${LOCAL_DOMAIN}
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: always

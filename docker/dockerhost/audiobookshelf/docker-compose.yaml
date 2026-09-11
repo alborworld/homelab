@@ -32,4 +32,6 @@ services:
       - homepage.widget.type=audiobookshelf
       - homepage.widget.url=https://audiobookshelf.${LOCAL_DOMAIN}
       - homepage.widget.key=${AUDIOBOOKSHELF_API_KEY}
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: unless-stopped

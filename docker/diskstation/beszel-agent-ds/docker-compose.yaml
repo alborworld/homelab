@@ -8,4 +8,7 @@ services:
     environment:
       LISTEN: 45876
       KEY: ${BESZEL_AGENT_DISKSTATION_PUBLIC_KEY}
+    labels:
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: unless-stopped

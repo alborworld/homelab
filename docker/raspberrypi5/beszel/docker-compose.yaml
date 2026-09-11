@@ -19,4 +19,6 @@ services:
       - homepage.href=https://beszel.${LOCAL_DOMAIN}
       - homepage.siteMonitor=https://beszel.${LOCAL_DOMAIN}
       - homepage.description=Server Monitoring Platform
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: unless-stopped

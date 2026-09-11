@@ -34,4 +34,6 @@ services:
       - homepage.widget.key=${TAUTULLI_API_KEY}
       - homepage.widget.showEpisodeNumber=true
       - homepage.widget.expandOneStreamToTwoRows=false
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: always

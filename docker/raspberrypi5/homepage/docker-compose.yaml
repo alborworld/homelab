@@ -19,4 +19,6 @@ services:
       - traefik.http.routers.homepage.entrypoints=websecure
       - traefik.http.routers.homepage.tls=true
       - traefik.http.routers.homepage.tls.certresolver=cloudflare
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: unless-stopped

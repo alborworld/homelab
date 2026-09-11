@@ -9,4 +9,7 @@ services:
     environment:
       LISTEN: /beszel_socket/beszel.sock
       KEY: ${BESZEL_AGENT_RASPBERRYPI5_PUBLIC_KEY}
+    labels:
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: unless-stopped

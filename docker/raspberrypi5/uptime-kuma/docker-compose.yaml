@@ -21,4 +21,6 @@ services:
       - homepage.widget.type=uptimekuma
       - homepage.widget.url=https://uptimekuma.${LOCAL_DOMAIN}
       - homepage.widget.slug=shamanism
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: always

@@ -26,6 +26,8 @@ services:
       - homepage.widget.url=https://adguard.${LOCAL_DOMAIN}
       - homepage.widget.username=${ADGUARD_HOME_USERNAME}
       - homepage.widget.password=${ADGUARD_HOME_PASSWORD}
+      # WUD
+      - wud.trigger.include=telegram.1
     depends_on:
       - unbound
     cap_add:

@@ -23,8 +23,12 @@ services:
       - WUD_WATCHER_DISKSTATION_CRON=0 20 6 * * *
       - WUD_WATCHER_DISKSTATION_WATCHBYDEFAULT=true
       - WUD_WATCHER_DISKSTATION_WATCHDIGEST=true
-      # Docker trigger disabled — WUD monitors only, no auto-updates
-      # - WUD_TRIGGER_DOCKER_LOCAL_PRUNE=true
+      # Docker trigger — opt-in only. Fires solely for containers labeled
+      # wud.trigger.include=telegram.1,docker.auto (reviewed standalone containers
+      # with no dependents). Every other watched container is explicitly pinned to
+      # wud.trigger.include=telegram.1 so it can never pick this up by default.
+      - WUD_TRIGGER_DOCKER_AUTO_PRUNE=false
+      - WUD_TRIGGER_DOCKER_AUTO_DRYRUN=false
       # Telegram notifications
       - WUD_TRIGGER_TELEGRAM_1_BOTTOKEN=${WUD_TELEGRAM_BOTTOKEN}
       - WUD_TRIGGER_TELEGRAM_1_CHATID=${WUD_TELEGRAM_CHATID}

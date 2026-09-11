@@ -40,4 +40,6 @@ services:
       - homepage.widget.url=https://speedtest.${LOCAL_DOMAIN}
       - homepage.widget.version=1
       - homepage.widget.bitratePrecision=3
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: unless-stopped

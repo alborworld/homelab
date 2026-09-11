@@ -13,4 +13,7 @@ services:
     volumes:
       - ${VOLUMEDIR}/zoom-recording-downloader/logs:/var/log/zoom-recording-downloader:rw
       - ${ZOOM_DOWNLOAD_DIR}:/downloads:rw
+    labels:
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: unless-stopped

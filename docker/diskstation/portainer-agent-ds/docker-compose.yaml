@@ -11,5 +11,5 @@ services:
       - /volume1/@docker/volumes:/var/lib/docker/volumes
     labels:
       # WUD
-      - wud.watch=false
+      - wud.trigger.include=telegram.1,docker.auto
     restart: always

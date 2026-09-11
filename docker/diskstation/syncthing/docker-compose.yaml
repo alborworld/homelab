@@ -32,4 +32,6 @@ services:
       - homepage.href=https://syncthing.${LOCAL_DOMAIN}
       - homepage.description=File Synchronization
       - homepage.siteMonitor=https://syncthing.${LOCAL_DOMAIN}
+      # WUD
+      - wud.trigger.include=telegram.1
     restart: unless-stopped

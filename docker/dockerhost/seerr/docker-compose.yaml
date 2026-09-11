@@ -31,4 +31,6 @@ services:
       - homepage.widget.type=overseerr
       - homepage.widget.url=https://seerr.${LOCAL_DOMAIN}
       - homepage.widget.key=${SEERR_API_KEY}
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: always

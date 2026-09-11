@@ -3,4 +3,7 @@ services:
     image: frauhottelmann/docker-iperf3:latest
     container_name: iPerf3-DS
     network_mode: host
+    labels:
+      # WUD
+      - wud.trigger.include=telegram.1,docker.auto
     restart: always

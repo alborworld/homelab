@@ -41,6 +41,8 @@ services:
       - homepage.href=https://booklore.${LOCAL_DOMAIN}
       - homepage.description=Personal Library
       - homepage.siteMonitor=https://booklore.${LOCAL_DOMAIN}
+      # WUD
+      - wud.trigger.include=telegram.1
     restart: unless-stopped
 
   booklore-mariadb:
@@ -56,6 +58,9 @@ services:
       - MYSQL_PASSWORD=${BOOKLORE_DB_PASSWORD}
     volumes:
       - ${VOLUMEDIR}/booklore/mariadb:/config
+    labels:
+      # WUD
+      - wud.trigger.include=telegram.1
     healthcheck:
       test: ["CMD", "mariadb-admin", "ping", "-h", "localhost" ]
       interval: 5s
