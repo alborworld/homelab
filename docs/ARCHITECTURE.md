@@ -30,7 +30,7 @@ All hosts are connected via [Tailscale](https://tailscale.com) mesh VPN, enablin
 | diskstation | NAS, AdGuard replica |
 | nuc13 | Proxmox host |
 | exit-nordvpn-nl | NordVPN Amsterdam exit node (LXC) |
-| openclaw | AI assistant gateway (LXC on nuc13, VMID 202) |
+| openclaw | AI assistant gateway (LXC on nuc13, VMID 202) — disabled, stopped |
 
 > **Note:** Tailscale IPs (`100.x.x.x`) are deliberately not committed to the repo — look them
 > up with `tailscale status`, or use MagicDNS hostnames. LAN addressing for the `10.0.4.0/24`
@@ -117,7 +117,7 @@ Gluetun's Docker healthcheck has a `start_period: 120s` to give the VPN enough t
 
 The homelab runs a local AI stack for LLM inference and assistant capabilities:
 
-- **OpenClaw** — LXC container on nuc13 (VMID 202, 2 cores / 4 GB RAM). AI assistant gateway with Telegram bot integration. Primary model: OpenAI Codex (gpt-5.3-codex). Includes Whisper-based audio transcription (faster-whisper, CPU) and Edge TTS for voice responses. Dashboard at `openclaw.home.alborworld.com`.
+- **OpenClaw** _(disabled 2026-09-11 — container stopped, not in active use)_ — LXC container on nuc13 (VMID 202, 2 cores / 4 GB RAM). AI assistant gateway with Telegram bot integration. Primary model: OpenAI Codex (gpt-5.3-codex). Includes Whisper-based audio transcription (faster-whisper, CPU) and Edge TTS for voice responses. Dashboard at `openclaw.home.alborworld.com`.
 - **Open WebUI** — Docker container on dockerhost. Provides a chat interface at `chat.home.alborworld.com`.
 
 ### Communication Flow

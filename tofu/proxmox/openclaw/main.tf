@@ -15,10 +15,12 @@ locals {
 resource "proxmox_virtual_environment_container" "openclaw" {
   node_name     = var.proxmox_node
   vm_id         = local.vmid
-  description   = "OpenClaw AI assistant"
+  description   = "OpenClaw AI assistant (disabled 2026-09-11 — not in active use)"
   tags          = ["openclaw", "ai", "tailscale"]
-  started       = true
-  start_on_boot = true
+  # Disabled 2026-09-11: not in active use. Container stopped on Proxmox;
+  # start_on_boot off so it stays down across host reboots.
+  started       = false
+  start_on_boot = false
 
   initialization {
     hostname = local.hostname

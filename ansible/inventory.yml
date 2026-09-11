@@ -21,10 +21,11 @@ all:
           nordvpn_public_key: "5p4RkybdRU5uaDi90eu4KZPTFif0lKCg4Qp6t1c4F30="
           expected_vpn_country: "NL"
 
-    openclaw_servers:
-      hosts:
-        openclaw:
-          ansible_host: "{{ lan_ips.openclaw }}"  # use the Tailscale hostname after provisioning
-          ansible_user: root
-          tailscale_hostname: openclaw
-          beszel_agent_listen_tailscale: true
+    # openclaw_servers: disabled 2026-09-11 — LXC 202 stopped, not in active use.
+    # openclaw_servers:
+    #   hosts:
+    #     openclaw:
+    #       ansible_host: "{{ lan_ips.openclaw }}"  # use the Tailscale hostname after provisioning
+    #       ansible_user: root
+    #       tailscale_hostname: openclaw
+    #       beszel_agent_listen_tailscale: true

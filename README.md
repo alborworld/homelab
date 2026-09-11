@@ -79,7 +79,7 @@ For detailed architecture and service information, see [docs/ARCHITECTURE.md](do
 
 The homelab doubles as a self-hosted AI platform — a place to run assistants and experiment with LLM tooling on infrastructure I control:
 
-- **Local AI gateway — OpenClaw**: an AI assistant gateway running in a dedicated LXC container on Proxmox, reachable via a Telegram bot. Voice notes are transcribed locally with Whisper (faster-whisper on CPU) and responses can be spoken back via Edge TTS, while model inference goes out over HTTPS to external APIs. The container's full lifecycle is managed as code: OpenTofu provisions it, Ansible configures it.
+- **Local AI gateway — OpenClaw** _(disabled)_: an AI assistant gateway in a dedicated LXC container on Proxmox, reachable via a Telegram bot. Voice notes are transcribed locally with Whisper (faster-whisper on CPU) and responses can be spoken back via Edge TTS, while model inference goes out over HTTPS to external APIs. The container's full lifecycle is managed as code: OpenTofu provisions it, Ansible configures it. Currently stopped and not in active use.
 - **LLM experimentation — Open WebUI**: a chat interface for trying out models, prompts, and tools without committing to any single vendor's UI.
 - **Automation — n8n**: workflow engine that wires services together and provides the glue for AI-triggered automations.
 - **AI-assisted workflows**: the combination of the gateway, n8n, and the rest of the stack turns everyday operations (notifications, document handling with Paperless-ngx, media requests) into workflows an assistant can participate in.
