@@ -15,10 +15,10 @@ locals {
 resource "proxmox_virtual_environment_container" "openclaw" {
   node_name     = var.proxmox_node
   vm_id         = local.vmid
-  description   = "OpenClaw AI assistant (disabled 2026-09-11 — not in active use)"
+  description   = "OpenClaw AI assistant (removed 2026-09-11 — LXC destroyed on Proxmox)"
   tags          = ["openclaw", "ai", "tailscale"]
-  # Disabled 2026-09-11: not in active use. Container stopped on Proxmox;
-  # start_on_boot off so it stays down across host reboots.
+  # Removed 2026-09-11: LXC 202 destroyed on Proxmox, removed from tofu state.
+  # Config kept to recreate it via `tofu apply` if revived; PBS backups retained.
   started       = false
   start_on_boot = false
 
