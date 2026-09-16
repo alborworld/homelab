@@ -22,3 +22,29 @@ services:
       # WUD
       - wud.trigger.include=telegram.1,docker.auto
     restart: unless-stopped
+
+  homepage-revalidate:
+    # Homepage bakes settings.yaml (layout, theme, background, etc.) into its
+    # Next.js static page at build/start time — unlike services.yaml/docker
+    # labels, which are read live. Whenever the Homepage container (re)starts
+    # for any reason (WUD auto-update, manual recreate, host reboot), poke
+    # /api/revalidate so the dashboard picks up the current settings.yaml
+    # instead of serving a stale cached shell. See homelab-gdq.
+    image: docker:cli
+    container_name: HomepageRevalidate
+    depends_on:
+      - homepage
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    entrypoint: sh
+    command:
+      - -c
+      - |
+        apk add --no-cache curl >/dev/null
+        docker events --filter 'container=Homepage' --filter 'event=start' --format '{{.Time}}' | while read -r _; do
+          sleep 5
+          curl -sf -H 'Host: raspberrypi.home' http://homepage:3000/api/revalidate >/dev/null || true
+        done
+    labels:
+      - wud.watch=false
+    restart: unless-stopped
