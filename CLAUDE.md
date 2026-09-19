@@ -104,6 +104,7 @@ make ansible-clean
 | Playbook   | Target           | Description                           |
 |------------|------------------|---------------------------------------|
 | `openclaw` | openclaw (LXC 202) | AI assistant gateway, Telegram bot |
+| `dockerhost` | dockerhost | Host-level state: NFS mounts, cron, Docker engine, iGPU driver, log rotation (homelab-4v6) |
 
 ## OpenTofu Stacks
 

@@ -1,0 +1,206 @@
+---
+# dockerhost host-level state (homelab-4v6 / GitHub #45).
+#
+# Explicitly out of scope: the Compose stacks themselves (already declarative
+# and version-controlled) and anything the k3s epic (homelab-jl0) supersedes.
+# This role only reproduces what is needed to rebuild the host after loss and
+# what makes host state reviewable in a diff.
+
+# ------------------------------------------------------------------------------
+# Directory skeleton
+# ------------------------------------------------------------------------------
+
+- name: Create ~/docker/volumes and ~/docker/logs
+  ansible.builtin.file:
+    path: "{{ dockerhost_home }}/docker/{{ item }}"
+    state: directory
+    owner: "{{ dockerhost_user }}"
+    group: "{{ dockerhost_user }}"
+    mode: "0775"
+  loop:
+    - volumes
+    - logs
+
+- name: Symlink ~/docker/compose to the repo checkout
+  ansible.builtin.file:
+    path: "{{ dockerhost_home }}/docker/compose"
+    src: "{{ dockerhost_home }}/homelab/docker/dockerhost"
+    state: link
+    owner: "{{ dockerhost_user }}"
+    group: "{{ dockerhost_user }}"
+
+# ------------------------------------------------------------------------------
+# NFS mounts (root cause of homelab-om9: a stale /media path silently failing
+# for 5.5 months because this mount lived only in the host's own /etc/fstab)
+# ------------------------------------------------------------------------------
+
+- name: Create NFS mount point directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: "0777"
+  loop: "{{ dockerhost_nfs_mounts }}"
+
+- name: Mount NFS shares from diskstation
+  ansible.posix.mount:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    fstype: nfs
+    opts: "{{ dockerhost_nfs_opts }}"
+    state: mounted
+  loop: "{{ dockerhost_nfs_mounts }}"
+
+# ------------------------------------------------------------------------------
+# Docker engine
+# ------------------------------------------------------------------------------
+
+- name: Install prerequisites for the Docker apt repo
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+    update_cache: true
+
+- name: Create apt keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Check if Docker's GPG key is already installed
+  ansible.builtin.stat:
+    path: /etc/apt/keyrings/docker.gpg
+  register: docker_gpg_key
+
+- name: Download Docker's GPG key
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /tmp/docker.gpg.key
+    mode: "0644"
+  when: not docker_gpg_key.stat.exists
+
+- name: Dearmor and install Docker's GPG key
+  ansible.builtin.shell: gpg --dearmor -o /etc/apt/keyrings/docker.gpg < /tmp/docker.gpg.key
+  args:
+    creates: /etc/apt/keyrings/docker.gpg
+  when: not docker_gpg_key.stat.exists
+
+- name: Clean up GPG key download
+  ansible.builtin.file:
+    path: /tmp/docker.gpg.key
+    state: absent
+  when: not docker_gpg_key.stat.exists
+
+- name: Add Docker apt repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    filename: docker
+    state: present
+
+- name: Install Docker engine
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+      - docker-ce-rootless-extras
+    state: present
+    update_cache: true
+
+- name: Configure Docker daemon (log rotation for container logs)
+  ansible.builtin.copy:
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "10m",
+          "max-file": "3"
+        }
+      }
+    mode: "0644"
+  notify: Restart docker
+
+- name: Enable and start Docker
+  ansible.builtin.systemd:
+    name: docker
+    enabled: true
+    state: started
+
+- name: Add {{ dockerhost_user }} to the docker group
+  ansible.builtin.user:
+    name: "{{ dockerhost_user }}"
+    groups: docker
+    append: true
+
+# ------------------------------------------------------------------------------
+# iGPU (Plex hardware transcoding via /dev/dri — VM-side config only; the
+# Proxmox PCI passthrough itself is out of scope for this role)
+# ------------------------------------------------------------------------------
+
+- name: Install Intel VAAPI driver
+  ansible.builtin.apt:
+    name: intel-media-va-driver-non-free
+    state: present
+
+# ------------------------------------------------------------------------------
+# Boot-time Compose recreation (docker-compose-up.service)
+#
+# Source of truth is the repo (docker/dockerhost/docker-compose-up.service),
+# checked out on the host itself at ~/homelab — this task installs it, it
+# does not duplicate its content here. See docs/ARCHITECTURE.md for why the
+# Gluetun stack needs force-recreation on every boot.
+# ------------------------------------------------------------------------------
+
+- name: Install docker-compose-up.service from the repo checkout
+  ansible.builtin.copy:
+    remote_src: true
+    src: "{{ dockerhost_home }}/homelab/docker/dockerhost/docker-compose-up.service"
+    dest: /etc/systemd/system/docker-compose-up.service
+    mode: "0644"
+  register: dockerhost_compose_up_unit
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: dockerhost_compose_up_unit.changed
+
+- name: Enable and start docker-compose-up.service
+  ansible.builtin.systemd:
+    name: docker-compose-up.service
+    enabled: true
+    state: started
+
+# ------------------------------------------------------------------------------
+# Crontab
+# ------------------------------------------------------------------------------
+
+- name: Schedule Gluetun stack update
+  ansible.builtin.cron:
+    name: "Gluetun stack update (WUD only notifies; this recreates the VPN-bound stack together)"
+    user: "{{ dockerhost_user }}"
+    minute: "{{ dockerhost_gluetun_update_cron.minute }}"
+    hour: "{{ dockerhost_gluetun_update_cron.hour }}"
+    job: "{{ dockerhost_home }}/docker/compose/scripts/update-gluetun-stack.sh >> {{ dockerhost_home }}/docker/logs/gluetun-update.log 2>&1"
+
+# ------------------------------------------------------------------------------
+# Log rotation (homelab-wlh)
+# ------------------------------------------------------------------------------
+
+- name: Configure log rotation for ~/docker/logs
+  ansible.builtin.copy:
+    dest: /etc/logrotate.d/dockerhost-logs
+    content: |
+      {{ dockerhost_home }}/docker/logs/*.log {
+          weekly
+          rotate {{ dockerhost_logrotate_rotate }}
+          compress
+          missingok
+          notifempty
+          su {{ dockerhost_user }} {{ dockerhost_user }}
+      }
+    mode: "0644"

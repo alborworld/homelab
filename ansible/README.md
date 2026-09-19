@@ -11,10 +11,12 @@ ansible/
 ├── secrets.yml.template     # Secrets template (copy to secrets.yml)
 ├── playbooks/
 │   ├── tailscale.yml        # Tailscale subnet router setup
-│   └── exit-node-nordvpn.yml # NordVPN exit node provisioning
+│   ├── exit-node-nordvpn.yml # NordVPN exit node provisioning
+│   └── dockerhost.yml       # dockerhost host-level state (fstab, cron, Docker engine, etc.)
 └── roles/
     ├── exit_node_nordvpn/   # Tailscale exit node via NordVPN
-    └── beszel_agent/        # Beszel monitoring agent
+    ├── beszel_agent/        # Beszel monitoring agent
+    └── dockerhost/          # dockerhost host-level state
 ```
 
 ## Host Groups
@@ -66,6 +68,21 @@ Provisions a Tailscale exit node that routes traffic through NordVPN WireGuard.
 **Required variables:**
 - `wireguard_private_key` - NordVPN WireGuard private key
 - `tailscale_authkey` - Tailscale auth key with exit node capability
+
+### dockerhost
+
+Reproduces dockerhost's host-level configuration: NFS automount entries,
+`docker-compose-up.service`, the crontab, Docker engine + daemon config, the
+iGPU (VAAPI) driver, the `~/docker` skeleton, and log rotation. Explicitly
+does **not** manage the Compose stacks themselves — see homelab-4v6 / GitHub
+[#45](https://github.com/alborworld/homelab/issues/45) for full scope.
+
+**Usage:**
+```bash
+cd ansible
+ansible-playbook playbooks/dockerhost.yml
+ansible-playbook playbooks/dockerhost.yml --diff --check   # dry run
+```
 
 ### beszel_agent
 

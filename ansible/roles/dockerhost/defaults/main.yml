@@ -1,0 +1,25 @@
+---
+# dockerhost host-state defaults
+# See homelab-4v6 / GitHub #45 for scope and rationale.
+
+dockerhost_user: albor
+dockerhost_home: /home/albor
+
+# NFS shares mounted from diskstation. Options must match the live host
+# exactly (see homelab-om9): x-systemd.automount is what makes recovery from
+# an overnight diskstation reboot work without any scripting.
+dockerhost_nfs_mounts:
+  - path: /mnt/media
+    src: "10.0.4.111:/volume1/media"
+  - path: /mnt/Alessandro
+    src: "10.0.4.111:/volume1/homes/Alessandro"
+dockerhost_nfs_opts: "rsize=1048576,wsize=1048576,hard,noatime,nolock,tcp,vers=4,nofail,_netdev,x-systemd.automount,timeo=14,actimeo=600"
+
+# Gluetun stack update cron (WUD only notifies; this recreates the VPN-bound
+# stack together — see docker/dockerhost/scripts/update-gluetun-stack.sh).
+dockerhost_gluetun_update_cron:
+  minute: "45"
+  hour: "6"
+
+# Log rotation (homelab-wlh): ~/docker/logs has no bound otherwise.
+dockerhost_logrotate_rotate: 4

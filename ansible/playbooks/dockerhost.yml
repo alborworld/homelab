@@ -1,0 +1,24 @@
+---
+# Reproduce dockerhost's host-level configuration: NFS mounts, the
+# boot-time Compose recreation service, cron, Docker engine + daemon
+# config, the iGPU driver, the ~/docker skeleton, and log rotation.
+#
+# Scope and rationale: homelab-4v6 / GitHub #45.
+#
+# Prerequisites:
+#   1. Host reachable via SSH (see ~/.ssh/config for the `dockerhost` alias)
+#   2. ~/homelab already git-cloned on the host — this role installs
+#      docker-compose-up.service FROM that checkout, it does not manage
+#      the clone itself
+#
+# Usage:
+#   cd ansible
+#   ansible-playbook playbooks/dockerhost.yml
+#   ansible-playbook playbooks/dockerhost.yml --diff --check   # dry run
+
+- name: Reproduce dockerhost host state
+  hosts: dockerhost
+  gather_facts: true
+
+  roles:
+    - dockerhost
